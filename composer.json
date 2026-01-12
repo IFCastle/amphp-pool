@@ -1,0 +1,60 @@
+{
+    "name": "ifcastle/amphp-pool",
+    "type": "library",
+    "description": "Middle-level library for creating Stateful Asynchronous server-side applications using the pure PHP and AMPHP",
+    "keywords": [
+        "server",
+        "async",
+        "asynchronous",
+        "concurrency",
+        "promise",
+        "awaitable",
+        "future",
+        "non-blocking",
+        "event",
+        "event-loop"
+    ],
+    "authors": [
+        {
+            "name": "Edmond Dantes",
+            "email": "edmondifthen@proton.me"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=8.3",
+        "ext-sockets": "*",
+        "ext-shmop": "*",
+        "amphp/amp": "^3",
+        "amphp/byte-stream": "^2",
+        "amphp/log": "^2",
+        "amphp/parallel": "^2.2",
+        "amphp/pipeline": "^1.1",
+        "amphp/process": "^2",
+        "amphp/serialization": "^1",
+        "amphp/socket": "^2",
+        "amphp/sync": "^2",
+        "monolog/monolog": "^3|^2|^1.23",
+        "psr/log": "^3|^2|^1",
+        "revolt/event-loop": "^1",
+        "amphp/http-server": "^3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "IfCastle\\AmpPool\\": ["./src"]}
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "IfCastle\\AmpPool\\": "./tests",
+            "Examples\\": "./examples"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.2",
+        "friendsofphp/php-cs-fixer": "^3.59",
+        "amphp/php-cs-fixer-config": "^2.1"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit ./tests"
+    }
+}
