@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\RestartStrategy;
@@ -13,7 +14,7 @@ use IfCastle\AmpPool\Strategies\WorkerStrategyAbstract;
 final class RestartWithLimiter extends WorkerStrategyAbstract implements RestartStrategyInterface
 {
     private int $restartsCount      = 0;
-    
+
     private ?int $currentInterval   = null;
 
     public function __construct(
@@ -21,8 +22,7 @@ final class RestartWithLimiter extends WorkerStrategyAbstract implements Restart
         private readonly int $restartInterval = 60,
         private readonly int $step = 10,
         private readonly int $intervalThreshold = 120,
-    ) {
-    }
+    ) {}
 
     public function shouldRestart(mixed $exitResult): int
     {

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\WorkerPoolMocks;
@@ -39,7 +40,7 @@ final class RestartEntryPoint implements WorkerEntryPointInterface
     {
         if (\is_file(self::getFile()) && (int) \file_get_contents(self::getFile()) >= 1) {
             // second time terminate worker
-            throw new TerminateWorkerException;
+            throw new TerminateWorkerException();
         }
 
         $this->worker->awaitTermination(new TimeoutCancellation(5));

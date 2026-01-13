@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies;
@@ -11,11 +12,11 @@ use IfCastle\AmpPool\WorkersStorage\WorkersStorageInterface;
 abstract class WorkerStrategyAbstract implements WorkerStrategyInterface
 {
     private \WeakReference|null $workerPool = null;
-    
+
     private \WeakReference|null $worker = null;
-    
+
     private \WeakReference|null $workerGroup = null;
-    
+
     private bool $isSelfWorker = false;
 
     public function getWorkerPool(): WorkerPoolInterface|null
@@ -123,13 +124,9 @@ abstract class WorkerStrategyAbstract implements WorkerStrategyInterface
         return $this->worker === null && $this->workerPool !== null;
     }
 
-    public function onStarted(): void
-    {
-    }
+    public function onStarted(): void {}
 
-    public function onStopped(): void
-    {
-    }
+    public function onStopped(): void {}
 
     public function __serialize(): array
     {

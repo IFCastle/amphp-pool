@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\JobExecutor;
@@ -19,10 +20,10 @@ interface JobExecutorInterface
      *
      */
     public function canAcceptMoreJobs(): bool;
-    
+
     public function getJobCount(): int;
-    
+
     public function awaitAll(?Cancellation $cancellation = null): void;
-    
+
     public function stopAll(?\Throwable $throwable = null): bool;
 }

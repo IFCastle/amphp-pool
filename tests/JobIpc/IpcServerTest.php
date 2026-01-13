@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\JobIpc;
@@ -11,14 +12,15 @@ use Amp\TimeoutCancellation;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use Revolt\EventLoop;
+
 use function Amp\Socket\socketConnector;
 
 class IpcServerTest extends TestCase
 {
     private IpcServer $ipcServer;
-    
+
     private DeferredCancellation $jobsLoopCancellation;
-    
+
     private mixed $jobHandler       = null;
 
     protected function setUp(): void

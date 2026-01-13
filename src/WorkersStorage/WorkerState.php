@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\WorkersStorage;
@@ -46,8 +47,7 @@ class WorkerState implements WorkerStateInterface
         public int  $jobProcessing           = 0,
         public int  $jobErrors               = 0,
         public int  $jobRejected             = 0
-    ) {
-    }
+    ) {}
 
     public function getWorkerId(): int
     {
@@ -475,7 +475,7 @@ class WorkerState implements WorkerStateInterface
 
         $this->phpMemoryUsage       = 0;
         $this->phpMemoryPeakUsage   = 0;
-        $this->connectionsProcessing= 0;
+        $this->connectionsProcessing = 0;
         $this->jobProcessing        = 0;
 
         $this->update();
@@ -724,8 +724,8 @@ class WorkerState implements WorkerStateInterface
                 $this->totalReloaded,
                 $this->weight
             ),
-            4 * 8
-            ];
+            4 * 8,
+        ];
     }
 
     protected function packTimeSegment(): array
@@ -738,7 +738,7 @@ class WorkerState implements WorkerStateInterface
                 $this->finishedAt,
                 $this->updatedAt
             ),
-            8 * 8
+            8 * 8,
         ];
     }
 
@@ -750,7 +750,7 @@ class WorkerState implements WorkerStateInterface
                 $this->phpMemoryUsage,
                 $this->phpMemoryPeakUsage
             ),
-            12 * 8
+            12 * 8,
         ];
     }
 
@@ -765,7 +765,7 @@ class WorkerState implements WorkerStateInterface
                 $this->connectionsRejected,
                 $this->connectionsProcessing
             ),
-            14 * 8
+            14 * 8,
         ];
     }
 
@@ -780,7 +780,7 @@ class WorkerState implements WorkerStateInterface
                 $this->jobErrors,
                 $this->jobRejected
             ),
-            19 * 8
+            19 * 8,
         ];
     }
 

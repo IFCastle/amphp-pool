@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\SocketStrategy\Unix;
@@ -13,26 +14,25 @@ use IfCastle\AmpPool\Strategies\SocketStrategy\SocketStrategyInterface;
 use IfCastle\AmpPool\Strategies\SocketStrategy\Unix\Messages\InitiateSocketTransfer;
 use IfCastle\AmpPool\Strategies\SocketStrategy\Unix\Messages\SocketTransferInfo;
 use IfCastle\AmpPool\Strategies\WorkerStrategyAbstract;
+
 use function Amp\Future\await;
 
 final class SocketUnixStrategy extends WorkerStrategyAbstract implements SocketStrategyInterface
 {
     private ServerSocketPipeFactory|null $socketPipeFactory = null;
-    
+
     private string              $uri                = '';
-    
+
     private string              $key                = '';
-    
+
     private DeferredFuture|null $deferredFuture     = null;
-    
+
     private EventWeakHandler|null $workerEventHandler = null;
 
     /** @var SocketProvider[] */
     private array $workerSocketProviders = [];
 
-    public function __construct(private readonly int $ipcTimeout = 5)
-    {
-    }
+    public function __construct(private readonly int $ipcTimeout = 5) {}
 
     public function onStarted(): void
     {
@@ -56,7 +56,7 @@ final class SocketUnixStrategy extends WorkerStrategyAbstract implements SocketS
             return;
         }
 
-        $this->deferredFuture       = new DeferredFuture;
+        $this->deferredFuture       = new DeferredFuture();
 
         $self                       = \WeakReference::create($this);
         $this->workerEventHandler   = new EventWeakHandler(

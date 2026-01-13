@@ -1,13 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\JobIpc;
 
 final readonly class JobRequest implements JobRequestInterface
 {
-    public function __construct(private int $jobId, private int $fromWorkerId, private int $workerGroupId, private int $priority, private int $weight, private string $data)
-    {
-    }
+    public function __construct(private int $jobId, private int $fromWorkerId, private int $workerGroupId, private int $priority, private int $weight, private string $data) {}
 
     public function getJobId(): int
     {

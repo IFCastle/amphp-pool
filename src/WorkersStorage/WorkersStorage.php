@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\WorkersStorage;
@@ -31,15 +32,15 @@ final class WorkersStorage implements WorkersStorageInterface
     }
 
     private readonly int $key;
-    
+
     private bool $isWrite           = false;
-    
+
     private readonly int $structureSize;
-    
+
     private \Shmop|null $handler = null;
 
     private ApplicationStateInterface|null $applicationState = null;
-    
+
     private MemoryUsageInterface|null $memoryUsage = null;
 
     public function __construct(
@@ -90,7 +91,7 @@ final class WorkersStorage implements WorkersStorageInterface
                                     + $this->getMemoryUsage()->getStructureSize()
                                     + $this->structureSize * $this->workersCount;
 
-                $handler            = \shmop_open($this->key, 'c', 0644, $totalSize);
+                $handler            = \shmop_open($this->key, 'c', 0o644, $totalSize);
             } else {
                 $handler            = \shmop_open($this->key, 'a', 0, 0);
             }

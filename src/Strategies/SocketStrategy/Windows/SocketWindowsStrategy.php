@@ -1,16 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\SocketStrategy\Windows;
 
-use Amp\Socket\ServerSocketFactory;
 use IfCastle\AmpPool\Strategies\SocketStrategy\SocketStrategyInterface;
 use IfCastle\AmpPool\Strategies\WorkerStrategyAbstract;
 
 final class SocketWindowsStrategy extends WorkerStrategyAbstract implements SocketStrategyInterface
 {
     private SocketListenerProvider|null $socketListenerProvider = null;
-    
+
     private SocketPipeFactoryWindows|null $socketPipeFactory = null;
 
     public function getServerSocketFactory(): \Amp\Socket\ServerSocketFactory

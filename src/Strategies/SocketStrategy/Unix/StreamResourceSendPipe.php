@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\SocketStrategy\Unix;
@@ -66,7 +67,7 @@ final readonly class StreamResourceSendPipe implements Closable
                             return;
                         }
                     } catch (\Throwable $exception) {
-                        $suspension->resume(static fn () => throw new SocketException(
+                        $suspension->resume(static fn() => throw new SocketException(
                             'Failed to send socket: ' . $exception->getMessage(),
                             previous: $exception,
                         ));
@@ -85,7 +86,7 @@ final readonly class StreamResourceSendPipe implements Closable
                 /** @var Suspension<null|\Closure():never> $suspension */
                 [$suspension] = $transferQueue->dequeue();
                 $suspension->resume(
-                    static fn () => throw new SocketException('The transfer socket closed unexpectedly')
+                    static fn() => throw new SocketException('The transfer socket closed unexpectedly')
                 );
             }
         });

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Examples\HttpServer;
@@ -58,10 +59,10 @@ final class HttpReactor implements WorkerEntryPointInterface
             new ClosureRequestHandler(static fn(): Response => new Response(
                 HttpStatus::OK,
                 [
-                'content-type' => 'text/plain; charset=utf-8',
-            ],
-                'Hello, World! From worker id: '.$worker->getWorkerId()
-               .' and group id: '.$worker->getWorkerGroupId()
+                    'content-type' => 'text/plain; charset=utf-8',
+                ],
+                'Hello, World! From worker id: ' . $worker->getWorkerId()
+               . ' and group id: ' . $worker->getWorkerGroupId()
             )),
             new DefaultErrorHandler(),
         );

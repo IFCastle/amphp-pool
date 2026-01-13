@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\WorkersStorage;
@@ -11,11 +12,11 @@ final class WorkersStorageMemory implements WorkersStorageInterface
     }
 
     private bool $isWrite           = false;
-    
+
     private readonly int $structureSize;
-    
+
     private readonly int         $totalSize;
-    
+
     private string $buffer          = '';
 
     public function __construct(

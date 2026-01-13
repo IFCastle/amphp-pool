@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies;
@@ -10,7 +11,7 @@ use IfCastle\AmpPool\WorkerPoolInterface;
 interface WorkerStrategyInterface
 {
     public function getWorkerPool(): WorkerPoolInterface|null;
-    
+
     public function getWorker(): WorkerInterface|null;
 
     public function getSelfWorker(): WorkerInterface|null;
@@ -24,6 +25,6 @@ interface WorkerStrategyInterface
     public function setWorkerGroup(WorkerGroupInterface $workerGroup): self;
 
     public function onStarted(): void;
-    
+
     public function onStopped(): void;
 }

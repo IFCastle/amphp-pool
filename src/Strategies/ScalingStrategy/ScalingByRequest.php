@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\ScalingStrategy;
@@ -10,14 +11,13 @@ use Revolt\EventLoop;
 final class ScalingByRequest extends WorkerStrategyAbstract implements ScalingStrategyInterface
 {
     private int $lastScalingRequest   = 0;
-    
+
     private string $decreaseCallbackId = '';
 
     public function __construct(
         private readonly int $decreaseTimeout = 5 * 60,
         private readonly int $decreaseCheckInterval = 5 * 60,
-    ) {
-    }
+    ) {}
 
     public function requestScaling(int $fromWorkerId = 0): bool
     {

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\RunnerStrategy;
@@ -14,6 +15,7 @@ use IfCastle\AmpPool\Strategies\WorkerStrategyAbstract;
 use IfCastle\AmpPool\Worker\Worker;
 use IfCastle\AmpPool\Worker\WorkerEntryPointInterface;
 use IfCastle\AmpPool\WorkerGroupInterface;
+
 use function Amp\async;
 
 class DefaultRunner extends WorkerStrategyAbstract implements RunnerStrategyInterface
@@ -40,7 +42,7 @@ class DefaultRunner extends WorkerStrategyAbstract implements RunnerStrategyInte
             throw new FatalWorkerException('Could not connect to IPC socket', 0, $exception);
         }
 
-        self::setProcessTitle($group->getGroupName().' worker #'.$id. ' group #'.$group->getWorkerGroupId());
+        self::setProcessTitle($group->getGroupName() . ' worker #' . $id . ' group #' . $group->getWorkerGroupId());
 
         $worker                     = null;
 
@@ -115,7 +117,7 @@ class DefaultRunner extends WorkerStrategyAbstract implements RunnerStrategyInte
             'group'                 => $group,
             'groupsScheme'          => $workerPool->getGroupsScheme(),
             'workersStorage'        => $workerPool->getWorkersStorage()::class,
-            'context'               => $context
+            'context'               => $context,
         ]);
     }
 
@@ -132,7 +134,7 @@ class DefaultRunner extends WorkerStrategyAbstract implements RunnerStrategyInte
 
         foreach (['id', 'group', 'groupsScheme', 'workersStorage'] as $key) {
             if (false === \array_key_exists($key, $data)) {
-                throw new FatalWorkerException('Worker <== Watcher: Invalid IPC data received. Expected key: '.$key);
+                throw new FatalWorkerException('Worker <== Watcher: Invalid IPC data received. Expected key: ' . $key);
             }
         }
 
@@ -155,7 +157,7 @@ class DefaultRunner extends WorkerStrategyAbstract implements RunnerStrategyInte
     {
         if (\function_exists('cli_set_process_title')) {
 
-            \set_error_handler(static fn () => true);
+            \set_error_handler(static fn() => true);
 
             try {
                 \cli_set_process_title($title);

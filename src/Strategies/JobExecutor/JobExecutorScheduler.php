@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\JobExecutor;
@@ -28,8 +29,7 @@ final class JobExecutorScheduler extends JobExecutorAbstract
         private int $maxJobCount        = 100,
         private int $defaultPriority    = 10,
         private int $maxAwaitAllTimeout = 0
-    ) {
-    }
+    ) {}
 
     #[\Override]
     public function __serialize(): array
@@ -37,7 +37,7 @@ final class JobExecutorScheduler extends JobExecutorAbstract
         return [
             'maxJobCount'           => $this->maxJobCount,
             'defaultPriority'       => $this->defaultPriority,
-            'maxAwaitAllTimeout'    => $this->maxAwaitAllTimeout
+            'maxAwaitAllTimeout'    => $this->maxAwaitAllTimeout,
         ];
     }
 
@@ -95,12 +95,12 @@ final class JobExecutorScheduler extends JobExecutorAbstract
         if ($cancellation === null && $this->maxAwaitAllTimeout > 0) {
             $cancellation           = new TimeoutCancellation(
                 $this->maxAwaitAllTimeout,
-                'JobRunnerAsync::awaitAll() timed out: '.$this->maxAwaitAllTimeout.'s'
+                'JobRunnerAsync::awaitAll() timed out: ' . $this->maxAwaitAllTimeout . 's'
             );
         } elseif ($this->maxAwaitAllTimeout > 0) {
             $cancellation           = new CompositeCancellation($cancellation, new TimeoutCancellation(
                 $this->maxAwaitAllTimeout,
-                'JobRunnerAsync::awaitAll() timed out: '.$this->maxAwaitAllTimeout.'s'
+                'JobRunnerAsync::awaitAll() timed out: ' . $this->maxAwaitAllTimeout . 's'
             ));
         }
 

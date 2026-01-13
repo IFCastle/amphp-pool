@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\SocketStrategy;
@@ -75,8 +76,8 @@ final class TestHttpReactor implements WorkerEntryPointInterface
                 return new Response(
                     HttpStatus::OK,
                     [
-                    'content-type' => 'text/plain; charset=utf-8',
-                ],
+                        'content-type' => 'text/plain; charset=utf-8',
+                    ],
                     self::class
                 );
             }),

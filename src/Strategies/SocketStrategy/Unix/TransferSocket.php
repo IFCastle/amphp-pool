@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\SocketStrategy\Unix;
@@ -40,8 +41,8 @@ final readonly class TransferSocket implements Closable
         }
 
         $this->socket = $socketResource;
-        $this->errorHandler = static fn () => true;
-        $errorHandler = static fn () => true;
+        $this->errorHandler = static fn() => true;
+        $errorHandler = static fn() => true;
         $this->onClose = new DeferredFuture();
 
         $this->onClose(static function () use ($socketResource, $errorHandler): void {

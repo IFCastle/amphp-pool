@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool;
@@ -47,7 +48,9 @@ use IfCastle\AmpPool\WorkersStorage\WorkersStorage;
 use IfCastle\AmpPool\WorkersStorage\WorkersStorageInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
 use Revolt\EventLoop;
+
 use const Amp\Process\IS_WINDOWS;
+
 use function Amp\async;
 use function Amp\delay;
 use function Amp\trapSignal;
@@ -61,9 +64,9 @@ use function Amp\trapSignal;
 final class WorkerPool implements WorkerPoolInterface
 {
     protected int $workerStartTimeout = 5;
-    
+
     protected int $workerStopTimeout  = 60;
-    
+
     private int $lastGroupId        = 0;
 
     private bool $shouldRestart      = false;
@@ -76,9 +79,9 @@ final class WorkerPool implements WorkerPoolInterface
     protected array $poolContext    = [];
 
     protected readonly Queue $queue;
-    
+
     private readonly ConcurrentIterator $iterator;
-    
+
     private bool $running           = false;
 
     private WorkersStorageInterface $workersStorage;
@@ -122,7 +125,7 @@ final class WorkerPool implements WorkerPoolInterface
         private readonly int $statsUpdateInterval       = 5
     ) {
         $this->contextFactory       ??= new DefaultContextFactory(ipcHub: $this->hub);
-        $this->eventEmitter         = new WorkerEventEmitter;
+        $this->eventEmitter         = new WorkerEventEmitter();
     }
 
     private function initWorkersStorage(): void
@@ -149,7 +152,7 @@ final class WorkerPool implements WorkerPoolInterface
         $this->applicationCollector = \forward_static_call([$this->collectorClass, 'instanciate'], $this->workersStorage);
 
         $this->applicationCollector->startApplication();
-        
+
         $this->applicationCollectorId = EventLoop::repeat($this->statsUpdateInterval, $this->updateApplicationState(...));
     }
 
@@ -198,7 +201,7 @@ final class WorkerPool implements WorkerPoolInterface
             // If group name undefined, use the worker class name without a namespace
             $groupName              = \strrchr($group->getEntryPointClass(), '\\');
 
-            $groupName = $groupName === false ? 'Group'.$groupId : \ucfirst(\substr($groupName, 1));
+            $groupName = $groupName === false ? 'Group' . $groupId : \ucfirst(\substr($groupName, 1));
 
             $group->defineGroupName($groupName);
         }
@@ -310,7 +313,7 @@ final class WorkerPool implements WorkerPoolInterface
         $this->initApplicationCollector();
 
         $this->running              = true;
-        $this->mainCancellation     = new DeferredCancellation;
+        $this->mainCancellation     = new DeferredCancellation();
 
         try {
             WorkerGroup::startStrategies($this->groupsScheme);
@@ -341,10 +344,10 @@ final class WorkerPool implements WorkerPoolInterface
                 $this->workersCancellation->cancel();
             }
 
-            $this->workersCancellation = new DeferredCancellation;
+            $this->workersCancellation = new DeferredCancellation();
 
             if (true === $this->scalingFuture?->isComplete() || $this->scalingFuture === null) {
-                $this->scalingFuture = new DeferredFuture;
+                $this->scalingFuture = new DeferredFuture();
             }
 
             $workersWatcher         = async($this->workersWatcher(...));
@@ -406,7 +409,7 @@ final class WorkerPool implements WorkerPoolInterface
                     $this->scalingTrigger->cancel();
                 }
 
-                $this->scalingTrigger = new DeferredCancellation;
+                $this->scalingTrigger = new DeferredCancellation();
 
                 // Clear completed futures
                 foreach ($futures as $key => $future) {
@@ -510,10 +513,10 @@ final class WorkerPool implements WorkerPoolInterface
             $this->scalingFuture->complete();
         }
 
-        $this->scalingFuture        = new DeferredFuture;
+        $this->scalingFuture        = new DeferredFuture();
 
-        $this->logger?->debug('Scaling workers request', ['group_id' => $groupId, 'delta' => $isDecrease? -$delta : $delta, 'handled' => $handled]);
-        $this->scalingTrigger->cancel(new ScalingTrigger);
+        $this->logger?->debug('Scaling workers request', ['group_id' => $groupId, 'delta' => $isDecrease ? -$delta : $delta, 'handled' => $handled]);
+        $this->scalingTrigger->cancel(new ScalingTrigger());
 
         return $handled;
     }
@@ -573,7 +576,7 @@ final class WorkerPool implements WorkerPoolInterface
         $suspension             = EventLoop::getSuspension();
         $cancellation           = new CompositeCancellation($this->mainCancellation->getCancellation(), $this->workersCancellation->getCancellation());
 
-        $id                     = $cancellation->subscribe(static fn (CancelledException $exception) => $suspension->throw($exception));
+        $id                     = $cancellation->subscribe(static fn(CancelledException $exception) => $suspension->throw($exception));
 
         $handler                = null;
 
@@ -586,7 +589,7 @@ final class WorkerPool implements WorkerPoolInterface
             \sapi_windows_set_ctrl_handler($handler, false);
             $handler            = null;
 
-            echo 'The server will attempt to stop gracefully with CTRL-C...'.PHP_EOL;
+            echo 'The server will attempt to stop gracefully with CTRL-C...' . PHP_EOL;
 
             $suspension->resume();
         };
@@ -640,12 +643,12 @@ final class WorkerPool implements WorkerPoolInterface
         try {
             $context                = $this->contextFactory->start(
                 $runnerStrategy->getScript(),
-                new TimeoutCancellation($this->workerStartTimeout + 6000, 'The worker start timeout ('.$this->workerStartTimeout.') has been exceeded')
+                new TimeoutCancellation($this->workerStartTimeout + 6000, 'The worker start timeout (' . $this->workerStartTimeout . ') has been exceeded')
             );
         } catch (\Throwable $exception) {
-            $this->logger?->critical('Starting the worker #'.$workerDescriptor->id
-                                     .' group "'.$workerDescriptor->group->getGroupName()
-                                     .'" failed: ' . $exception->getMessage(), ['exception' => $exception]);
+            $this->logger?->critical('Starting the worker #' . $workerDescriptor->id
+                                     . ' group "' . $workerDescriptor->group->getGroupName()
+                                     . '" failed: ' . $exception->getMessage(), ['exception' => $exception]);
 
             throw new FatalWorkerException('Starting the worker failed', 0, $exception);
         }
@@ -835,7 +838,7 @@ final class WorkerPool implements WorkerPoolInterface
 
                 if ($remoteException->getOriginalClassName() === TerminateWorkerException::class) {
                     // The Worker has terminated itself cleanly.
-                    $exitResult = new TerminateWorkerException;
+                    $exitResult = new TerminateWorkerException();
                     $workerProcess->info("Worker #{$id} terminated yourself cleanly without restart");
                 }
             }
@@ -885,7 +888,7 @@ final class WorkerPool implements WorkerPoolInterface
             $workerDescriptor->workerState->markUsShutdown();
 
         } catch (\Throwable $exception) {
-            $this->logger?->error('Failed to read or update the worker state: '.$exception->getMessage(), ['exception' => $exception]);
+            $this->logger?->error('Failed to read or update the worker state: ' . $exception->getMessage(), ['exception' => $exception]);
         }
     }
 
@@ -999,7 +1002,7 @@ final class WorkerPool implements WorkerPoolInterface
     private function stopWorkers(?\Throwable $throwable = null): void
     {
         if (false === $this->workersCancellation?->isCancelled()) {
-            $this->workersCancellation->cancel($throwable ?? new WorkerShouldBeStopped);
+            $this->workersCancellation->cancel($throwable ?? new WorkerShouldBeStopped());
         }
     }
 
@@ -1048,31 +1051,31 @@ final class WorkerPool implements WorkerPoolInterface
     private function defaultWorkerStrategies(WorkerGroupInterface $group): void
     {
         if ($group->getRunnerStrategy() === null) {
-            $group->defineRunnerStrategy(new DefaultRunner);
+            $group->defineRunnerStrategy(new DefaultRunner());
         }
 
         if ($group->getPickupStrategy() === null) {
-            $group->definePickupStrategy(new PickupLeastJobs);
+            $group->definePickupStrategy(new PickupLeastJobs());
         }
 
         if ($group->getScalingStrategy() === null) {
-            $group->defineScalingStrategy(new ScalingByRequest);
+            $group->defineScalingStrategy(new ScalingByRequest());
         }
 
         if ($group->getRestartStrategy() === null) {
-            $group->defineRestartStrategy(new RestartAlways);
+            $group->defineRestartStrategy(new RestartAlways());
         }
 
         if ($group->getJobExecutor() === null && $group->getWorkerType() === WorkerTypeEnum::JOB) {
-            $group->defineJobExecutor(new JobExecutorScheduler);
+            $group->defineJobExecutor(new JobExecutorScheduler());
         }
 
         if ($group->getJobClient() === null && $group->getJobGroups() !== []) {
-            $group->defineJobClient(new JobClientDefault);
+            $group->defineJobClient(new JobClientDefault());
         }
 
         if ($group->getSocketStrategy() === null && $group->getWorkerType() === WorkerTypeEnum::REACTOR) {
-            $group->defineSocketStrategy(IS_WINDOWS ? new SocketWindowsStrategy : new SocketUnixStrategy);
+            $group->defineSocketStrategy(IS_WINDOWS ? new SocketWindowsStrategy() : new SocketUnixStrategy());
         }
     }
 
@@ -1106,8 +1109,8 @@ final class WorkerPool implements WorkerPoolInterface
         $pidFileHandle              = null;
 
         try {
-            $pidFileHandle          = Safe::execute(fn () => \fopen($pidFile, 'c'));
-            $pidFileLocked          = Safe::execute(fn () => \flock($pidFileHandle, LOCK_EX | LOCK_NB));
+            $pidFileHandle          = Safe::execute(fn() => \fopen($pidFile, 'c'));
+            $pidFileLocked          = Safe::execute(fn() => \flock($pidFileHandle, LOCK_EX | LOCK_NB));
 
             if (false === $pidFileLocked) {
                 return (int) \file_get_contents($pidFile);
@@ -1133,7 +1136,7 @@ final class WorkerPool implements WorkerPoolInterface
             return $this->pidFile;
         }
 
-        return \getcwd().'/server.pid';
+        return \getcwd() . '/server.pid';
     }
 
     public function applyGlobalErrorHandler(): void
@@ -1166,8 +1169,8 @@ final class WorkerPool implements WorkerPoolInterface
 
         try {
             // Try to lock the pid file without waiting
-            $this->pidFileHandler = Safe::execute(fn () => \fopen($pidFile, 'c'));
-            $pidFileLocked        = Safe::execute(fn () => \flock($this->pidFileHandler, LOCK_EX | LOCK_NB));
+            $this->pidFileHandler = Safe::execute(fn() => \fopen($pidFile, 'c'));
+            $pidFileLocked        = Safe::execute(fn() => \flock($this->pidFileHandler, LOCK_EX | LOCK_NB));
 
             if (!$pidFileLocked) {
                 echo "Failed to lock the pid file: another instance is running... [EXIT]\n";
@@ -1178,7 +1181,7 @@ final class WorkerPool implements WorkerPoolInterface
             \fwrite($this->pidFileHandler, (string) \getmypid());
 
         } catch (\Throwable $throwable) {
-            echo "Failed to lock the pid file: ".$throwable->getMessage()."\n";
+            echo 'Failed to lock the pid file: ' . $throwable->getMessage() . "\n";
             return;
         } finally {
             if ($this->pidFileHandler !== null && true !== $pidFileLocked) {
@@ -1202,9 +1205,9 @@ final class WorkerPool implements WorkerPoolInterface
             \fclose($this->pidFileHandler);
 
             try {
-                Safe::execute(fn () => \unlink($this->getPidFile()));
+                Safe::execute(fn() => \unlink($this->getPidFile()));
             } catch (\Throwable $throwable) {
-                echo 'Failed to remove the pid file: '.$throwable->getMessage().PHP_EOL;
+                echo 'Failed to remove the pid file: ' . $throwable->getMessage() . PHP_EOL;
             }
         }
     }
@@ -1222,12 +1225,12 @@ final class WorkerPool implements WorkerPoolInterface
         $command                    = $args[1];
 
         if (IS_WINDOWS) {
-            echo 'The stop and restart commands are not supported on Windows'.PHP_EOL;
+            echo 'The stop and restart commands are not supported on Windows' . PHP_EOL;
             return false;
         }
 
         if (false === \function_exists('posix_kill')) {
-            echo 'The stop and restart commands are not supported because posix_kill not exists'.PHP_EOL;
+            echo 'The stop and restart commands are not supported because posix_kill not exists' . PHP_EOL;
             return false;
         }
 
@@ -1241,18 +1244,18 @@ final class WorkerPool implements WorkerPoolInterface
         }
 
         if ($pid === 0) {
-            echo 'Failed to get the application PID'.PHP_EOL;
+            echo 'Failed to get the application PID' . PHP_EOL;
             return false;
         }
 
         if ($command === 'stop') {
-            echo 'The application will be stopped'.PHP_EOL;
+            echo 'The application will be stopped' . PHP_EOL;
             posix_kill($pid, \SIGTERM);
             return true;
         }
 
         if ($command === 'restart') {
-            echo 'The application will be restarted'.PHP_EOL;
+            echo 'The application will be restarted' . PHP_EOL;
             posix_kill($pid, \SIGUSR2);
         }
 

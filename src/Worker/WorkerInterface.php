@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Worker;
@@ -27,11 +28,11 @@ interface WorkerInterface extends WorkerEventEmitterAwareInterface, WorkersStora
     public function getWorkerState(): WorkerStateInterface;
 
     public function getWorkerId(): int;
-    
+
     public function getWorkerGroup(): WorkerGroup;
-    
+
     public function getWorkerGroupId(): int;
-    
+
     public function getWorkerType(): WorkerTypeEnum;
 
     /**

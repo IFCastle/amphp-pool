@@ -1,4 +1,6 @@
-<?php /** @noinspection ALL */
+<?php
+
+/** @noinspection ALL */
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Coroutine;
@@ -10,9 +12,9 @@ use Revolt\EventLoop\Suspension;
 final class Coroutine implements CoroutineInterface
 {
     private readonly DeferredFuture $future;
-    
+
     private Suspension|null     $suspension          = null;
-    
+
     private \WeakReference|null $schedulerSuspension = null;
 
     public function __construct(
@@ -21,7 +23,7 @@ final class Coroutine implements CoroutineInterface
         private int $startAt            = 0,
         private readonly int $timeLimit = 0
     ) {
-        $this->future               = new DeferredFuture;
+        $this->future               = new DeferredFuture();
 
         if ($this->startAt === 0) {
             $this->startAt          = \time();

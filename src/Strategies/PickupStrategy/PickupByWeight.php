@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\PickupStrategy;
@@ -15,9 +16,7 @@ class PickupByWeight extends PickupStrategyAbstract
 {
     private int $lastMinimalWeight  = 0;
 
-    public function __construct(private readonly int $ignoreWeightLimit = 0)
-    {
-    }
+    public function __construct(private readonly int $ignoreWeightLimit = 0) {}
 
     public function pickupWorker(
         array $possibleGroups       = [],

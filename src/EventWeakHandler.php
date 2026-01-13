@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool;
@@ -6,7 +7,7 @@ namespace IfCastle\AmpPool;
 final class EventWeakHandler
 {
     private \WeakReference|null $eventEmitter;
-    
+
     private \WeakReference|null $self;
 
     public function __construct(object $self, private \Closure|null $closure)

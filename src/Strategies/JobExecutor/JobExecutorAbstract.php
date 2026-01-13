@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\JobExecutor;
@@ -15,20 +16,21 @@ use IfCastle\AmpPool\WorkerGroup;
 use IfCastle\AmpPool\WorkersStorage\WorkerStateInterface;
 use Psr\Log\LoggerInterface;
 use Revolt\EventLoop;
+
 use function Amp\delay;
 
 abstract class JobExecutorAbstract extends WorkerStrategyAbstract implements JobExecutorInterface
 {
     protected JobHandlerInterface|null $handler         = null;
-    
+
     protected int                     $workerId         = 0;
-    
+
     protected LoggerInterface|null    $logger           = null;
-    
+
     protected WorkerStateInterface|null $workerState    = null;
-    
+
     protected WorkerGroup|null        $group            = null;
-    
+
     protected IpcServerInterface|null $jobIpc           = null;
 
     abstract protected function initIpcServer(): void;
@@ -52,7 +54,7 @@ abstract class JobExecutorAbstract extends WorkerStrategyAbstract implements Job
 
         if ($this->handler === null) {
             throw new FatalWorkerException('Job handler is not defined before starting the Worker. '
-                                           .'Please use $worker->group->getJobExecutor()->defineJobHandler() method before starting the Worker.');
+                                           . 'Please use $worker->group->getJobExecutor()->defineJobHandler() method before starting the Worker.');
         }
 
         $jobLoopCancellation        = new DeferredCancellation();

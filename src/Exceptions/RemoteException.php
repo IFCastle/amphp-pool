@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Exceptions;
@@ -105,7 +106,7 @@ class RemoteException extends \RuntimeException
 
     public function __unserialize(array $data): void
     {
-        $this->message = \array_key_exists('message', $data) ? 'Remote exception: '.$data['message'] : 'Remote exception';
+        $this->message = \array_key_exists('message', $data) ? 'Remote exception: ' . $data['message'] : 'Remote exception';
 
         if (\array_key_exists('code', $data)) {
             $this->code             = $data['code'];

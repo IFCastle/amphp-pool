@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Worker;
@@ -56,11 +57,11 @@ class Worker implements WorkerInterface, \Stringable
     protected readonly ConcurrentIterator $iterator;
 
     private LoggerInterface $logger;
-    
+
     private readonly WorkersStorageInterface $workersStorage;
-    
+
     private WorkerStateInterface $workerState;
-    
+
     private readonly WorkerEventEmitterInterface $eventEmitter;
 
     private bool $isStopped         = false;
@@ -91,10 +92,10 @@ class Worker implements WorkerInterface, \Stringable
     ) {
         $this->queue                = new Queue();
         $this->iterator             = $this->queue->iterate();
-        $this->mainCancellation     = new DeferredCancellation;
-        $this->workerFuture         = new DeferredFuture;
+        $this->mainCancellation     = new DeferredCancellation();
+        $this->workerFuture         = new DeferredFuture();
 
-        $this->eventEmitter         = new WorkerEventEmitter;
+        $this->eventEmitter         = new WorkerEventEmitter();
 
         if (\class_exists($workersStorageClass) === false) {
             throw new \RuntimeException('Invalid storage class provided. Expected ' . WorkersStorageInterface::class . ' implementation');
@@ -105,7 +106,7 @@ class Worker implements WorkerInterface, \Stringable
         if ($logger !== null) {
             $this->logger           = $logger;
         } else {
-            $this->logger           = new \Monolog\Logger('worker-'.$id);
+            $this->logger           = new \Monolog\Logger('worker-' . $id);
             $this->logger->pushHandler(new WorkerLogHandler($this->ipcChannel, $this->id, $this->group));
         }
     }
@@ -217,7 +218,7 @@ class Worker implements WorkerInterface, \Stringable
             while ($message = $this->ipcChannel->receive($abortCancellation)) {
 
                 if ($message instanceof MessagePingPong) {
-                    $this->ipcChannel->send(new MessagePingPong);
+                    $this->ipcChannel->send(new MessagePingPong());
                     continue;
                 }
 
@@ -252,7 +253,7 @@ class Worker implements WorkerInterface, \Stringable
             try {
                 $this->workerState->increaseAndUpdateShutdownErrors();
             } catch (\Throwable $stateException) {
-                $this->logger->error('Failed to update worker state: '.$stateException->getMessage());
+                $this->logger->error('Failed to update worker state: ' . $stateException->getMessage());
             }
 
             if (false === $exception instanceof CancelledException) {
@@ -327,8 +328,8 @@ class Worker implements WorkerInterface, \Stringable
                 // Make sure that the exception is a FatalWorkerException
                 $throwable          = new FatalWorkerException(
                     "Fatal Worker Exception  (id:{$this->id}, group:{$this->group->getGroupName()}, pid:$pid): "
-                    .$throwable->getMessage()
-                    ." in {$throwable->getFile()}:{$throwable->getLine()}",
+                    . $throwable->getMessage()
+                    . " in {$throwable->getFile()}:{$throwable->getLine()}",
                     0,
                     $throwable
                 );
@@ -387,12 +388,12 @@ class Worker implements WorkerInterface, \Stringable
 
     public function onClose(\Closure $onClose): void
     {
-        $this->mainCancellation->getCancellation()->subscribe(static fn () => $onClose());
+        $this->mainCancellation->getCancellation()->subscribe(static fn() => $onClose());
     }
 
     public function __toString(): string
     {
-        return $this->group->getGroupName().'-'.$this->id;
+        return $this->group->getGroupName() . '-' . $this->id;
     }
 
     protected function initWorkerStrategies(): void
@@ -420,7 +421,7 @@ class Worker implements WorkerInterface, \Stringable
 
                 if (false === $exception instanceof RemoteException) {
                     $exception      = new FatalWorkerException(
-                        'Periodic task encountered an error: '.$exception->getMessage(),
+                        'Periodic task encountered an error: ' . $exception->getMessage(),
                         0,
                         $exception
                     );
@@ -479,7 +480,7 @@ class Worker implements WorkerInterface, \Stringable
             $pid                    = \getmypid();
             $exception              = new RemoteException(
                 "Uncaught worker (id: {$this->id}, pid: $pid) exception: "
-                                                  .$exception->getMessage(),
+                                                  . $exception->getMessage(),
                 0,
                 $exception
             );

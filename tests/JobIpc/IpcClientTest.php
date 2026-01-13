@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\JobIpc;
@@ -15,13 +16,13 @@ use Revolt\EventLoop;
 class IpcClientTest extends TestCase
 {
     private IpcClient $ipcClient;
-    
+
     private IpcServer $ipcServer;
-    
+
     private DeferredCancellation   $jobsLoopCancellation;
-    
+
     private JobSerializerInterface $jobSerializer;
-    
+
     private mixed                  $jobHandler = null;
 
     protected function setUp(): void
@@ -29,9 +30,9 @@ class IpcClientTest extends TestCase
         $workerId                   = 1;
         $groupId                    = 1;
 
-        $this->jobSerializer        = new JobSerializer;
+        $this->jobSerializer        = new JobSerializer();
 
-        $this->jobsLoopCancellation = new DeferredCancellation;
+        $this->jobsLoopCancellation = new DeferredCancellation();
 
         $workerGroup                = new WorkerGroup(
             '',
@@ -87,7 +88,7 @@ class IpcClientTest extends TestCase
 
         try {
             while ($iterator->continue($abortCancellation)) {
-                [$channel, $request]= $iterator->getValue();
+                [$channel, $request] = $iterator->getValue();
 
                 if ($request === null) {
                     break;

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\JobExecutor;
@@ -8,26 +9,26 @@ use Amp\CompositeCancellation;
 use Amp\Future;
 use Amp\TimeoutCancellation;
 use IfCastle\AmpPool\JobIpc\IpcServer;
+
 use function Amp\async;
 
 final class JobExecutorAsync extends JobExecutorAbstract
 {
     private int $jobCount           = 0;
-    
+
     private array $jobFutures       = [];
 
     public function __construct(
         private readonly int        $maxJobCount = 100,
         private readonly int        $maxAwaitAllTimeout = 0
-    ) {
-    }
+    ) {}
 
     #[\Override]
     public function __serialize(): array
     {
         return [
             'maxJobCount'           => $this->maxJobCount,
-            'maxAwaitAllTimeout'    => $this->maxAwaitAllTimeout
+            'maxAwaitAllTimeout'    => $this->maxAwaitAllTimeout,
         ];
     }
 
@@ -98,12 +99,12 @@ final class JobExecutorAsync extends JobExecutorAbstract
         if ($cancellation === null && $this->maxAwaitAllTimeout > 0) {
             $cancellation           = new TimeoutCancellation(
                 $this->maxAwaitAllTimeout,
-                'JobRunnerAsync::awaitAll() timed out: '.$this->maxAwaitAllTimeout.'s'
+                'JobRunnerAsync::awaitAll() timed out: ' . $this->maxAwaitAllTimeout . 's'
             );
         } elseif ($this->maxAwaitAllTimeout > 0) {
             $cancellation           = new CompositeCancellation($cancellation, new TimeoutCancellation(
                 $this->maxAwaitAllTimeout,
-                'JobRunnerAsync::awaitAll() timed out: '.$this->maxAwaitAllTimeout.'s'
+                'JobRunnerAsync::awaitAll() timed out: ' . $this->maxAwaitAllTimeout . 's'
             ));
         }
 

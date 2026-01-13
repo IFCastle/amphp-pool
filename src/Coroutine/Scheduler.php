@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Coroutine;
@@ -17,21 +18,21 @@ final class Scheduler implements SchedulerInterface
      * @var array<CoroutineInterface>
      */
     private array $coroutines       = [];
-    
+
     private array $coroutinesQueue  = [];
-    
+
     private int         $highestPriority   = 0;
-    
+
     private ?Suspension $suspension = null;
-    
+
     private string      $callbackId = '';
-    
+
     private bool        $isRunning  = true;
-    
+
     private ?DeferredFuture $future = null;
-    
+
     private \Throwable|null $stopException = null;
-    
+
     private bool $managerResumed    = false;
 
     private function init(): void
@@ -124,7 +125,7 @@ final class Scheduler implements SchedulerInterface
             }
 
             if (false === \array_key_exists($callbackId, $self->coroutines)) {
-                $coroutine->fail(new CoroutineNotStarted);
+                $coroutine->fail(new CoroutineNotStarted());
                 return;
             }
 

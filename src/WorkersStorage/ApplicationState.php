@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\WorkersStorage;
@@ -6,9 +7,9 @@ namespace IfCastle\AmpPool\WorkersStorage;
 class ApplicationState implements ApplicationStateInterface
 {
     private \WeakReference|null $storage = null;
-    
+
     private bool $isLoaded              = false;
-    
+
     private bool $isReadOnly            = true;
 
     protected const int ITEM_COUNT      = 9;
@@ -32,8 +33,7 @@ class ApplicationState implements ApplicationStateInterface
         private int $memoryFree         = 0,
         private int $memoryTotal        = 0,
         private float $loadAverage      = 0.0
-    ) {
-    }
+    ) {}
 
     public function update(): void
     {

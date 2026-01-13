@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\AutoRestartStrategy;
@@ -15,7 +16,7 @@ use Revolt\EventLoop;
 final class AutoRestartByQuota extends WorkerStrategyAbstract
 {
     private string $checkerId                   = '';
-    
+
     private array $workersLastState             = [];
 
     public function __construct(
@@ -24,8 +25,7 @@ final class AutoRestartByQuota extends WorkerStrategyAbstract
         public readonly int $maxJobs            = 0,
         public readonly int $maxSystemMemory    = 0,
         public readonly int $frequencyOfCheck   = 60
-    ) {
-    }
+    ) {}
 
     public function onStarted(): void
     {
@@ -83,21 +83,21 @@ final class AutoRestartByQuota extends WorkerStrategyAbstract
             }
 
             if ($this->maxRequests > 0 && ($workerState->getConnectionsProcessed() - $lastState->getConnectionsProcessed()) >= $this->maxRequests) {
-                $workerPool->getLogger()?->info('Restart worker of group "'.$group->getGroupName().'" by quota maxRequests: ' . $this->maxRequests);
+                $workerPool->getLogger()?->info('Restart worker of group "' . $group->getGroupName() . '" by quota maxRequests: ' . $this->maxRequests);
                 $workerPool->restartWorker($workerState->getWorkerId());
                 $this->workersLastState[$workerState->getWorkerId()] = $workerState;
                 continue;
             }
 
             if ($this->maxTime > 0 && ($workerState->getStartedAt() - $lastState->getStartedAt()) >= $this->maxTime) {
-                $workerPool->getLogger()?->info('Restart worker of group "'.$group->getGroupName().'" by quota maxTime: ' . $this->maxTime);
+                $workerPool->getLogger()?->info('Restart worker of group "' . $group->getGroupName() . '" by quota maxTime: ' . $this->maxTime);
                 $workerPool->restartWorker($workerState->getWorkerId());
                 $this->workersLastState[$workerState->getWorkerId()] = $workerState;
                 continue;
             }
 
             if ($this->maxJobs > 0 && ($workerState->getJobProcessed() - $lastState->getJobProcessed()) >= $this->maxJobs) {
-                $workerPool->getLogger()?->info('Restart worker of group "'.$group->getGroupName().'" by quota maxJobs: ' . $this->maxJobs);
+                $workerPool->getLogger()?->info('Restart worker of group "' . $group->getGroupName() . '" by quota maxJobs: ' . $this->maxJobs);
                 $workerPool->restartWorker($workerState->getWorkerId());
                 $this->workersLastState[$workerState->getWorkerId()] = $workerState;
             }
@@ -121,7 +121,7 @@ final class AutoRestartByQuota extends WorkerStrategyAbstract
             }
 
             if (\in_array($workerId, $groupWorkerIds, true) && $memoryUsage >= $this->maxSystemMemory) {
-                $workerPool->getLogger()?->info('Restart worker of group "'.$group->getGroupName().'" by quota maxSystemMemory: ' . $this->maxSystemMemory);
+                $workerPool->getLogger()?->info('Restart worker of group "' . $group->getGroupName() . '" by quota maxSystemMemory: ' . $this->maxSystemMemory);
                 $workerPool->restartWorker($workerId);
                 $this->workersLastState[$workerState->getWorkerId()] = $workerState;
             }

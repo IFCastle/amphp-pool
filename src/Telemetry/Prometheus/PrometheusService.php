@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Telemetry\Prometheus;
@@ -51,7 +52,7 @@ class PrometheusService implements WorkerEntryPointInterface
         // 2. Expose the server to the network
         $httpServer->expose($address);
 
-        $worker->getLogger()->info('Prometheus service is running on '.$address);
+        $worker->getLogger()->info('Prometheus service is running on ' . $address);
 
         // 3. Handle incoming connections and start the server
         $httpServer->start(

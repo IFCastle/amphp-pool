@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\SocketStrategy\Windows;
@@ -14,7 +15,7 @@ final class SocketListenerProvider
 {
     /** @var array<string, SocketClientListenerProvider> */
     private array $socketListeners  = [];
-    
+
     private mixed $eventListener;
 
     public function __construct(private readonly WorkerPool $workerPool, private readonly WorkerGroupInterface $workerGroup)

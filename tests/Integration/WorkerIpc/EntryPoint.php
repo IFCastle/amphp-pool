@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Integration\WorkerIpc;
@@ -16,9 +17,9 @@ use Revolt\EventLoop;
 final class EntryPoint implements WorkerEntryPointInterface, JobHandlerInterface
 {
     public const string GROUP1      = 'group1';
-    
+
     public const string GROUP2      = 'group2';
-    
+
     public const string WAS_HANDLED = ' was handled';
 
     public static function getFile(): string
@@ -55,9 +56,9 @@ final class EntryPoint implements WorkerEntryPointInterface, JobHandlerInterface
         ?CoroutineInterface $coroutine = null,
         ?Cancellation       $cancellation = null
     ): mixed {
-        EventLoop::delay(1, fn () => $this->worker->stop());
+        EventLoop::delay(1, fn() => $this->worker->stop());
 
-        return $data.self::WAS_HANDLED;
+        return $data . self::WAS_HANDLED;
     }
 
     public function run(): void

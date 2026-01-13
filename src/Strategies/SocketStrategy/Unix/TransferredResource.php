@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\SocketStrategy\Unix;
@@ -21,8 +22,7 @@ final readonly class TransferredResource
     public function __construct(
         private mixed $resource,
         private mixed $data,
-    ) {
-    }
+    ) {}
 
     /**
      * @return resource Stream-socket resource.

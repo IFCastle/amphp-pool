@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Worker\Internal;
@@ -90,12 +91,12 @@ final class WorkerLogHandler extends AbstractProcessingHandler
                 }
 
                 if ($value instanceof \Throwable) {
-                    $record[$key] = $record[$key]->getMessage().' in '.$record[$key]->getFile().':'.$record[$key]->getLine()
-                                    .PHP_EOL.$record[$key]->getTraceAsString();
+                    $record[$key] = $record[$key]->getMessage() . ' in ' . $record[$key]->getFile() . ':' . $record[$key]->getLine()
+                                    . PHP_EOL . $record[$key]->getTraceAsString();
                 }
 
                 if (\is_object($value)) {
-                    $record[$key] = 'object::'.$value::class;
+                    $record[$key] = 'object::' . $value::class;
                 }
 
                 if (\is_resource($value)) {

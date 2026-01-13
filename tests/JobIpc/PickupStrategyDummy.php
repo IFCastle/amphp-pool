@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\JobIpc;
@@ -10,9 +11,7 @@ use IfCastle\AmpPool\Strategies\PickupStrategy\PickupStrategyInterface;
  */
 final readonly class PickupStrategyDummy implements PickupStrategyInterface
 {
-    public function __construct(public int $workerId)
-    {
-    }
+    public function __construct(public int $workerId) {}
 
     public function pickupWorker(
         array $possibleGroups       = [],

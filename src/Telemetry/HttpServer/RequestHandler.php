@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Telemetry\HttpServer;
@@ -9,9 +10,7 @@ use IfCastle\AmpPool\Telemetry\Collectors\ConnectionCollectorInterface;
 
 final readonly class RequestHandler implements \Amp\Http\Server\RequestHandler
 {
-    public function __construct(private ConnectionCollectorInterface $collector, private \Closure $closure)
-    {
-    }
+    public function __construct(private ConnectionCollectorInterface $collector, private \Closure $closure) {}
 
     public function handleRequest(Request $request): Response
     {

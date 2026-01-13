@@ -1,27 +1,24 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\SocketStrategy\Unix;
 
-use Amp\ByteStream\ResourceStream;
 use Amp\Cancellation;
 use Amp\CancelledException;
 use Amp\CompositeCancellation;
 use Amp\DeferredCancellation;
-use Amp\Parallel\Ipc\IpcHub;
-use Amp\Socket\ResourceSocket;
-use Amp\Socket\Socket;
 use Amp\Socket\SocketException;
-use Amp\TimeoutCancellation;
 use Revolt\EventLoop;
+
 use const Amp\Process\IS_WINDOWS;
 
 final class SocketProvider
 {
     private ServerSocketPipeProvider|null $provider = null;
-    
+
     private readonly Cancellation $cancellation;
-    
+
     private readonly DeferredCancellation $deferredCancellation;
 
     public function __construct(
@@ -29,7 +26,7 @@ final class SocketProvider
         Cancellation            $cancellation
     ) {
         if (IS_WINDOWS) {
-            throw new \Error(self::class.' can\'t be used under Windows OS');
+            throw new \Error(self::class . ' can\'t be used under Windows OS');
         }
 
         $this->provider             = new ServerSocketPipeProvider($this->workerId);

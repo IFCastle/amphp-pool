@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 require_once __DIR__ . '/../../vendor/autoload.php';
@@ -27,7 +28,7 @@ $logger->useLoggingLoopDetection(false);
 $workerPool = new WorkerPool(logger: $logger);
 
 // 2. Add Prometheus group service
-$workerPool->describeGroup(new PrometheusGroup);
+$workerPool->describeGroup(new PrometheusGroup());
 
 $workerPool->describeGroup(new WorkerGroup(
     entryPointClass: JobWorker::class,

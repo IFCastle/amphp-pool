@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\System;
 
 use IfCastle\AmpPool\Internal\Safe;
+
 use const Amp\Process\IS_WINDOWS;
 
 final class SystemInfo
@@ -78,7 +80,7 @@ final class SystemInfo
     {
         if (IS_WINDOWS) {
 
-            $info                   = \shell_exec('wmic process where processid='.$pid.' get workingsetsize /format:csv');
+            $info                   = \shell_exec('wmic process where processid=' . $pid . ' get workingsetsize /format:csv');
 
             if (empty($info)) {
                 return 0;
@@ -95,7 +97,7 @@ final class SystemInfo
             return (int) $info[1];
         }
 
-        $info                   = \shell_exec('ps -p '.$pid.' -o rss=');
+        $info                   = \shell_exec('ps -p ' . $pid . ' -o rss=');
 
         if (empty($info)) {
             return 0;
@@ -124,11 +126,11 @@ final class SystemInfo
     private static ?SystemInfo $instance = null;
 
     private ?int $memoryTotal     = null;
-    
+
     private ?int $memoryFree      = null;
-    
+
     private ?int $cpuLoad         = null;
-    
+
     private ?float $loadAverage   = null;
 
     protected bool $isCalculated    = false;
@@ -177,7 +179,7 @@ final class SystemInfo
     {
         try {
 
-            $stats                  = Safe::execute(fn () => \file_get_contents('/proc/meminfo'));
+            $stats                  = Safe::execute(fn() => \file_get_contents('/proc/meminfo'));
             $stats                  = \str_replace(["\r\n", "\n\r", "\r"], "\n", $stats);
             $stats                  = \explode("\n", $stats);
             $needKeys               = ['MemTotal', 'MemFree'];
@@ -265,7 +267,7 @@ final class SystemInfo
         }
 
         foreach (\explode("\n", $output) as $line) {
-            if (!empty($line) && \preg_match("/^\\d+\$/", $line)) {
+            if (!empty($line) && \preg_match('/^\\d+$/', $line)) {
                 $this->cpuLoad      = (int) $line;
                 break;
             }

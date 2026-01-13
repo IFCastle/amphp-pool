@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\SocketStrategy\Windows;
@@ -27,12 +28,12 @@ final class ServerSocketFactoryWindows implements ServerSocket
     use ForbidSerialization;
 
     private readonly DeferredFuture $onClose;
-    
+
     /** @var Queue<MessageSocketTransfer> */
     private readonly Queue $queue;
-    
+
     private readonly ConcurrentIterator $iterator;
-    
+
     private mixed $workerEventHandler;
 
     public function __construct(
@@ -106,13 +107,13 @@ final class ServerSocketFactoryWindows implements ServerSocket
         $message                    = $this->iterator->getValue();
 
         if (false === $message instanceof MessageSocketTransfer) {
-            throw new SocketException('Invalid message received. Required MessageSocketTransfer. Got: '.\get_debug_type($message));
+            throw new SocketException('Invalid message received. Required MessageSocketTransfer. Got: ' . \get_debug_type($message));
         }
 
         $socket                     = \socket_wsaprotocol_info_import($message->socketId);
 
         if (false === $socket) {
-            throw new SocketException('Failed importing socket from ID: '.$message->socketId);
+            throw new SocketException('Failed importing socket from ID: ' . $message->socketId);
         }
 
         \socket_wsaprotocol_info_release($message->socketId);

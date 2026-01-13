@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Internal\Messages;
@@ -9,6 +10,4 @@ namespace IfCastle\AmpPool\Internal\Messages;
  * @package IfCastle\AmpPool\Messages
  * @internal
  */
-final readonly class MessageIpcShutdown
-{
-}
+final readonly class MessageIpcShutdown {}

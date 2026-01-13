@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Internal\Messages;
@@ -12,7 +13,6 @@ final readonly class MessageLog
         public string $message,
         public string $level        = \Psr\Log\LogLevel::INFO,
         public array  $context      = []
-    ) {
-    }
+    ) {}
 
 }

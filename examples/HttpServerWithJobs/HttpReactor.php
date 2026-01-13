@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Examples\HttpServerWithJobs;
@@ -68,7 +69,7 @@ final class HttpReactor implements WorkerEntryPointInterface
                 return new Response(
                     HttpStatus::OK,
                     ['content-type' => 'text/plain; charset=utf-8'],
-                    'Job result: '.$result
+                    'Job result: ' . $result
                 );
             }),
             new DefaultErrorHandler(),

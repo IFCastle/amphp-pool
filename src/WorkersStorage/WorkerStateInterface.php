@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\WorkersStorage;
@@ -15,11 +16,11 @@ interface WorkerStateInterface
     public static function getItemSize(): int;
 
     public function read(): static;
-    
+
     public function update(): static;
 
     public function updateStateSegment(): static;
-    
+
     public function updateTimeSegment(): static;
 
     public function updateMemorySegment(): static;

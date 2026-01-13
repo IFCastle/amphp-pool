@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\RestartStrategy;
@@ -9,7 +10,7 @@ namespace IfCastle\AmpPool\Strategies\RestartStrategy;
 interface RestartStrategyInterface
 {
     public const int RESTART_IMMEDIATELY = 0;
-    
+
     public const int RESTART_NEVER = -1;
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Examples\Prometheus;
@@ -67,22 +68,22 @@ final class HttpReactorWithTelemetry implements WorkerEntryPointInterface
             }
 
             $body                   = <<<EOF
-# Basic information about the worker
+                # Basic information about the worker
 
-Worker ID: {$worker->getWorkerId()}
-Worker Group ID: {$worker->getWorkerGroupId()}
-Worker Type: {$worker->getWorkerType()->value}
-Worker Php Memory: {$workerState->getPhpMemoryUsage()}
-Worker Peak Php Memory: {$workerState->getPhpMemoryPeakUsage()}
+                Worker ID: {$worker->getWorkerId()}
+                Worker Group ID: {$worker->getWorkerGroupId()}
+                Worker Type: {$worker->getWorkerType()->value}
+                Worker Php Memory: {$workerState->getPhpMemoryUsage()}
+                Worker Peak Php Memory: {$workerState->getPhpMemoryPeakUsage()}
 
-# Worker connections
+                # Worker connections
 
-Connections Accepted: {$workerState->getConnectionsAccepted()}
-Connections Processing: {$workerState->getConnectionsProcessing()}
-Connections Processed: {$workerState->getConnectionsProcessed()}
-Connections Errors: {$workerState->getConnectionsErrors()}
+                Connections Accepted: {$workerState->getConnectionsAccepted()}
+                Connections Processing: {$workerState->getConnectionsProcessing()}
+                Connections Processed: {$workerState->getConnectionsProcessed()}
+                Connections Errors: {$workerState->getConnectionsErrors()}
 
-EOF;
+                EOF;
 
             return new Response(
                 HttpStatus::OK,

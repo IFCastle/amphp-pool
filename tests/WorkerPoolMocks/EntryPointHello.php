@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\WorkerPoolMocks;
@@ -26,9 +27,7 @@ final class EntryPointHello implements WorkerEntryPointInterface
         }
     }
 
-    public function initialize(WorkerInterface $worker): void
-    {
-    }
+    public function initialize(WorkerInterface $worker): void {}
 
     public function run(): void
     {

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\SocketStrategy\Unix;
@@ -19,6 +20,7 @@ use Amp\Socket\SocketAddress;
 use Amp\Socket\SocketException;
 use Amp\Sync\Channel;
 use Amp\Sync\ChannelException;
+
 use function Amp\async;
 
 final readonly class ServerSocketPipeFactory implements ServerSocketFactory
@@ -46,7 +48,7 @@ final readonly class ServerSocketPipeFactory implements ServerSocketFactory
         }
 
         $channel = $this->channel;
-        async(static fn () => $channel->send(null))->ignore();
+        async(static fn() => $channel->send(null))->ignore();
     }
 
     public function listen(SocketAddress|string $address, ?BindContext $bindContext = null): ServerSocket
@@ -77,7 +79,7 @@ final readonly class ServerSocketPipeFactory implements ServerSocketFactory
             throw new SocketException('Failed to import stream from socket');
         }
 
-        \socket_listen($socket, $context["socket"]["backlog"] ?? 0);
+        \socket_listen($socket, $context['socket']['backlog'] ?? 0);
 
         $stream = \socket_export_stream($socket);
         /** @psalm-suppress UndefinedFunction */

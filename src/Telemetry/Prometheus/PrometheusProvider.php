@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Telemetry\Prometheus;
@@ -15,8 +16,7 @@ final readonly class PrometheusProvider
          * @var WorkerGroupInterface[]
          */
         private array $groupsScheme = []
-    ) {
-    }
+    ) {}
 
     public function render(): string
     {
@@ -250,12 +250,12 @@ final readonly class PrometheusProvider
 
         foreach ($this->groupsScheme as $group) {
 
-            $metrics[] = 'worker_group{group_id="'.$group->getWorkerGroupId()
-                         .'", group_name="' .$group->getGroupName()
-                         .'", group_type="' .$group->getWorkerType()->value
-                         .'", group_min_workers="' .$group->getMinWorkers()
-                         .'", group_max_workers="' .$group->getMaxWorkers()
-                         .'"} '.($runningWorkers[$group->getWorkerGroupId()] ?? 0);
+            $metrics[] = 'worker_group{group_id="' . $group->getWorkerGroupId()
+                         . '", group_name="' . $group->getGroupName()
+                         . '", group_type="' . $group->getWorkerType()->value
+                         . '", group_min_workers="' . $group->getMinWorkers()
+                         . '", group_max_workers="' . $group->getMaxWorkers()
+                         . '"} ' . ($runningWorkers[$group->getWorkerGroupId()] ?? 0);
         }
 
         return $metrics;
@@ -287,12 +287,12 @@ final readonly class PrometheusProvider
 
         foreach ($this->groupsScheme as $group) {
 
-            $metrics[] = 'worker_group_should_be_started{group_id="'.$group->getWorkerGroupId()
-                         .'", group_name="' .$group->getGroupName()
-                         .'", group_type="' .$group->getWorkerType()->value
-                         .'", group_min_workers="' .$group->getMinWorkers()
-                         .'", group_max_workers="' .$group->getMaxWorkers()
-                         .'"} '.($shouldBeStarted[$group->getWorkerGroupId()] ?? 0);
+            $metrics[] = 'worker_group_should_be_started{group_id="' . $group->getWorkerGroupId()
+                         . '", group_name="' . $group->getGroupName()
+                         . '", group_type="' . $group->getWorkerType()->value
+                         . '", group_min_workers="' . $group->getMinWorkers()
+                         . '", group_max_workers="' . $group->getMaxWorkers()
+                         . '"} ' . ($shouldBeStarted[$group->getWorkerGroupId()] ?? 0);
         }
 
         return $metrics;
@@ -343,6 +343,6 @@ final readonly class PrometheusProvider
         $group                      = $this->groupsScheme[$workerState->getGroupId()] ?? null;
         $groupType                  = $group?->getWorkerType()->value ?? '';
 
-        return 'worker_id="'.$workerState->getWorkerId().'", group_id="'.$workerState->getGroupId().'", group="'.$groupType.'"';
+        return 'worker_id="' . $workerState->getWorkerId() . '", group_id="' . $workerState->getGroupId() . '", group="' . $groupType . '"';
     }
 }

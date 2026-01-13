@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Worker\Internal;
@@ -15,24 +16,23 @@ use IfCastle\AmpPool\WorkersStorage\WorkerStateInterface;
 final class WorkerDescriptor
 {
     private ?DeferredFuture       $startFuture      = null;
-    
+
     private ?WorkerProcessContext $workerProcess    = null;
-    
+
     private bool                  $isStoppedForever = false;
-    
+
     public ?WorkerStateInterface  $workerState      = null;
 
     public function __construct(
         public readonly int $id,
         public readonly WorkerGroupInterface $group,
         private bool $shouldBeStarted = false,
-    ) {
-    }
+    ) {}
 
     public function starting(): void
     {
         if ($this->startFuture === null || $this->startFuture->isComplete()) {
-            $this->startFuture      = new DeferredFuture;
+            $this->startFuture      = new DeferredFuture();
         }
 
         $this->workerState?->updateShouldBeStarted(true);

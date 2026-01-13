@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Integration\WorkerIpc;
@@ -20,7 +21,7 @@ class WorkerToWorkerTest extends TestCase
             workerType     : WorkerTypeEnum::JOB,
             minWorkers     : 1,
             groupName      : EntryPoint::GROUP1,
-            restartStrategy: new RestartNever
+            restartStrategy: new RestartNever()
         ));
 
         $workerPool->describeGroup(new WorkerGroup(
@@ -29,7 +30,7 @@ class WorkerToWorkerTest extends TestCase
             minWorkers     : 1,
             groupName      : EntryPoint::GROUP2,
             jobGroups      : [1],
-            restartStrategy: new RestartNever
+            restartStrategy: new RestartNever()
         ));
 
         $workerPool->run();
@@ -37,7 +38,7 @@ class WorkerToWorkerTest extends TestCase
         $this->assertFileExists(EntryPoint::getFile());
 
         // Assert file content
-        $this->assertEquals(EntryPoint::GROUP2.EntryPoint::WAS_HANDLED, \file_get_contents(EntryPoint::getFile()));
+        $this->assertEquals(EntryPoint::GROUP2 . EntryPoint::WAS_HANDLED, \file_get_contents(EntryPoint::getFile()));
     }
 
     protected function setUp(): void

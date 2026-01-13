@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\JobIpc;
@@ -20,7 +21,9 @@ use Amp\TimeoutCancellation;
 use Amp\TimeoutException;
 use Psr\Log\LoggerInterface;
 use Revolt\EventLoop;
+
 use const Amp\Process\IS_WINDOWS;
+
 use function Amp\delay;
 
 /**
@@ -33,13 +36,13 @@ final class IpcServer implements IpcServerInterface
     use ForbidSerialization;
 
     public const string HAND_SHAKE = 'AM PHP WORKER IPC';
-    
+
     public const string CLOSE_HAND_SHAKE = 'AM PHP WORKER IPC CLOSE';
 
     private ?string $toUnlink = null;
-    
+
     private Socket\ResourceServerSocket $server;
-    
+
     private SocketAddress $address;
 
     private Queue $jobQueue;
@@ -49,7 +52,7 @@ final class IpcServer implements IpcServerInterface
         if (IS_WINDOWS) {
             return new Socket\InternetAddress('127.0.0.1', 10000 + $workerId);
         }
-        
+
         return new Socket\UnixAddress(\sys_get_temp_dir() . '/worker-' . $workerId . '.sock');
 
     }
@@ -159,7 +162,7 @@ final class IpcServer implements IpcServerInterface
                 break;
             } catch (\Throwable $exception) {
                 $this->logger?->notice(
-                    'Error sending job #'.$jobRequest->getJobId().' result (try number '.$i.')',
+                    'Error sending job #' . $jobRequest->getJobId() . ' result (try number ' . $i . ')',
                     ['exception' => $exception, 'request' => $jobRequest]
                 );
 
@@ -243,7 +246,7 @@ final class IpcServer implements IpcServerInterface
         }
 
         // Ignore errors when unlinking temp socket.
-        \set_error_handler(static fn () => true);
+        \set_error_handler(static fn() => true);
         try {
             \unlink($this->toUnlink);
         } finally {

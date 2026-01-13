@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Telemetry\Collectors;
@@ -18,8 +19,7 @@ final readonly class ApplicationCollector implements ApplicationCollectorInterfa
     public function __construct(
         private ApplicationStateInterface $applicationState,
         private MemoryUsageInterface      $memoryUsage
-    ) {
-    }
+    ) {}
 
     public function startApplication(): void
     {
@@ -63,9 +63,7 @@ final readonly class ApplicationCollector implements ApplicationCollectorInterfa
                                ->update();
     }
 
-    public function stopApplication(): void
-    {
-    }
+    public function stopApplication(): void {}
 
     public function flushTelemetry(): void
     {

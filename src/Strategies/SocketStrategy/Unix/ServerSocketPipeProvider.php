@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\SocketStrategy\Unix;
 
@@ -17,6 +19,7 @@ use Amp\Socket\SocketAddress;
 use Amp\Socket\SocketException;
 use Amp\Sync\Channel;
 use Amp\Sync\ChannelException;
+
 use const Amp\Process\IS_WINDOWS;
 
 final class ServerSocketPipeProvider
@@ -26,7 +29,7 @@ final class ServerSocketPipeProvider
     private readonly Serializer $serializer;
 
     private static array $servers   = [];
-    
+
     /**
      * Which worker is using which server socket?
      *
@@ -34,9 +37,9 @@ final class ServerSocketPipeProvider
      */
     private static array $usedBy    = [];
 
-    public function __construct(private readonly int $workerId, private readonly BindContext $bindContext = new BindContext)
+    public function __construct(private readonly int $workerId, private readonly BindContext $bindContext = new BindContext())
     {
-        $this->serializer           = new NativeSerializer;
+        $this->serializer           = new NativeSerializer();
     }
 
     /**
@@ -140,15 +143,15 @@ final class ServerSocketPipeProvider
             $bindContext->toStreamContextArray(),
             [
                 'socket'            => [
-                  'so_reuseaddr'    => IS_WINDOWS, // SO_REUSEADDR has SO_REUSEPORT semantics on Windows
-                  'ipv6_v6only'     => true,
+                    'so_reuseaddr'    => IS_WINDOWS, // SO_REUSEADDR has SO_REUSEPORT semantics on Windows
+                    'ipv6_v6only'     => true,
                 ],
             ],
         ));
 
         // Error reporting suppressed as stream_socket_server() error is immediately checked and
         // reported with an exception.
-        \set_error_handler($errorHandler ??= static fn () => true);
+        \set_error_handler($errorHandler ??= static fn() => true);
 
         try {
             // Do NOT use STREAM_SERVER_LISTEN here - we explicitly invoke \socket_listen() in our worker processes

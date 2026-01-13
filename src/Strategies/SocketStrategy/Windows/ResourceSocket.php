@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\SocketStrategy\Windows;
@@ -93,7 +94,7 @@ final class ResourceSocket implements Socket, ResourceStream, \IteratorAggregate
         if (empty($context['ssl'])) {
             throw new TlsException(
                 "Can't enable TLS without configuration. If you used Amp\\Socket\\listen(), " .
-                "be sure to pass a ServerTlsContext within the BindContext in the second argument, " .
+                'be sure to pass a ServerTlsContext within the BindContext in the second argument, ' .
                 "otherwise set the 'ssl' context option to the PHP stream resource."
             );
         }

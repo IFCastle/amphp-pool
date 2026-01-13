@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Telemetry\Collectors;
@@ -9,15 +10,14 @@ use Psr\Log\LoggerInterface;
 class WorkerTelemetryCollector implements ConnectionCollectorInterface, JobCollectorInterface
 {
     private int $firstErrorAt       = 0;
-    
+
     private int $errorsCount        = 0;
 
     public function __construct(
         private readonly WorkerStateInterface $workerState,
         private readonly ?LoggerInterface $logger = null,
         private readonly int $errorsTimeout = 60 * 60
-    ) {
-    }
+    ) {}
 
     public function flushTelemetry(): void
     {
@@ -38,7 +38,7 @@ class WorkerTelemetryCollector implements ConnectionCollectorInterface, JobColle
 
             if ($this->errorsCount <= 1 || \time() - $this->firstErrorAt > $this->errorsTimeout) {
                 $this->logger?->error(
-                    'Telemetry error: '.$exception->getMessage(),
+                    'Telemetry error: ' . $exception->getMessage(),
                     ['file' => $exception->getFile(), 'line' => $exception->getLine(), 'trace' => $exception->getTraceAsString()]
                 );
 

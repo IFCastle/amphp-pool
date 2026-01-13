@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Coroutine;
@@ -6,6 +7,7 @@ namespace IfCastle\AmpPool\Coroutine;
 use Amp\TimeoutCancellation;
 use PHPUnit\Framework\TestCase;
 use Revolt\EventLoop;
+
 use function Amp\Future\awaitAll;
 
 class SchedulerTest extends TestCase
@@ -14,7 +16,7 @@ class SchedulerTest extends TestCase
 
     public function testOneJob(): void
     {
-        $scheduler                  = new Scheduler;
+        $scheduler                  = new Scheduler();
 
         $scheduler->run(new Coroutine(function (CoroutineInterface $coroutine) {
             $this->runLog[] = 1;
@@ -31,7 +33,7 @@ class SchedulerTest extends TestCase
 
     public function testTwoJobs(): void
     {
-        $scheduler                  = new Scheduler;
+        $scheduler                  = new Scheduler();
 
         $future1                    = $scheduler->run(new Coroutine(function (CoroutineInterface $coroutine): int {
             $this->runLog[] = 1;
@@ -58,7 +60,7 @@ class SchedulerTest extends TestCase
 
     public function testJobWithPriority(): void
     {
-        $scheduler                  = new Scheduler;
+        $scheduler                  = new Scheduler();
 
         $scheduler->run(new Coroutine(function (CoroutineInterface $coroutine) {
             $this->runLog[] = 1;
@@ -81,7 +83,7 @@ class SchedulerTest extends TestCase
 
     public function testJobWithPriorityAndDefer(): void
     {
-        $scheduler                  = new Scheduler;
+        $scheduler                  = new Scheduler();
 
         $scheduler->run(new Coroutine(function (CoroutineInterface $coroutine) {
             $this->runLog[] = 1;
@@ -106,7 +108,7 @@ class SchedulerTest extends TestCase
 
     public function testStopAll(): void
     {
-        $scheduler                  = new Scheduler;
+        $scheduler                  = new Scheduler();
 
         $scheduler->run(new Coroutine(function () {
             $this->runLog[] = 1;
@@ -121,7 +123,7 @@ class SchedulerTest extends TestCase
 
     public function testStopAllWithException(): void
     {
-        $scheduler                  = new Scheduler;
+        $scheduler                  = new Scheduler();
 
         $scheduler->run(new Coroutine(function () {
             $this->runLog[] = 1;
@@ -136,7 +138,7 @@ class SchedulerTest extends TestCase
 
     public function testStopAllWithExceptionUntilRunning(): void
     {
-        $scheduler                  = new Scheduler;
+        $scheduler                  = new Scheduler();
 
         $scheduler->run(new Coroutine(function (Coroutine $coroutine) {
             $this->runLog[] = 1;

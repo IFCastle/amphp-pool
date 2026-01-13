@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool;
@@ -41,7 +42,7 @@ class WorkerGroup implements WorkerGroupInterface
                 try {
                     $strategy->onStopped();
                 } catch (\Throwable $exception) {
-                    $logger?->error('Worker strategy "'.$strategy::class.'" failed to stop', ['exception' => $exception]);
+                    $logger?->error('Worker strategy "' . $strategy::class . '" failed to stop', ['exception' => $exception]);
                 }
             }
         }

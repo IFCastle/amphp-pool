@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\SocketStrategy\Windows;
@@ -38,30 +39,30 @@ final class SocketClientListenerProvider
      * @var int[]
      */
     private array                   $workers          = [];
-    
+
     /**
      * Map of worker statuses, where key is the worker ID and value is the status.
      * True means worker is ready to accept new socket.
      * @var array<int, bool>
      */
     private array                   $workerStatus     = [];
-    
+
     /**
      * Map of transferred sockets, where key is the socket ID and value is the socket.
      * @var array<int, ResourceSocket|Socket>
      */
     private array                   $transferredSockets = [];
-    
+
     private array                   $transferredSocketsByWorker = [];
-    
+
     /**
      * Map of requests by worker, where key is the worker ID and value is the number of active requests.
      * @var array<int, int>
      */
     private array                   $requestsByWorker   = [];
-    
+
     private Cancellation|null       $cancellation       = null;
-    
+
     private readonly DeferredCancellation    $deferredCancellation;
 
     public function __construct(
@@ -69,7 +70,7 @@ final class SocketClientListenerProvider
         private readonly WorkerPoolInterface $workerPool,
         private readonly WorkerGroupInterface $workerGroup
     ) {
-        $this->deferredCancellation = new DeferredCancellation;
+        $this->deferredCancellation = new DeferredCancellation();
         $this->cancellation         = new CompositeCancellation($this->workerPool->getMainCancellation(), $this->deferredCancellation->getCancellation());
 
         $self                       = \WeakReference::create($this);
@@ -151,7 +152,7 @@ final class SocketClientListenerProvider
 
                 $pid                = $foundedWorker->getPid();
 
-                $socketId           = Safe::execute(fn () => \socket_wsaprotocol_info_export(\socket_import_stream($socket->getResource()), $pid));
+                $socketId           = Safe::execute(fn() => \socket_wsaprotocol_info_export(\socket_import_stream($socket->getResource()), $pid));
 
                 if (false === $socketId) {
                     $socket->close();
@@ -192,16 +193,16 @@ final class SocketClientListenerProvider
         $context                    = \stream_context_create(\array_merge(
             $bindContext->toStreamContextArray(),
             [
-                 'socket'           => [
-                     'so_reuseaddr' => \PHP_OS_FAMILY === 'Windows',
-                     'ipv6_v6only'  => true,
-                 ],
-             ],
+                'socket'           => [
+                    'so_reuseaddr' => \PHP_OS_FAMILY === 'Windows',
+                    'ipv6_v6only'  => true,
+                ],
+            ],
         ));
 
         // Error reporting suppressed as stream_socket_server() error is immediately checked and
         // reported with an exception.
-        \set_error_handler($errorHandler ??= static fn () => true);
+        \set_error_handler($errorHandler ??= static fn() => true);
 
         try {
             // Do NOT use STREAM_SERVER_LISTEN here - we explicitly invoke \socket_listen() in our worker processes

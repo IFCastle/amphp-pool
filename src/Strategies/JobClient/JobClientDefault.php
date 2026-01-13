@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\JobClient;
@@ -42,7 +43,7 @@ final class JobClientDefault extends WorkerStrategyAbstract implements JobClient
         if ($this->getWorkerGroup() !== null && $this->getWorkerGroup()->getJobGroups() === []) {
             throw new FatalWorkerException(
                 'JobClient strategy requires at least one JobGroup to be defined in the WorkerGroup. '
-                .'Please define jobGroups before starting the WorkerPool.'
+                . 'Please define jobGroups before starting the WorkerPool.'
             );
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\JobIpc;
@@ -14,8 +15,7 @@ final readonly class JobResponse implements JobResponseInterface
         private int    $errorCode,
         private string $data,
         private ?RemoteException $exception = null
-    ) {
-    }
+    ) {}
 
     public function getJobId(): int
     {

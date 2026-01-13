@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\JobIpc;
@@ -19,6 +20,7 @@ use IfCastle\AmpPool\Exceptions\NoWorkersAvailable;
 use IfCastle\AmpPool\Exceptions\SendJobException;
 use IfCastle\AmpPool\WorkerGroupInterface;
 use Revolt\EventLoop;
+
 use function Amp\delay;
 use function Amp\Socket\socketConnector;
 
@@ -39,11 +41,11 @@ final class IpcClient implements IpcClientInterface
      * @var array [Future, int, int]
      */
     private array $resultsFutures   = [];
-    
+
     private int $maxTryCount        = 3;
-    
+
     private int $futureTimeout      = 60 * 10;
-    
+
     private string $futureTimeoutCallbackId;
 
     /**
@@ -153,7 +155,7 @@ final class IpcClient implements IpcClientInterface
                     $this->resultsFutures[\spl_object_id($deferred)] = [$deferred, $socketId, \time()];
                     return $deferred->getFuture();
                 }
-                
+
                 return null;
 
             } catch (NoWorkersAvailable $exception) {
@@ -302,7 +304,7 @@ final class IpcClient implements IpcClientInterface
 
         $client->write(IpcServer::HAND_SHAKE);
 
-        return new StreamChannel($client, $client, new PassthroughSerializer);
+        return new StreamChannel($client, $client, new PassthroughSerializer());
     }
 
     private function readLoop(int $workerId): void

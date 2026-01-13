@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Internal\Messages;
@@ -9,7 +10,4 @@ namespace IfCastle\AmpPool\Internal\Messages;
  * This is useful for the scaling algorithm when it is necessary to indicate
  * to the Worker to stop working after a successful task.
  */
-final class WorkerSoftShutdown
-{
-
-}
+final class WorkerSoftShutdown {}

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\WorkersStorage;
@@ -26,7 +27,7 @@ class MemoryUsageTest extends TestCase
         $stats                      = [];
 
         for ($workerId = 1; $workerId <= 5; $workerId++) {
-            $stats[$workerId]       = random_int(0, 1000);
+            $stats[$workerId]       = \random_int(0, 1000);
         }
 
         $memoryUsage->setStats($stats);

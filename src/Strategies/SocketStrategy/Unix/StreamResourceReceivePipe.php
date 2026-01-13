@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Strategies\SocketStrategy\Unix;
@@ -57,7 +58,7 @@ final class StreamResourceReceivePipe implements Closable
                 try {
                     if (\feof($stream)) {
                         $transferSocket->close();
-                        $suspension?->resume(static fn () => throw new SocketException(
+                        $suspension?->resume(static fn() => throw new SocketException(
                             'The transfer socket closed while waiting to receive a socket',
                         ));
                     } else {
@@ -71,7 +72,7 @@ final class StreamResourceReceivePipe implements Closable
                     }
                 } catch (\Throwable $exception) {
                     $transferSocket->close();
-                    $suspension?->resume(static fn () => throw new SocketException(
+                    $suspension?->resume(static fn() => throw new SocketException(
                         'The transfer socket threw an exception: ' . $exception->getMessage(),
                         previous: $exception,
                     ));
@@ -83,7 +84,7 @@ final class StreamResourceReceivePipe implements Closable
 
         $this->transferSocket->onClose(static function () use (&$suspension, $onReadable): void {
             EventLoop::cancel($onReadable);
-            $suspension?->resume(static fn () => throw new SocketException('The transfer socket closed unexpectedly'));
+            $suspension?->resume(static fn() => throw new SocketException('The transfer socket closed unexpectedly'));
         });
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\Worker;
@@ -13,29 +14,24 @@ use IfCastle\AmpPool\WorkerTypeEnum;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use Revolt\EventLoop;
+
 use function Amp\Sync\createChannelPair;
 
 class WorkerTest extends TestCase
 {
     private Worker      $worker;
-    
+
     private Channel     $channelIn;
-    
+
     private Channel     $channelOut;
-    
+
     private WorkerGroup $workerGroup;
-    
+
     private DeferredCancellation $cancellation;
 
-    protected function setUp(): void
-    {
+    protected function setUp(): void {}
 
-    }
-
-    protected function tearDown(): void
-    {
-
-    }
+    protected function tearDown(): void {}
 
     public function testStop(): void
     {
@@ -61,7 +57,7 @@ class WorkerTest extends TestCase
         EventLoop::queue($this->worker->mainLoop(...));
 
         EventLoop::queue(function () {
-            $this->channelIn->send(new MessageIpcShutdown);
+            $this->channelIn->send(new MessageIpcShutdown());
         });
 
         $this->worker->awaitTermination(new TimeoutCancellation(5));
@@ -71,7 +67,7 @@ class WorkerTest extends TestCase
 
     protected function buildChannel(): void
     {
-        $this->cancellation         = new DeferredCancellation;
+        $this->cancellation         = new DeferredCancellation();
 
         [$this->channelIn, $this->channelOut] = createChannelPair();
 

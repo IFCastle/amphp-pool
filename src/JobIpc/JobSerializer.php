@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\AmpPool\JobIpc;
@@ -7,13 +8,13 @@ use IfCastle\AmpPool\Exceptions\RemoteException;
 
 final class JobSerializer implements JobSerializerInterface
 {
-    const int REQUEST_HEADER_LENGTH = 5 * 4;
-    
-    const int REQUEST_HEADER_ITEMS = 5;
-    
-    const int RESPONSE_HEADER_LENGTH = 4 * 4;
-    
-    const int RESPONSE_HEADER_ITEMS = 4;
+    public const int REQUEST_HEADER_LENGTH = 5 * 4;
+
+    public const int REQUEST_HEADER_ITEMS = 5;
+
+    public const int RESPONSE_HEADER_LENGTH = 4 * 4;
+
+    public const int RESPONSE_HEADER_ITEMS = 4;
 
     public function createRequest(int $jobId, int $fromWorkerId, int $workerGroupId, string $data, int $priority = 0, int $weight = 0): string
     {
@@ -24,7 +25,7 @@ final class JobSerializer implements JobSerializerInterface
     {
         // Check minimum length
         if (\strlen($request) < self::REQUEST_HEADER_LENGTH) {
-            throw new \InvalidArgumentException('Request is too short (less '.self::REQUEST_HEADER_LENGTH . ' bytes)');
+            throw new \InvalidArgumentException('Request is too short (less ' . self::REQUEST_HEADER_LENGTH . ' bytes)');
         }
 
         $buffer                     = \unpack('V*', \substr($request, 0, self::REQUEST_HEADER_LENGTH));
@@ -52,14 +53,14 @@ final class JobSerializer implements JobSerializerInterface
             $data                   = \serialize($data);
         }
 
-        return \pack('V*', $jobId, $fromWorkerId, $workerGroupId, $isException).$data;
+        return \pack('V*', $jobId, $fromWorkerId, $workerGroupId, $isException) . $data;
     }
 
     public function parseResponse(string $response): JobResponseInterface
     {
         // Check minimum length
         if (\strlen($response) < self::RESPONSE_HEADER_LENGTH) {
-            throw new \InvalidArgumentException('Response is too short (less '.self::RESPONSE_HEADER_LENGTH . ' bytes)');
+            throw new \InvalidArgumentException('Response is too short (less ' . self::RESPONSE_HEADER_LENGTH . ' bytes)');
         }
 
         $buffer                     = \unpack('V*', \substr($response, 0, self::RESPONSE_HEADER_LENGTH));
