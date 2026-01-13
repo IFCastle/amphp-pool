@@ -20,10 +20,15 @@ use function Amp\delay;
 abstract class JobExecutorAbstract extends WorkerStrategyAbstract implements JobExecutorInterface
 {
     protected JobHandlerInterface|null $handler         = null;
+    
     protected int                     $workerId         = 0;
+    
     protected LoggerInterface|null    $logger           = null;
+    
     protected WorkerStateInterface|null $workerState    = null;
+    
     protected WorkerGroup|null        $group            = null;
+    
     protected IpcServerInterface|null $jobIpc           = null;
 
     abstract protected function initIpcServer(): void;

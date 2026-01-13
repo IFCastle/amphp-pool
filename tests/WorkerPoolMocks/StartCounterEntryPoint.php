@@ -44,11 +44,7 @@ final class StartCounterEntryPoint implements WorkerEntryPointInterface
         if (\flock($fh, LOCK_EX)) {
             $content                = \fread($fh, 4);
 
-            if (false === $content || $content === '') {
-                $content            = 1;
-            } else {
-                $content            = (int) $content + 1;
-            }
+            $content = false === $content || $content === '' ? 1 : (int) $content + 1;
 
             \fseek($fh, 0);
             \fwrite($fh, (string) $content);

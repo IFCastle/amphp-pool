@@ -61,7 +61,9 @@ use function Amp\trapSignal;
 final class WorkerPool implements WorkerPoolInterface
 {
     protected int $workerStartTimeout = 5;
+    
     protected int $workerStopTimeout  = 60;
+    
     private int $lastGroupId        = 0;
 
     private bool $shouldRestart      = false;
@@ -74,7 +76,9 @@ final class WorkerPool implements WorkerPoolInterface
     protected array $poolContext    = [];
 
     protected readonly Queue $queue;
+    
     private readonly ConcurrentIterator $iterator;
+    
     private bool $running           = false;
 
     private WorkersStorageInterface $workersStorage;
@@ -100,7 +104,7 @@ final class WorkerPool implements WorkerPoolInterface
      */
     private array $groupsScheme             = [];
 
-    private WorkerEventEmitterInterface $eventEmitter;
+    private readonly WorkerEventEmitterInterface $eventEmitter;
 
     private mixed $pidFileHandler           = null;
 
@@ -113,7 +117,7 @@ final class WorkerPool implements WorkerPoolInterface
         private readonly string $workersStorageClass    = WorkersStorage::class,
         private readonly string $collectorClass         = ApplicationCollector::class,
         private ?ContextFactory $contextFactory         = null,
-        private ?PsrLogger $logger                      = null,
+        private readonly ?PsrLogger $logger                      = null,
         private readonly string|bool $pidFile           = false,
         private readonly int $statsUpdateInterval       = 5
     ) {
@@ -145,6 +149,7 @@ final class WorkerPool implements WorkerPoolInterface
         $this->applicationCollector = \forward_static_call([$this->collectorClass, 'instanciate'], $this->workersStorage);
 
         $this->applicationCollector->startApplication();
+        
         $this->applicationCollectorId = EventLoop::repeat($this->statsUpdateInterval, $this->updateApplicationState(...));
     }
 
@@ -193,11 +198,7 @@ final class WorkerPool implements WorkerPoolInterface
             // If group name undefined, use the worker class name without a namespace
             $groupName              = \strrchr($group->getEntryPointClass(), '\\');
 
-            if ($groupName === false) {
-                $groupName          = 'Group'.$groupId;
-            } else {
-                $groupName          = \ucfirst(\substr($groupName, 1));
-            }
+            $groupName = $groupName === false ? 'Group'.$groupId : \ucfirst(\substr($groupName, 1));
 
             $group->defineGroupName($groupName);
         }
@@ -228,7 +229,7 @@ final class WorkerPool implements WorkerPoolInterface
      */
     public function validateGroupsScheme(): void
     {
-        if (empty($this->groupsScheme)) {
+        if ($this->groupsScheme === []) {
             throw new \Exception('The worker groups scheme is empty');
         }
 
@@ -436,7 +437,7 @@ final class WorkerPool implements WorkerPoolInterface
                 }
 
                 // Stop cycle when all workers are stopped
-            } while (\count($futures) > 0 && true !== $this->workersCancellation?->isCancelled());
+            } while ($futures !== [] && true !== $this->workersCancellation?->isCancelled());
 
         } finally {
             // All workers are stopped here, so triggers cancellation if not already canceled
@@ -520,11 +521,9 @@ final class WorkerPool implements WorkerPoolInterface
     public function restartWorker(int $workerId): bool
     {
         foreach ($this->workers as $workerDescriptor) {
-            if ($workerDescriptor->id === $workerId) {
-                if ($workerDescriptor->isRunning()) {
-                    $workerDescriptor->getWorkerProcess()->softShutdown();
-                    return true;
-                }
+            if ($workerDescriptor->id === $workerId && $workerDescriptor->isRunning()) {
+                $workerDescriptor->getWorkerProcess()->softShutdown();
+                return true;
             }
         }
 
@@ -578,7 +577,7 @@ final class WorkerPool implements WorkerPoolInterface
 
         $handler                = null;
 
-        $handler                = static function () use ($suspension, &$handler, $id): void {
+        $handler                = static function () use ($suspension, &$handler): void {
 
             if ($handler === null) {
                 return;
@@ -1091,11 +1090,7 @@ final class WorkerPool implements WorkerPoolInterface
         $workersPid                 = [];
 
         foreach ($this->workers as $workerDescriptor) {
-            if ($workerDescriptor->isRunning()) {
-                $workersPid[]       = $workerDescriptor->getWorkerProcess()?->getPid() ?? 0;
-            } else {
-                $workersPid[]       = 0;
-            }
+            $workersPid[] = $workerDescriptor->isRunning() ? $workerDescriptor->getWorkerProcess()?->getPid() ?? 0 : 0;
         }
 
         $this->applicationCollector?->updateApplicationState($workersPid);

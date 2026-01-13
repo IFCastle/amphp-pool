@@ -36,9 +36,11 @@ final class StreamResourceReceivePipe implements Closable
         ResourceStream $resourceStream,
         private readonly Serializer $serializer,
     ) {
-        $this->transferSocket = $transferSocket = new TransferSocket($resourceStream);
-        $this->receiveQueue = $receiveQueue = new \SplQueue();
+        $this->transferSocket = new TransferSocket($resourceStream);
+        $transferSocket = $this->transferSocket;
 
+        $this->receiveQueue = new \SplQueue();
+        $receiveQueue = $this->receiveQueue;
         $streamResource = $resourceStream->getResource();
         if (!\is_resource($streamResource)) {
             throw new SocketException('The provided socket has already been closed');
@@ -60,7 +62,7 @@ final class StreamResourceReceivePipe implements Closable
                         ));
                     } else {
                         $received = $transferSocket->receiveSocket();
-                        if (!$received) {
+                        if ($received === null) {
                             return;
                         }
 
@@ -118,14 +120,13 @@ final class StreamResourceReceivePipe implements Closable
         }
 
         if ($this->receiveQueue->isEmpty()) {
-            $this->waiting = $suspension = EventLoop::getSuspension();
-
+            $this->waiting = EventLoop::getSuspension();
+            $suspension = $this->waiting;
             $waiting = &$this->waiting;
             $id = $cancellation?->subscribe(static function (CancelledException $exception) use (&$waiting): void {
                 $waiting?->throw($exception);
                 $waiting = null;
             });
-
             try {
                 if ($closure = $suspension->suspend()) {
                     $closure();

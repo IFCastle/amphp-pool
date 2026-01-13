@@ -31,6 +31,7 @@ final class JobExecutorScheduler extends JobExecutorAbstract
     ) {
     }
 
+    #[\Override]
     public function __serialize(): array
     {
         return [
@@ -47,6 +48,7 @@ final class JobExecutorScheduler extends JobExecutorAbstract
         $this->maxAwaitAllTimeout   = $data['maxAwaitAllTimeout'] ?? 0;
     }
 
+    #[\Override]
     public function onStarted(): void
     {
         parent::onStarted();

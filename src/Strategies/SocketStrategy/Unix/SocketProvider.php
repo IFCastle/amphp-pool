@@ -19,18 +19,17 @@ use const Amp\Process\IS_WINDOWS;
 final class SocketProvider
 {
     private ServerSocketPipeProvider|null $provider = null;
-    private Cancellation $cancellation;
-    private DeferredCancellation $deferredCancellation;
+    
+    private readonly Cancellation $cancellation;
+    
+    private readonly DeferredCancellation $deferredCancellation;
 
     public function __construct(
         private readonly int    $workerId,
-        private readonly IpcHub $hub,
-        private readonly string $ipcKey,
-        Cancellation            $cancellation,
-        private readonly int    $timeout = 5
+        Cancellation            $cancellation
     ) {
         if (IS_WINDOWS) {
-            throw new \Error(__CLASS__.' can\'t be used under Windows OS');
+            throw new \Error(self::class.' can\'t be used under Windows OS');
         }
 
         $this->provider             = new ServerSocketPipeProvider($this->workerId);
@@ -74,30 +73,5 @@ final class SocketProvider
         }
 
         $this->provider             = null;
-    }
-
-    private function createSocketTransport(): ResourceSocket
-    {
-        $socket                     = $this->hub->accept(
-            $this->ipcKey,
-            new CompositeCancellation(
-                $this->cancellation,
-                new TimeoutCancellation(
-                    $this->timeout,
-                    'Timeout while attempting to create a channel for socket transmission between processes.'
-                )
-            )
-        );
-
-        if (false === $socket instanceof ResourceSocket) {
-            throw new \TypeError(\sprintf(
-                'The %s instance returned from %s::accept() must also implement %s',
-                Socket::class,
-                \get_class($this->hub),
-                ResourceStream::class,
-            ));
-        }
-
-        return $socket;
     }
 }

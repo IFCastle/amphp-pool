@@ -51,21 +51,18 @@ final class HttpReactor implements WorkerEntryPointInterface
         $httpServer                 = new SocketHttpServer($worker->getLogger(), $socketFactory, $clientFactory);
 
         // 2. Expose the server to the network
-        $httpServer->expose('127.0.0.1:9095', (new BindContext())->withTcpNoDelay());
+        $httpServer->expose('127.0.0.1:9095', new BindContext()->withTcpNoDelay());
 
         // 3. Handle incoming connections and start the server
         $httpServer->start(
-            new ClosureRequestHandler(static function () use ($worker): Response {
-
-                return new Response(
-                    HttpStatus::OK,
-                    [
-                    'content-type' => 'text/plain; charset=utf-8',
-                ],
-                    'Hello, World! From worker id: '.$worker->getWorkerId()
-                   .' and group id: '.$worker->getWorkerGroupId()
-                );
-            }),
+            new ClosureRequestHandler(static fn(): Response => new Response(
+                HttpStatus::OK,
+                [
+                'content-type' => 'text/plain; charset=utf-8',
+            ],
+                'Hello, World! From worker id: '.$worker->getWorkerId()
+               .' and group id: '.$worker->getWorkerGroupId()
+            )),
             new DefaultErrorHandler(),
         );
 

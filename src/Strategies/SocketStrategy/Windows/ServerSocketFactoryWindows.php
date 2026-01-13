@@ -27,9 +27,12 @@ final class ServerSocketFactoryWindows implements ServerSocket
     use ForbidSerialization;
 
     private readonly DeferredFuture $onClose;
+    
     /** @var Queue<MessageSocketTransfer> */
     private readonly Queue $queue;
+    
     private readonly ConcurrentIterator $iterator;
+    
     private mixed $workerEventHandler;
 
     public function __construct(
@@ -132,7 +135,7 @@ final class ServerSocketFactoryWindows implements ServerSocket
      *
      *
      */
-    private function workerEventHandler(mixed $message, int $workerId = 0): void
+    private function workerEventHandler(mixed $message): void
     {
         if ($message instanceof MessageSocketTransfer) {
             $this->queue->pushAsync($message)->ignore();

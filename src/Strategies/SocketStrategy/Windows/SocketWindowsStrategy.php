@@ -10,9 +10,10 @@ use IfCastle\AmpPool\Strategies\WorkerStrategyAbstract;
 final class SocketWindowsStrategy extends WorkerStrategyAbstract implements SocketStrategyInterface
 {
     private SocketListenerProvider|null $socketListenerProvider = null;
+    
     private SocketPipeFactoryWindows|null $socketPipeFactory = null;
 
-    public function getServerSocketFactory(): ServerSocketFactory|null
+    public function getServerSocketFactory(): \Amp\Socket\ServerSocketFactory
     {
         if ($this->socketPipeFactory !== null) {
             return $this->socketPipeFactory;

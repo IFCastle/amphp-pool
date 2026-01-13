@@ -9,6 +9,7 @@ namespace IfCastle\AmpPool\Strategies\RestartStrategy;
 interface RestartStrategyInterface
 {
     public const int RESTART_IMMEDIATELY = 0;
+    
     public const int RESTART_NEVER = -1;
 
     /**

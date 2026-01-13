@@ -34,7 +34,7 @@ final class ResourceSocket implements Socket, ResourceStream, \IteratorAggregate
     use ForbidSerialization;
     use ReadableStreamIteratorAggregate;
 
-    public const DEFAULT_CHUNK_SIZE = ReadableResourceStream::DEFAULT_CHUNK_SIZE;
+    public const int DEFAULT_CHUNK_SIZE = ReadableResourceStream::DEFAULT_CHUNK_SIZE;
 
     /**
      * @param resource     $resource  Stream resource.
@@ -195,7 +195,7 @@ final class ResourceSocket implements Socket, ResourceStream, \IteratorAggregate
 
     public function isTlsConfigurationAvailable(): bool
     {
-        return $this->tlsContext || !empty($this->getStreamContext()['ssl']);
+        return $this->tlsContext instanceof \Amp\Socket\ClientTlsContext || !empty($this->getStreamContext()['ssl']);
     }
 
     private function getStreamContext(): ?array
@@ -204,7 +204,7 @@ final class ResourceSocket implements Socket, ResourceStream, \IteratorAggregate
             return $this->streamContext;
         }
 
-        if ($this->tlsContext) {
+        if ($this->tlsContext !== null) {
             return $this->streamContext = $this->tlsContext->toStreamContextArray();
         }
 

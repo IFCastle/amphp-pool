@@ -15,8 +15,11 @@ use IfCastle\AmpPool\WorkersStorage\WorkerStateInterface;
 final class WorkerDescriptor
 {
     private ?DeferredFuture       $startFuture      = null;
+    
     private ?WorkerProcessContext $workerProcess    = null;
+    
     private bool                  $isStoppedForever = false;
+    
     public ?WorkerStateInterface  $workerState      = null;
 
     public function __construct(
@@ -83,7 +86,10 @@ final class WorkerDescriptor
 
     public function isRunningOrWillBeRunning(): bool
     {
-        return $this->isRunning() || ($this->startFuture !== null && false === $this->startFuture->isComplete());
+        if ($this->isRunning()) {
+            return true;
+        }
+        return $this->startFuture !== null && false === $this->startFuture->isComplete();
     }
 
     public function isRunning(): bool

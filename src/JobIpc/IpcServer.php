@@ -33,20 +33,23 @@ final class IpcServer implements IpcServerInterface
     use ForbidSerialization;
 
     public const string HAND_SHAKE = 'AM PHP WORKER IPC';
+    
     public const string CLOSE_HAND_SHAKE = 'AM PHP WORKER IPC CLOSE';
 
     private ?string $toUnlink = null;
+    
     private Socket\ResourceServerSocket $server;
+    
     private SocketAddress $address;
 
     private Queue $jobQueue;
-    private JobSerializerInterface $jobSerializer;
 
     public static function getSocketAddress(int $workerId): SocketAddress
     {
         if (IS_WINDOWS) {
             return new Socket\InternetAddress('127.0.0.1', 10000 + $workerId);
         }
+        
         return new Socket\UnixAddress(\sys_get_temp_dir() . '/worker-' . $workerId . '.sock');
 
     }
@@ -57,7 +60,7 @@ final class IpcServer implements IpcServerInterface
      */
     public function __construct(
         private readonly int $workerId,
-        ?JobSerializerInterface $jobSerializer       = null,
+        private ?JobSerializerInterface $jobSerializer       = new JobSerializer(),
         private readonly ?LoggerInterface $logger   = null,
         private readonly int $sendResultAttempts    = 2,
         private readonly float $attemptDelay        = 0.5
@@ -76,7 +79,6 @@ final class IpcServer implements IpcServerInterface
         $this->address              = $address;
         $this->server               = Socket\listen($address);
         $this->jobQueue             = new Queue(10);
-        $this->jobSerializer        = $jobSerializer ?? new JobSerializer();
     }
 
     public function __destruct()

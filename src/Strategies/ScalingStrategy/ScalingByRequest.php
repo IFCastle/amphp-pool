@@ -10,6 +10,7 @@ use Revolt\EventLoop;
 final class ScalingByRequest extends WorkerStrategyAbstract implements ScalingStrategyInterface
 {
     private int $lastScalingRequest   = 0;
+    
     private string $decreaseCallbackId = '';
 
     public function __construct(
@@ -97,7 +98,7 @@ final class ScalingByRequest extends WorkerStrategyAbstract implements ScalingSt
         return [$minWorkerId, $maxWorkerId];
     }
 
-    private function handleScalingRequest(mixed $message, int $workerId = 0): void
+    private function handleScalingRequest(mixed $message): void
     {
         if ($message instanceof ScalingRequest === false) {
             return;

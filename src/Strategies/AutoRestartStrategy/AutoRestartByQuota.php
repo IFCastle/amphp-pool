@@ -15,6 +15,7 @@ use Revolt\EventLoop;
 final class AutoRestartByQuota extends WorkerStrategyAbstract
 {
     private string $checkerId                   = '';
+    
     private array $workersLastState             = [];
 
     public function __construct(

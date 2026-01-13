@@ -16,31 +16,32 @@ use Revolt\EventLoop\Suspension;
 /**
  * @template T
  */
-final class StreamResourceSendPipe implements Closable
+final readonly class StreamResourceSendPipe implements Closable
 {
     use ForbidCloning;
     use ForbidSerialization;
 
-    private readonly TransferSocket $transferSocket;
+    private TransferSocket $transferSocket;
 
     /** @var \SplQueue<array{Suspension<null|\Closure():never>, resource, string}> */
-    private readonly \SplQueue $transferQueue;
+    private \SplQueue $transferQueue;
 
-    private readonly string $onWritable;
+    private string $onWritable;
 
     public function __construct(
         ResourceStream $resourceStream,
-        private readonly Serializer $serializer,
+        private Serializer $serializer,
     ) {
-        $this->transferSocket = $transferSocket = new TransferSocket($resourceStream);
-        $this->transferQueue = $transferQueue = new \SplQueue();
+        $this->transferSocket = new TransferSocket($resourceStream);
+        $transferSocket = $this->transferSocket;
 
+        $this->transferQueue = new \SplQueue();
+        $transferQueue = $this->transferQueue;
         $streamResource = $resourceStream->getResource();
         if (!\is_resource($streamResource)) {
             throw new SocketException('The provided socket has already been closed');
         }
-
-        $this->onWritable = $onWritable = EventLoop::disable(EventLoop::onWritable(
+        $this->onWritable = EventLoop::disable(EventLoop::onWritable(
             $streamResource,
             static function (string $callbackId, $stream) use (
                 $transferSocket,
@@ -75,6 +76,7 @@ final class StreamResourceSendPipe implements Closable
                 EventLoop::disable($callbackId);
             },
         ));
+        $onWritable = $this->onWritable;
 
         $this->transferSocket->onClose(static function () use ($transferQueue, $onWritable): void {
             EventLoop::cancel($onWritable);

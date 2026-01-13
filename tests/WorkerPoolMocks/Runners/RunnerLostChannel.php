@@ -9,6 +9,7 @@ use function Amp\delay;
 
 final class RunnerLostChannel extends DefaultRunner
 {
+    #[\Override]
     public static function processEntryPoint(Channel $channel): void
     {
         // Break the channel
@@ -17,7 +18,8 @@ final class RunnerLostChannel extends DefaultRunner
         delay(2);
     }
 
-    public function getScript(): string|array
+    #[\Override]
+    public function getScript(): string
     {
         return __DIR__ . '/runner.php';
     }

@@ -23,12 +23,12 @@ class ApplicationStateTest extends TestCase
 
     private function fillApplicationState(ApplicationState $applicationState): void
     {
-        $applicationState->setStartedAt(\rand(0, 1000));
-        $applicationState->setLastRestartedAt(\rand(0, 1000));
-        $applicationState->setRestartsCount(\rand(0, 1000));
-        $applicationState->setWorkersErrors(\rand(0, 1000));
-        $applicationState->setMemoryFree(\rand(0, 1000));
-        $applicationState->setMemoryTotal(\rand(0, 1000));
-        $applicationState->setLoadAverage(\rand(0, 1000) / 1000);
+        $applicationState->setStartedAt(random_int(0, 1000));
+        $applicationState->setLastRestartedAt(random_int(0, 1000));
+        $applicationState->setRestartsCount(random_int(0, 1000));
+        $applicationState->setWorkersErrors(random_int(0, 1000));
+        $applicationState->setMemoryFree(random_int(0, 1000));
+        $applicationState->setMemoryTotal(random_int(0, 1000));
+        $applicationState->setLoadAverage(random_int(0, 1000) / 1000);
     }
 }

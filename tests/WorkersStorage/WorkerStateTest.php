@@ -58,6 +58,7 @@ class WorkerStateTest extends TestCase
         $workerState->finishedAt    = \time();
         $workerState->updatedAt     = \time();
         $workerState->updateTimeSegment();
+        
         $workerState2->read();
 
         $this->assertEquals($workerState, $workerState2);
@@ -127,6 +128,7 @@ class WorkerStateTest extends TestCase
         $workerState->jobEnqueued(15, true);
 
         $workerState->updateJobSegment();
+        
         $workerState2->read();
         $this->assertEquals($workerState, $workerState2);
 

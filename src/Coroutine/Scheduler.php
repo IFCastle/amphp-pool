@@ -17,13 +17,21 @@ final class Scheduler implements SchedulerInterface
      * @var array<CoroutineInterface>
      */
     private array $coroutines       = [];
+    
     private array $coroutinesQueue  = [];
+    
     private int         $highestPriority   = 0;
+    
     private ?Suspension $suspension = null;
+    
     private string      $callbackId = '';
+    
     private bool        $isRunning  = true;
+    
     private ?DeferredFuture $future = null;
+    
     private \Throwable|null $stopException = null;
+    
     private bool $managerResumed    = false;
 
     private function init(): void

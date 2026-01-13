@@ -14,6 +14,7 @@ final class SocketListenerProvider
 {
     /** @var array<string, SocketClientListenerProvider> */
     private array $socketListeners  = [];
+    
     private mixed $eventListener;
 
     public function __construct(private readonly WorkerPool $workerPool, private readonly WorkerGroupInterface $workerGroup)
@@ -79,15 +80,6 @@ final class SocketListenerProvider
     {
         foreach ($this->socketListeners as $listener) {
             $listener->removeWorker($workerId);
-        }
-    }
-
-    private function cleanListeners(): void
-    {
-        foreach ($this->socketListeners as $address => $listener) {
-            if ($listener->stopIfNoWorkers()) {
-                unset($this->socketListeners[$address]);
-            }
         }
     }
 }

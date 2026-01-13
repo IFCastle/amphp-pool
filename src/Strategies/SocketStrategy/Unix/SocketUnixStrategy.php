@@ -18,9 +18,13 @@ use function Amp\Future\await;
 final class SocketUnixStrategy extends WorkerStrategyAbstract implements SocketStrategyInterface
 {
     private ServerSocketPipeFactory|null $socketPipeFactory = null;
+    
     private string              $uri                = '';
+    
     private string              $key                = '';
+    
     private DeferredFuture|null $deferredFuture     = null;
+    
     private EventWeakHandler|null $workerEventHandler = null;
 
     /** @var SocketProvider[] */
@@ -133,7 +137,7 @@ final class SocketUnixStrategy extends WorkerStrategyAbstract implements SocketS
         }
     }
 
-    private function handleMessage(mixed $message, int $workerId = 0): void
+    private function handleMessage(mixed $message): void
     {
         if ($this->isSelfWorker()) {
             $this->workerHandler($message);
@@ -214,6 +218,7 @@ final class SocketUnixStrategy extends WorkerStrategyAbstract implements SocketS
         }
     }
 
+    #[\Override]
     public function __serialize(): array
     {
         return ['ipcTimeout' => $this->ipcTimeout];

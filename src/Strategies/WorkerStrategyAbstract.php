@@ -11,8 +11,11 @@ use IfCastle\AmpPool\WorkersStorage\WorkersStorageInterface;
 abstract class WorkerStrategyAbstract implements WorkerStrategyInterface
 {
     private \WeakReference|null $workerPool = null;
+    
     private \WeakReference|null $worker = null;
+    
     private \WeakReference|null $workerGroup = null;
+    
     private bool $isSelfWorker = false;
 
     public function getWorkerPool(): WorkerPoolInterface|null
@@ -131,9 +134,5 @@ abstract class WorkerStrategyAbstract implements WorkerStrategyInterface
     public function __serialize(): array
     {
         return [];
-    }
-
-    public function __unserialize(array $data): void
-    {
     }
 }

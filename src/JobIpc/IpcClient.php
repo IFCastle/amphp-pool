@@ -34,14 +34,16 @@ final class IpcClient implements IpcClientInterface
      * @var StreamChannel[]
      */
     private array                       $workerChannels = [];
-    private JobSerializerInterface|null $jobSerializer  = null;
     /**
      * List of futures that are waiting for the result of the job with SocketId, and time when the job was sent.
      * @var array [Future, int, int]
      */
     private array $resultsFutures   = [];
+    
     private int $maxTryCount        = 3;
+    
     private int $futureTimeout      = 60 * 10;
+    
     private string $futureTimeoutCallbackId;
 
     /**
@@ -55,7 +57,7 @@ final class IpcClient implements IpcClientInterface
         private readonly int $workerId,
         private readonly WorkerGroupInterface $workerGroup,
         private readonly array $groupsScheme,
-        ?JobSerializerInterface                $jobSerializer = null,
+        private ?JobSerializerInterface                $jobSerializer = new JobSerializer(),
         private readonly Cancellation|null    $cancellation = null,
         private readonly int                  $retryInterval = 1,
         private readonly int                  $scalingTimeout = 2
@@ -63,8 +65,6 @@ final class IpcClient implements IpcClientInterface
         if ($this->workerGroup->getPickupStrategy() === null) {
             throw new \InvalidArgumentException('WorkerGroup must have a PickupStrategy');
         }
-
-        $this->jobSerializer        = $jobSerializer ?? new JobSerializer();
     }
 
     public function mainLoop(): void
@@ -153,6 +153,7 @@ final class IpcClient implements IpcClientInterface
                     $this->resultsFutures[\spl_object_id($deferred)] = [$deferred, $socketId, \time()];
                     return $deferred->getFuture();
                 }
+                
                 return null;
 
             } catch (NoWorkersAvailable $exception) {
@@ -187,7 +188,7 @@ final class IpcClient implements IpcClientInterface
     }
 
     private function tryToSendJob(
-        $foundedWorkerId,
+        int $foundedWorkerId,
         string $data,
         int $priority               = 0,
         int $weight                 = 0,
@@ -265,7 +266,7 @@ final class IpcClient implements IpcClientInterface
 
         foreach ($allowedGroups as $groupId) {
 
-            if (\array_key_exists($groupId, $groupsScheme) === false) {
+            if (\array_key_exists((string) $groupId, $groupsScheme) === false) {
                 continue;
             }
 

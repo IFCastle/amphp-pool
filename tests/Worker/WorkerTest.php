@@ -18,9 +18,13 @@ use function Amp\Sync\createChannelPair;
 class WorkerTest extends TestCase
 {
     private Worker      $worker;
+    
     private Channel     $channelIn;
+    
     private Channel     $channelOut;
+    
     private WorkerGroup $workerGroup;
+    
     private DeferredCancellation $cancellation;
 
     protected function setUp(): void

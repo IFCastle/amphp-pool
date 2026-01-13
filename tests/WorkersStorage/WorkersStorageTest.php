@@ -110,26 +110,26 @@ class WorkersStorageTest extends TestCase
 
     private function fillWorkerState(WorkerState $workerState): void
     {
-        $workerState->groupId        = \rand(1, 1000000);
-        $workerState->shouldBeStarted= \rand(0, 1) === 1;
-        $workerState->isReady        = \rand(0, 1) === 1;
-        $workerState->totalReloaded  = \rand(1, 1000000);
-        $workerState->weight         = \rand(1, 1000000);
-        $workerState->firstStartedAt = \rand(1, 1000000);
-        $workerState->startedAt      = \rand(1, 1000000);
-        $workerState->finishedAt     = \rand(1, 1000000);
-        $workerState->updatedAt      = \rand(1, 1000000);
-        $workerState->phpMemoryUsage = \rand(1, 1000000);
-        $workerState->phpMemoryPeakUsage = \rand(1, 1000000);
-        $workerState->connectionsAccepted = \rand(1, 1000000);
-        $workerState->connectionsProcessed = \rand(1, 1000000);
-        $workerState->connectionsErrors = \rand(1, 1000000);
-        $workerState->connectionsRejected = \rand(1, 1000000);
-        $workerState->connectionsProcessing = \rand(1, 1000000);
-        $workerState->jobAccepted = \rand(1, 1000000);
-        $workerState->jobProcessed = \rand(1, 1000000);
-        $workerState->jobProcessing = \rand(1, 1000000);
-        $workerState->jobErrors = \rand(1, 1000000);
-        $workerState->jobRejected = \rand(1, 1000000);
+        $workerState->groupId        = random_int(1, 1000000);
+        $workerState->shouldBeStarted= random_int(0, 1) === 1;
+        $workerState->isReady        = random_int(0, 1) === 1;
+        $workerState->totalReloaded  = random_int(1, 1000000);
+        $workerState->weight         = random_int(1, 1000000);
+        $workerState->firstStartedAt = random_int(1, 1000000);
+        $workerState->startedAt      = random_int(1, 1000000);
+        $workerState->finishedAt     = random_int(1, 1000000);
+        $workerState->updatedAt      = random_int(1, 1000000);
+        $workerState->phpMemoryUsage = random_int(1, 1000000);
+        $workerState->phpMemoryPeakUsage = random_int(1, 1000000);
+        $workerState->connectionsAccepted = random_int(1, 1000000);
+        $workerState->connectionsProcessed = random_int(1, 1000000);
+        $workerState->connectionsErrors = random_int(1, 1000000);
+        $workerState->connectionsRejected = random_int(1, 1000000);
+        $workerState->connectionsProcessing = random_int(1, 1000000);
+        $workerState->jobAccepted = random_int(1, 1000000);
+        $workerState->jobProcessed = random_int(1, 1000000);
+        $workerState->jobProcessing = random_int(1, 1000000);
+        $workerState->jobErrors = random_int(1, 1000000);
+        $workerState->jobRejected = random_int(1, 1000000);
     }
 }

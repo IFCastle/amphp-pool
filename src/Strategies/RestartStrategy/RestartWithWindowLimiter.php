@@ -15,7 +15,9 @@ use IfCastle\AmpPool\Strategies\WorkerStrategyAbstract;
 final class RestartWithWindowLimiter extends WorkerStrategyAbstract implements RestartStrategyInterface
 {
     private int $restartsCount      = 0;
+    
     private ?int $currentInterval   = null;
+    
     private int $lastRestartWindow  = 0;
 
     public function __construct(

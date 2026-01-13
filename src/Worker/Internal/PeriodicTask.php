@@ -8,7 +8,7 @@ use Revolt\EventLoop;
 /**
  * @internal
  */
-final class PeriodicTask
+final readonly class PeriodicTask
 {
     private string $id;
 

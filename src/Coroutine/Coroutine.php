@@ -9,8 +9,10 @@ use Revolt\EventLoop\Suspension;
 
 final class Coroutine implements CoroutineInterface
 {
-    private DeferredFuture $future;
+    private readonly DeferredFuture $future;
+    
     private Suspension|null     $suspension          = null;
+    
     private \WeakReference|null $schedulerSuspension = null;
 
     public function __construct(

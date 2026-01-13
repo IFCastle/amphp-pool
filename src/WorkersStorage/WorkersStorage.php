@@ -21,7 +21,7 @@ final class WorkersStorage implements WorkersStorageInterface
 {
     public static function instanciate(int $workersCount = 0, int $workerId = 0): static
     {
-        return new static(
+        return new self(
             WorkerState::class,
             ApplicationState::class,
             MemoryUsage::class,
@@ -30,12 +30,16 @@ final class WorkersStorage implements WorkersStorageInterface
         );
     }
 
-    private int $key;
+    private readonly int $key;
+    
     private bool $isWrite           = false;
-    private int $structureSize;
+    
+    private readonly int $structureSize;
+    
     private \Shmop|null $handler = null;
 
     private ApplicationStateInterface|null $applicationState = null;
+    
     private MemoryUsageInterface|null $memoryUsage = null;
 
     public function __construct(
@@ -68,7 +72,7 @@ final class WorkersStorage implements WorkersStorageInterface
             return;
         }
 
-        \set_error_handler(static function ($number, $error, $file = null, $line = null) {
+        \set_error_handler(static function ($number, $error, $file = null, $line = null): never {
             throw new \ErrorException($error, 0, $number, $file, $line);
         });
 
@@ -136,7 +140,7 @@ final class WorkersStorage implements WorkersStorageInterface
         $this->open();
 
         // get all data from shared memory
-        \set_error_handler(static function ($number, $error, $file = null, $line = null) {
+        \set_error_handler(static function ($number, $error, $file = null, $line = null): never {
             throw new \ErrorException($error, 0, $number, $file, $line);
         });
 
@@ -183,7 +187,7 @@ final class WorkersStorage implements WorkersStorageInterface
 
         $workerOffset               = $this->calculateWorkerOffset($workerId);
 
-        \set_error_handler(static function ($number, $error, $file = null, $line = null) {
+        \set_error_handler(static function ($number, $error, $file = null, $line = null): never {
             throw new \ErrorException($error, 0, $number, $file, $line);
         });
 
@@ -218,7 +222,7 @@ final class WorkersStorage implements WorkersStorageInterface
 
         $workerOffset               = $this->calculateWorkerOffset($workerId);
 
-        \set_error_handler(static function ($number, $error, $file = null, $line = null) {
+        \set_error_handler(static function ($number, $error, $file = null, $line = null): never {
             throw new \ErrorException($error, 0, $number, $file, $line);
         });
 
@@ -259,7 +263,7 @@ final class WorkersStorage implements WorkersStorageInterface
             throw new \RuntimeException('Shared memory segment is too small for ApplicationState data');
         }
 
-        \set_error_handler(static function ($number, $error, $file = null, $line = null) {
+        \set_error_handler(static function ($number, $error, $file = null, $line = null): never {
             throw new \ErrorException($error, 0, $number, $file, $line);
         });
 
@@ -290,7 +294,7 @@ final class WorkersStorage implements WorkersStorageInterface
             $this->open();
         }
 
-        \set_error_handler(static function ($number, $error, $file = null, $line = null) {
+        \set_error_handler(static function ($number, $error, $file = null, $line = null): never {
             throw new \ErrorException($error, 0, $number, $file, $line);
         });
 
@@ -335,7 +339,7 @@ final class WorkersStorage implements WorkersStorageInterface
                                         . \shmop_size($this->handler) . ' < ' . ($offset + $size) . ' bytes');
         }
 
-        \set_error_handler(static function ($number, $error, $file = null, $line = null) {
+        \set_error_handler(static function ($number, $error, $file = null, $line = null): never {
             throw new \ErrorException($error, 0, $number, $file, $line);
         });
 
@@ -369,7 +373,7 @@ final class WorkersStorage implements WorkersStorageInterface
             $this->open();
         }
 
-        \set_error_handler(static function ($number, $error, $file = null, $line = null) {
+        \set_error_handler(static function ($number, $error, $file = null, $line = null): never {
             throw new \ErrorException($error, 0, $number, $file, $line);
         });
 

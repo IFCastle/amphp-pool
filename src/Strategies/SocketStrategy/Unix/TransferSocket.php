@@ -12,16 +12,16 @@ use Amp\Socket\SocketException;
 use Socket as ExtSocketResource;
 
 /** @internal */
-final class TransferSocket implements Closable
+final readonly class TransferSocket implements Closable
 {
     use ForbidCloning;
     use ForbidSerialization;
 
-    private readonly ExtSocketResource $socket;
+    private ExtSocketResource $socket;
 
-    private readonly \Closure $errorHandler;
+    private \Closure $errorHandler;
 
-    private readonly DeferredFuture $onClose;
+    private DeferredFuture $onClose;
 
     public function __construct(ResourceStream $socket)
     {
@@ -40,7 +40,8 @@ final class TransferSocket implements Closable
         }
 
         $this->socket = $socketResource;
-        $this->errorHandler = $errorHandler = static fn () => true;
+        $this->errorHandler = static fn () => true;
+        $errorHandler = static fn () => true;
         $this->onClose = new DeferredFuture();
 
         $this->onClose(static function () use ($socketResource, $errorHandler): void {

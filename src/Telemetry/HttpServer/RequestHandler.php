@@ -7,9 +7,9 @@ use Amp\Http\Server\Request;
 use Amp\Http\Server\Response;
 use IfCastle\AmpPool\Telemetry\Collectors\ConnectionCollectorInterface;
 
-final class RequestHandler implements \Amp\Http\Server\RequestHandler
+final readonly class RequestHandler implements \Amp\Http\Server\RequestHandler
 {
-    public function __construct(private readonly ConnectionCollectorInterface $collector, private readonly \Closure $closure)
+    public function __construct(private ConnectionCollectorInterface $collector, private \Closure $closure)
     {
     }
 

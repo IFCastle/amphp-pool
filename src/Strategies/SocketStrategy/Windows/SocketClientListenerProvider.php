@@ -38,25 +38,31 @@ final class SocketClientListenerProvider
      * @var int[]
      */
     private array                   $workers          = [];
+    
     /**
      * Map of worker statuses, where key is the worker ID and value is the status.
      * True means worker is ready to accept new socket.
      * @var array<int, bool>
      */
     private array                   $workerStatus     = [];
+    
     /**
      * Map of transferred sockets, where key is the socket ID and value is the socket.
      * @var array<int, ResourceSocket|Socket>
      */
     private array                   $transferredSockets = [];
+    
     private array                   $transferredSocketsByWorker = [];
+    
     /**
      * Map of requests by worker, where key is the worker ID and value is the number of active requests.
      * @var array<int, int>
      */
     private array                   $requestsByWorker   = [];
+    
     private Cancellation|null       $cancellation       = null;
-    private DeferredCancellation    $deferredCancellation;
+    
+    private readonly DeferredCancellation    $deferredCancellation;
 
     public function __construct(
         private readonly SocketAddress $address,
@@ -112,7 +118,7 @@ final class SocketClientListenerProvider
 
     public function stopIfNoWorkers(): bool
     {
-        if (!empty($this->workers)) {
+        if ($this->workers !== []) {
             return false;
         }
 
@@ -171,7 +177,7 @@ final class SocketClientListenerProvider
 
     private function listenAddress(SocketAddress $address, ?BindContext $bindContext = null): ServerSocket
     {
-        $bindContext                = $bindContext ?? new BindContext();
+        $bindContext ??= new BindContext();
 
         return new ResourceServerSocket(
             $this->bind((string) $address, $bindContext),
@@ -216,7 +222,7 @@ final class SocketClientListenerProvider
 
     private function pickupWorker(): int|null
     {
-        if (empty($this->workers)) {
+        if ($this->workers === []) {
             return null;
         }
 
@@ -331,7 +337,7 @@ final class SocketClientListenerProvider
 
         if (\array_key_exists($workerId, $this->transferredSocketsByWorker)) {
             foreach ($this->transferredSocketsByWorker[$workerId] as $socketId) {
-                if (\array_key_exists($socketId, $this->transferredSockets)) {
+                if (\array_key_exists((string) $socketId, $this->transferredSockets)) {
                     $this->transferredSockets[$socketId]->close();
                     unset($this->transferredSockets[$socketId]);
                 }

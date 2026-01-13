@@ -54,17 +54,14 @@ final class HttpReactor implements WorkerEntryPointInterface
 
         // 3. Handle incoming connections and start the server
         $httpServer->start(
-            new ClosureRequestHandler(static function () use ($worker): Response {
-
-                return new Response(
-                    HttpStatus::OK,
-                    [
-                    'content-type' => 'text/plain; charset=utf-8',
-                ],
-                    'Hello, World! From worker id: '.$worker->getWorkerId()
-                   .' and group id: '.$worker->getWorkerGroupId()
-                );
-            }),
+            new ClosureRequestHandler(static fn(): Response => new Response(
+                HttpStatus::OK,
+                [
+                'content-type' => 'text/plain; charset=utf-8',
+            ],
+                'Hello, World! From worker id: '.$worker->getWorkerId()
+               .' and group id: '.$worker->getWorkerGroupId()
+            )),
             new DefaultErrorHandler(),
         );
 

@@ -9,7 +9,7 @@ use Amp\ForbidSerialization;
 /**
  * @template-covariant T
  */
-final class TransferredResource
+final readonly class TransferredResource
 {
     use ForbidCloning;
     use ForbidSerialization;
@@ -19,8 +19,8 @@ final class TransferredResource
      * @param T $data
      */
     public function __construct(
-        private readonly mixed $resource,
-        private readonly mixed $data,
+        private mixed $resource,
+        private mixed $data,
     ) {
     }
 

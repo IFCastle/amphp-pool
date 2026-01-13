@@ -5,13 +5,12 @@ namespace IfCastle\AmpPool;
 
 final class EventWeakHandler
 {
-    private \Closure|null $closure;
     private \WeakReference|null $eventEmitter;
+    
     private \WeakReference|null $self;
 
-    public function __construct(object $self, \Closure $closure)
+    public function __construct(object $self, private \Closure|null $closure)
     {
-        $this->closure              = $closure;
         $this->self                 = \WeakReference::create($self);
     }
 

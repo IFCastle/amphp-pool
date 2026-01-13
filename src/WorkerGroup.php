@@ -41,7 +41,7 @@ class WorkerGroup implements WorkerGroupInterface
                 try {
                     $strategy->onStopped();
                 } catch (\Throwable $exception) {
-                    $logger?->error('Worker strategy "'.\get_class($strategy).'" failed to stop', ['exception' => $exception]);
+                    $logger?->error('Worker strategy "'.$strategy::class.'" failed to stop', ['exception' => $exception]);
                 }
             }
         }
@@ -61,7 +61,7 @@ class WorkerGroup implements WorkerGroupInterface
         /**
          * @var int|string[]
          */
-        private array                     $jobGroups = [],
+        private readonly array                     $jobGroups = [],
         private ?RunnerStrategyInterface  $runnerStrategy = null,
         private ?PickupStrategyInterface  $pickupStrategy = null,
         private ?RestartStrategyInterface $restartStrategy = null,
@@ -298,7 +298,7 @@ class WorkerGroup implements WorkerGroupInterface
         }
 
         if ($this->extraStrategies !== []) {
-            $strategyList           = \array_merge($strategyList, $this->extraStrategies);
+            return \array_merge($strategyList, $this->extraStrategies);
         }
 
         return $strategyList;

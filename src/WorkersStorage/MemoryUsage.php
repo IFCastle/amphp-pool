@@ -6,8 +6,11 @@ namespace IfCastle\AmpPool\WorkersStorage;
 class MemoryUsage implements MemoryUsageInterface
 {
     private \WeakReference|null $storage = null;
+    
     private bool $isLoaded = false;
+    
     private bool $isReadOnly = true;
+    
     private array $stats            = [];
 
     protected const int ITEM_SIZE   = 8;

@@ -38,7 +38,7 @@ use Revolt\EventLoop;
  * @template TSend
  * @implements Channel<TReceive, TSend>
  */
-class Worker implements WorkerInterface
+class Worker implements WorkerInterface, \Stringable
 {
     protected readonly DeferredCancellation $mainCancellation;
 
@@ -55,16 +55,13 @@ class Worker implements WorkerInterface
     /** @var ConcurrentIterator<TReceive> */
     protected readonly ConcurrentIterator $iterator;
 
-    /**
-     * Shared context between all workers.
-     *
-     */
-    protected readonly array $poolContext;
-
     private LoggerInterface $logger;
-    private WorkersStorageInterface $workersStorage;
+    
+    private readonly WorkersStorageInterface $workersStorage;
+    
     private WorkerStateInterface $workerState;
-    private WorkerEventEmitterInterface $eventEmitter;
+    
+    private readonly WorkerEventEmitterInterface $eventEmitter;
 
     private bool $isStopped         = false;
 
@@ -87,7 +84,10 @@ class Worker implements WorkerInterface
         private readonly array $groupsScheme,
         string $workersStorageClass,
         ?LoggerInterface        $logger = null,
-        array $poolContext          = []
+        /**
+         * Shared context between all workers.
+         */
+        protected readonly array $poolContext          = []
     ) {
         $this->queue                = new Queue();
         $this->iterator             = $this->queue->iterate();
@@ -95,7 +95,6 @@ class Worker implements WorkerInterface
         $this->workerFuture         = new DeferredFuture;
 
         $this->eventEmitter         = new WorkerEventEmitter;
-        $this->poolContext          = $poolContext;
 
         if (\class_exists($workersStorageClass) === false) {
             throw new \RuntimeException('Invalid storage class provided. Expected ' . WorkersStorageInterface::class . ' implementation');

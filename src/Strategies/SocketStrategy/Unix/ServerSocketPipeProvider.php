@@ -23,11 +23,10 @@ final class ServerSocketPipeProvider
 {
     use ForbidCloning;
     use ForbidSerialization;
-
-    private readonly BindContext $bindContext;
     private readonly Serializer $serializer;
 
     private static array $servers   = [];
+    
     /**
      * Which worker is using which server socket?
      *
@@ -35,9 +34,8 @@ final class ServerSocketPipeProvider
      */
     private static array $usedBy    = [];
 
-    public function __construct(private readonly int $workerId, BindContext $bindContext = new BindContext)
+    public function __construct(private readonly int $workerId, private readonly BindContext $bindContext = new BindContext)
     {
-        $this->bindContext          = $bindContext;
         $this->serializer           = new NativeSerializer;
     }
 
@@ -99,17 +97,6 @@ final class ServerSocketPipeProvider
     private static function usedBy(string $uri, int $workerId): void
     {
         self::$usedBy[$uri][]       = $workerId;
-    }
-
-    private static function freeAddress(string $uri, int $workerId): void
-    {
-        if (\array_key_exists($uri, self::$usedBy) === false) {
-            return;
-        }
-
-        if (($key = \array_search($workerId, self::$usedBy[$uri], true)) !== false) {
-            unset(self::$usedBy[$uri][$key]);
-        }
     }
 
     private static function freeWorker(int $workerId): void

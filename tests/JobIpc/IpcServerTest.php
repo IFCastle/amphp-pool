@@ -16,7 +16,9 @@ use function Amp\Socket\socketConnector;
 class IpcServerTest extends TestCase
 {
     private IpcServer $ipcServer;
+    
     private DeferredCancellation $jobsLoopCancellation;
+    
     private mixed $jobHandler       = null;
 
     protected function setUp(): void

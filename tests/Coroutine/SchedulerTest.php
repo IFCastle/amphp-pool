@@ -33,7 +33,7 @@ class SchedulerTest extends TestCase
     {
         $scheduler                  = new Scheduler;
 
-        $future1                    = $scheduler->run(new Coroutine(function (CoroutineInterface $coroutine) {
+        $future1                    = $scheduler->run(new Coroutine(function (CoroutineInterface $coroutine): int {
             $this->runLog[] = 1;
             $coroutine->suspend();
             $this->runLog[] = 2;
@@ -41,7 +41,7 @@ class SchedulerTest extends TestCase
             return 1;
         }));
 
-        $future2                    = $scheduler->run(new Coroutine(function (CoroutineInterface $coroutine) {
+        $future2                    = $scheduler->run(new Coroutine(function (CoroutineInterface $coroutine): int {
             $this->runLog[] = 4;
             $coroutine->suspend();
             $this->runLog[] = 5;

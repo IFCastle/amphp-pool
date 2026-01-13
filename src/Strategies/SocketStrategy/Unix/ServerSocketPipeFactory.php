@@ -21,16 +21,16 @@ use Amp\Sync\Channel;
 use Amp\Sync\ChannelException;
 use function Amp\async;
 
-final class ServerSocketPipeFactory implements ServerSocketFactory
+final readonly class ServerSocketPipeFactory implements ServerSocketFactory
 {
     use ForbidCloning;
     use ForbidSerialization;
 
     /** @var Channel<never, SocketAddress|null> */
-    private readonly Channel $channel;
+    private Channel $channel;
 
     /** @var StreamResourceReceivePipe<null> */
-    private readonly StreamResourceReceivePipe $pipe;
+    private StreamResourceReceivePipe $pipe;
 
     public function __construct(WritableStream&ResourceStream $stream)
     {
@@ -80,12 +80,8 @@ final class ServerSocketPipeFactory implements ServerSocketFactory
         \socket_listen($socket, $context["socket"]["backlog"] ?? 0);
 
         $stream = \socket_export_stream($socket);
-        if (PHP_VERSION_ID >= 80300) {
-            /** @psalm-suppress UndefinedFunction */
-            \stream_context_set_options($stream, $context);
-        } else {
-            \stream_context_set_option($stream, $context);
-        }
+        /** @psalm-suppress UndefinedFunction */
+        \stream_context_set_options($stream, $context);
 
         return new ResourceServerSocket($stream, $bindContext);
     }

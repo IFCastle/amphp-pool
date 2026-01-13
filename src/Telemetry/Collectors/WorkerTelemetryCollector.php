@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 class WorkerTelemetryCollector implements ConnectionCollectorInterface, JobCollectorInterface
 {
     private int $firstErrorAt       = 0;
+    
     private int $errorsCount        = 0;
 
     public function __construct(

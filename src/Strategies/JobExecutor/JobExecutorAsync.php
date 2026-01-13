@@ -13,6 +13,7 @@ use function Amp\async;
 final class JobExecutorAsync extends JobExecutorAbstract
 {
     private int $jobCount           = 0;
+    
     private array $jobFutures       = [];
 
     public function __construct(
@@ -21,6 +22,7 @@ final class JobExecutorAsync extends JobExecutorAbstract
     ) {
     }
 
+    #[\Override]
     public function __serialize(): array
     {
         return [

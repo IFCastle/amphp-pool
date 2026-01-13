@@ -55,14 +55,11 @@ class PrometheusService implements WorkerEntryPointInterface
 
         // 3. Handle incoming connections and start the server
         $httpServer->start(
-            new ClosureRequestHandler(static function () use ($prometheusProvider): Response {
-
-                return new Response(
-                    HttpStatus::OK,
-                    ['content-type' => self::MIME_TYPE],
-                    $prometheusProvider->render()
-                );
-            }),
+            new ClosureRequestHandler(static fn(): Response => new Response(
+                HttpStatus::OK,
+                ['content-type' => self::MIME_TYPE],
+                $prometheusProvider->render()
+            )),
             new DefaultErrorHandler(),
         );
 

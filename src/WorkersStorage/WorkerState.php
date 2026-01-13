@@ -509,7 +509,7 @@ class WorkerState implements WorkerStateInterface
         }
 
         // Ignore empty data
-        if (\count($data) === 0) {
+        if ($data === []) {
             return $this;
         }
 

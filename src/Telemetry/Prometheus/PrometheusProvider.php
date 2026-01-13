@@ -7,14 +7,14 @@ use IfCastle\AmpPool\WorkerGroupInterface;
 use IfCastle\AmpPool\WorkersStorage\WorkersStorageInterface;
 use IfCastle\AmpPool\WorkersStorage\WorkerStateInterface;
 
-final class PrometheusProvider
+final readonly class PrometheusProvider
 {
     public function __construct(
-        private readonly WorkersStorageInterface $workersStorage,
+        private WorkersStorageInterface $workersStorage,
         /**
          * @var WorkerGroupInterface[]
          */
-        private readonly array $groupsScheme = []
+        private array $groupsScheme = []
     ) {
     }
 

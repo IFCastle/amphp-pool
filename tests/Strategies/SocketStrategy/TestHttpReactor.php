@@ -66,7 +66,7 @@ final class TestHttpReactor implements WorkerEntryPointInterface
         $httpServer->start(
             new ClosureRequestHandler(static function () use ($worker): Response {
 
-                \file_put_contents(self::getFile(), __CLASS__);
+                \file_put_contents(self::getFile(), self::class);
 
                 EventLoop::delay(2, static function () use ($worker) {
                     $worker->stop();
@@ -77,7 +77,7 @@ final class TestHttpReactor implements WorkerEntryPointInterface
                     [
                     'content-type' => 'text/plain; charset=utf-8',
                 ],
-                    __CLASS__
+                    self::class
                 );
             }),
             new DefaultErrorHandler(),

@@ -7,10 +7,13 @@ use IfCastle\AmpPool\Exceptions\RemoteException;
 
 final class JobSerializer implements JobSerializerInterface
 {
-    final const int REQUEST_HEADER_LENGTH = 5 * 4;
-    final const int REQUEST_HEADER_ITEMS = 5;
-    final const int RESPONSE_HEADER_LENGTH = 4 * 4;
-    final const int RESPONSE_HEADER_ITEMS = 4;
+    const int REQUEST_HEADER_LENGTH = 5 * 4;
+    
+    const int REQUEST_HEADER_ITEMS = 5;
+    
+    const int RESPONSE_HEADER_LENGTH = 4 * 4;
+    
+    const int RESPONSE_HEADER_ITEMS = 4;
 
     public function createRequest(int $jobId, int $fromWorkerId, int $workerGroupId, string $data, int $priority = 0, int $weight = 0): string
     {

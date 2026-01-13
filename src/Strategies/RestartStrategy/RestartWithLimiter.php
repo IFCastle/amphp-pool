@@ -13,6 +13,7 @@ use IfCastle\AmpPool\Strategies\WorkerStrategyAbstract;
 final class RestartWithLimiter extends WorkerStrategyAbstract implements RestartStrategyInterface
 {
     private int $restartsCount      = 0;
+    
     private ?int $currentInterval   = null;
 
     public function __construct(

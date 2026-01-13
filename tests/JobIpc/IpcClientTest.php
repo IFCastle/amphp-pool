@@ -15,9 +15,13 @@ use Revolt\EventLoop;
 class IpcClientTest extends TestCase
 {
     private IpcClient $ipcClient;
+    
     private IpcServer $ipcServer;
+    
     private DeferredCancellation   $jobsLoopCancellation;
+    
     private JobSerializerInterface $jobSerializer;
+    
     private mixed                  $jobHandler = null;
 
     protected function setUp(): void
@@ -64,7 +68,7 @@ class IpcClientTest extends TestCase
     {
         $receivedData               = null;
 
-        $this->jobHandler           = function (JobRequest $request) use (&$receivedData) {
+        $this->jobHandler           = function (JobRequest $request) use (&$receivedData): string {
             $receivedData           = $request->getData();
             return 'OK: ' . $request->getData();
         };

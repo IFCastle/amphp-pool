@@ -40,6 +40,7 @@ class SocketStrategyTest extends TestCase
             $context                = $contextFactory->start(__DIR__ . '/connectionTester.php', new TimeoutCancellation(5));
 
             $context->send('http://'.TestHttpReactor::ADDRESS.'/');
+            
             $response               = $context->receive(new TimeoutCancellation(5));
 
             $this->assertEquals(TestHttpReactor::class, $response);

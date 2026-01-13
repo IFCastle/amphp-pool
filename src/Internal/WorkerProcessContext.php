@@ -49,12 +49,16 @@ final class WorkerProcessContext implements \Psr\Log\LoggerInterface, \Psr\Log\L
     private int $lastActivity;
 
     private readonly Future $processFuture;
+    
     private string          $watcher     = '';
+    
     /**
      * Equals true if the client uses the worker exclusively.
      */
     private bool $isExclusive   = false;
+    
     private array $transferredSockets = [];
+    
     /**
      * When the worker process was terminated or should be terminated.
      * This descriptor will always be canceled if the child process has terminated.
@@ -323,7 +327,7 @@ final class WorkerProcessContext implements \Psr\Log\LoggerInterface, \Psr\Log\L
 
             } else {
                 $text               = 'Waiting for the worker #'.$this->id.' was interrupted due to a timeout ('.$this->processTimeout . '). '
-                                    .'Error '.\get_class($loopException)
+                                    .'Error '.$loopException::class
                                     .' occurred at '.$loopException->getFile().':'.$loopException->getLine()
                                     .': "'.$loopException->getMessage();
             }
@@ -351,7 +355,10 @@ final class WorkerProcessContext implements \Psr\Log\LoggerInterface, \Psr\Log\L
 
     public function wasTerminated(): bool
     {
-        return $this->processFuture->isComplete() || $this->context->isClosed();
+        if ($this->processFuture->isComplete()) {
+            return true;
+        }
+        return $this->context->isClosed();
     }
 
     private function close(): void

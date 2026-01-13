@@ -95,7 +95,7 @@ final class WorkerLogHandler extends AbstractProcessingHandler
                 }
 
                 if (\is_object($value)) {
-                    $record[$key] = 'object::'.\get_class($value);
+                    $record[$key] = 'object::'.$value::class;
                 }
 
                 if (\is_resource($value)) {

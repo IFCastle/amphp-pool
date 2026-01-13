@@ -7,12 +7,15 @@ final class WorkersStorageMemory implements WorkersStorageInterface
 {
     public static function instanciate(int $workersCount = 0): static
     {
-        return new static(WorkerState::class, ApplicationState::class, MemoryUsage::class, $workersCount);
+        return new self(WorkerState::class, ApplicationState::class, MemoryUsage::class, $workersCount);
     }
 
     private bool $isWrite           = false;
-    private int $structureSize;
-    private int         $totalSize;
+    
+    private readonly int $structureSize;
+    
+    private readonly int         $totalSize;
+    
     private string $buffer          = '';
 
     public function __construct(

@@ -18,23 +18,12 @@ final class SystemInfo
 
         $os = (\stripos(\PHP_OS, 'WIN') === 0) ? 'win' : \strtolower(\PHP_OS);
 
-        switch ($os) {
-            case 'win':
-                $cmd = 'wmic cpu get NumberOfCores';
-                break;
-            case 'linux':
-            case 'darwin':
-                $cmd = 'getconf _NPROCESSORS_ONLN';
-                break;
-            case 'netbsd':
-            case 'openbsd':
-            case 'freebsd':
-                $cmd = 'sysctl hw.ncpu | cut -d \':\' -f2';
-                break;
-            default:
-                $cmd = null;
-                break;
-        }
+        $cmd = match ($os) {
+            'win' => 'wmic cpu get NumberOfCores',
+            'linux', 'darwin' => 'getconf _NPROCESSORS_ONLN',
+            'netbsd', 'openbsd', 'freebsd' => 'sysctl hw.ncpu | cut -d \':\' -f2',
+            default => null,
+        };
 
         /** @psalm-suppress ForbiddenCode */
         $execResult = $cmd ? (string) \shell_exec($cmd) : '1';
@@ -135,8 +124,11 @@ final class SystemInfo
     private static ?SystemInfo $instance = null;
 
     private ?int $memoryTotal     = null;
+    
     private ?int $memoryFree      = null;
+    
     private ?int $cpuLoad         = null;
+    
     private ?float $loadAverage   = null;
 
     protected bool $isCalculated    = false;
@@ -224,7 +216,7 @@ final class SystemInfo
         $output                 = \shell_exec('wmic ComputerSystem get TotalPhysicalMemory');
 
         if ($output !== false) {
-            $output             = \explode("\n", $output);
+            $output             = \explode("\n", (string) $output);
 
             if (!empty($output[1])) {
                 $this->memoryTotal = (int) \trim($output[1]);
@@ -235,7 +227,7 @@ final class SystemInfo
         $output                 = \shell_exec('wmic OS get FreePhysicalMemory');
 
         if ($output !== false) {
-            $output             = \explode("\n", $output);
+            $output             = \explode("\n", (string) $output);
 
             if (!empty($output[1])) {
                 $this->memoryFree = (int) \trim($output[1]) * 1024;
@@ -273,7 +265,7 @@ final class SystemInfo
         }
 
         foreach (\explode("\n", $output) as $line) {
-            if (!empty($line) && \preg_match("/^[0-9]+\$/", $line)) {
+            if (!empty($line) && \preg_match("/^\\d+\$/", $line)) {
                 $this->cpuLoad      = (int) $line;
                 break;
             }

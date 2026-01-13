@@ -21,7 +21,7 @@ final readonly class PickupStrategyDummy implements PickupStrategyInterface
         int   $priority             = 0,
         int   $weight               = 0,
         int   $tryCount             = 0
-    ): ?int {
+    ): int {
         return $this->workerId;
     }
 }

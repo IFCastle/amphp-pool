@@ -70,7 +70,7 @@ class RemoteException extends \RuntimeException
 
         return [
             'message'               => $exception->getMessage(),
-            'class'                 => \get_class($exception),
+            'class'                 => $exception::class,
             'code'                  => $exception->getCode(),
             'file'                  => $exception->getFile(),
             'line'                  => $exception->getLine(),
@@ -91,11 +91,7 @@ class RemoteException extends \RuntimeException
 
             foreach ($item['args'] as $k => $arg) {
                 if (\is_string($arg)) {
-                    if (\strlen($arg) <= 64) {
-                        $trace[$key]['args'][$k] = \substr($arg, 0, 61) . '...';
-                    } else {
-                        $trace[$key]['args'][$k] = $arg;
-                    }
+                    $trace[$key]['args'][$k] = \strlen($arg) <= 64 ? \substr($arg, 0, 61) . '...' : $arg;
                 } elseif (\is_scalar($arg) || $arg === null) {
                     $trace[$key]['args'][$k] = $arg;
                 } else {
@@ -109,11 +105,7 @@ class RemoteException extends \RuntimeException
 
     public function __unserialize(array $data): void
     {
-        if (\array_key_exists('message', $data)) {
-            $this->message          = 'Remote exception: '.$data['message'];
-        } else {
-            $this->message          = 'Remote exception';
-        }
+        $this->message = \array_key_exists('message', $data) ? 'Remote exception: '.$data['message'] : 'Remote exception';
 
         if (\array_key_exists('code', $data)) {
             $this->code             = $data['code'];

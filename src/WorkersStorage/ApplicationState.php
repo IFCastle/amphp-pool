@@ -6,7 +6,9 @@ namespace IfCastle\AmpPool\WorkersStorage;
 class ApplicationState implements ApplicationStateInterface
 {
     private \WeakReference|null $storage = null;
+    
     private bool $isLoaded              = false;
+    
     private bool $isReadOnly            = true;
 
     protected const int ITEM_COUNT      = 9;
