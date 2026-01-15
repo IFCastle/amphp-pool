@@ -101,7 +101,10 @@ class Worker implements WorkerInterface, \Stringable
             throw new \RuntimeException('Invalid storage class provided. Expected ' . WorkersStorageInterface::class . ' implementation');
         }
 
-        $this->workersStorage       = \forward_static_call([$workersStorageClass, 'instanciate'], $this->getTotalWorkersCount(), $this->id);
+        // Extract shmKey from poolContext if provided
+        $shmKey                     = $this->poolContext['shmKey'] ?? null;
+
+        $this->workersStorage       = \forward_static_call([$workersStorageClass, 'instanciate'], $this->getTotalWorkersCount(), $this->id, $shmKey);
 
         if ($logger !== null) {
             $this->logger           = $logger;

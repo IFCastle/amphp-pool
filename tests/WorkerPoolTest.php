@@ -26,6 +26,12 @@ use function Amp\delay;
 
 class WorkerPoolTest extends TestCase
 {
+    private function getUniqueKey(): int
+    {
+        // Generate unique key based on test name and random value to avoid conflicts
+        return \abs(\crc32(\uniqid($this->name(), true)));
+    }
+
     #[RunInSeparateProcess]
     public function testStart(): void
     {
@@ -198,7 +204,8 @@ class WorkerPoolTest extends TestCase
     #[RunInSeparateProcess]
     public function testWorkerState(): void
     {
-        $workerPool                 = new WorkerPool();
+        $key                        = $this->getUniqueKey();
+        $workerPool                 = new WorkerPool(shmKey: $key);
         $workerPool->describeGroup(new WorkerGroup(
             EntryPointWait::class,
             WorkerTypeEnum::SERVICE,
@@ -216,11 +223,11 @@ class WorkerPoolTest extends TestCase
         $workers                     = null;
         $expectedWorkers             = [1 => true, 2 => true, 3 => true, 4 => true, 5 => true];
 
-        EventLoop::queue(function () use ($workerPool, &$workers) {
+        EventLoop::queue(function () use ($workerPool, $key, &$workers) {
 
             $workerPool->awaitStart();
 
-            foreach (WorkersStorage::instanciate()->foreachWorkers() as $workerState) {
+            foreach (WorkersStorage::instanciate(0, 0, $key)->foreachWorkers() as $workerState) {
                 $workers[$workerState->getWorkerId()] = $workerState->isReady();
             }
 
@@ -233,7 +240,7 @@ class WorkerPoolTest extends TestCase
 
         // Check pool state after workers stopped
 
-        foreach (WorkersStorage::instanciate() as $workerState) {
+        foreach (WorkersStorage::instanciate(0, 0, $key) as $workerState) {
             $this->assertFalse($workerState->isReady(), 'All workers should be unready');
         }
     }
@@ -274,7 +281,8 @@ class WorkerPoolTest extends TestCase
     {
         StartCounterEntryPoint::removeFile();
 
-        $workerPool                 = new WorkerPool();
+        $key                        = $this->getUniqueKey();
+        $workerPool                 = new WorkerPool(shmKey: $key);
         $workerPool->describeGroup(new WorkerGroup(
             StartCounterEntryPoint::class,
             WorkerTypeEnum::SERVICE,
@@ -301,14 +309,15 @@ class WorkerPoolTest extends TestCase
     #[RunInSeparateProcess]
     public function testSoftRestart(): void
     {
-        $workerPool                 = new WorkerPool();
+        $key                        = $this->getUniqueKey();
+        $workerPool                 = new WorkerPool(shmKey: $key);
         $workerPool->describeGroup(new WorkerGroup(
             EntryPointHello::class,
             WorkerTypeEnum::SERVICE,
             minWorkers: 1
         ));
 
-        EventLoop::delay(1, function () use ($workerPool) {
+        EventLoop::delay(1, function () use ($workerPool, $key) {
 
             $state                  = $workerPool->getWorkersStorage()->getApplicationState();
             $pid                    = $state->getPid();
@@ -319,7 +328,7 @@ class WorkerPoolTest extends TestCase
             $workerPool->restart(true);
             delay(2);
 
-            $workerStorageReadOnly  = WorkersStorage::instanciate();
+            $workerStorageReadOnly  = WorkersStorage::instanciate(0, 0, $key);
             $state                  = $workerStorageReadOnly->getApplicationState();
             $state->read();
 

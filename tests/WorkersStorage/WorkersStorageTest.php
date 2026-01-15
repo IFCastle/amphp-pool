@@ -8,9 +8,36 @@ use PHPUnit\Framework\TestCase;
 
 class WorkersStorageTest extends TestCase
 {
+    private array $storageInstances = [];
+
+    private function getUniqueKey(): int
+    {
+        // Generate unique key based on test name and random value to avoid conflicts
+        return \abs(\crc32(\uniqid($this->name(), true)));
+    }
+
+    protected function tearDown(): void
+    {
+        // Clean up all storage instances to properly delete shared memory
+        foreach ($this->storageInstances as $storage) {
+            $storage->close();
+        }
+        $this->storageInstances = [];
+
+        parent::tearDown();
+    }
+
+    private function createStorage(int $workersCount, int $workerId, int $key): WorkersStorage
+    {
+        $storage = WorkersStorage::instanciate($workersCount, $workerId, $key);
+        $this->storageInstances[] = $storage;
+        return $storage;
+    }
+
     public function testWriteRead(): void
     {
-        $workerStorage              = WorkersStorage::instanciate(10);
+        $key                        = $this->getUniqueKey();
+        $workerStorage              = $this->createStorage(10, 0, $key);
         $workerState                = $workerStorage->getWorkerState(2);
         $this->fillWorkerState($workerState);
         $workerState->update();
@@ -24,8 +51,9 @@ class WorkersStorageTest extends TestCase
 
     public function testOnlyRead(): void
     {
-        $workerStorage              = WorkersStorage::instanciate(10);
-        $workerStorageReadOnly      = WorkersStorage::instanciate();
+        $key                        = $this->getUniqueKey();
+        $workerStorage              = $this->createStorage(10, 0, $key);
+        $workerStorageReadOnly      = $this->createStorage(0, 0, $key);
 
         $workerState                = $workerStorage->getWorkerState(2);
         $this->fillWorkerState($workerState);
@@ -40,8 +68,9 @@ class WorkersStorageTest extends TestCase
 
     public function testReview(): void
     {
-        $workerStorage              = WorkersStorage::instanciate(10);
-        $workerStorageReadOnly      = WorkersStorage::instanciate();
+        $key                        = $this->getUniqueKey();
+        $workerStorage              = $this->createStorage(10, 0, $key);
+        $workerStorageReadOnly      = $this->createStorage(0, 0, $key);
 
         $workerState                = $workerStorage->getWorkerState(2);
         $this->fillWorkerState($workerState);
@@ -56,8 +85,9 @@ class WorkersStorageTest extends TestCase
 
     public function testForeachWorkers(): void
     {
-        $workerStorage              = WorkersStorage::instanciate(10);
-        $workerStorageReadOnly      = WorkersStorage::instanciate();
+        $key                        = $this->getUniqueKey();
+        $workerStorage              = $this->createStorage(10, 0, $key);
+        $workerStorageReadOnly      = $this->createStorage(0, 0, $key);
 
         $workerStorage->getApplicationState()->update();
 
@@ -85,7 +115,8 @@ class WorkersStorageTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('This instance WorkersStorage is read-only');
 
-        $workerStorageReadOnly      = WorkersStorage::instanciate();
+        $key                        = $this->getUniqueKey();
+        $workerStorageReadOnly      = $this->createStorage(0, 0, $key);
 
         $workerState2               = $workerStorageReadOnly->getWorkerState(2);
         $workerState2->update();
@@ -96,7 +127,8 @@ class WorkersStorageTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid worker id provided');
 
-        $workerStorage              = WorkersStorage::instanciate(10);
+        $key                        = $this->getUniqueKey();
+        $workerStorage              = $this->createStorage(10, 0, $key);
         $workerStorage->getWorkerState(0);
     }
 
@@ -105,7 +137,8 @@ class WorkersStorageTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Worker id is out of range');
 
-        $workerStorage              = WorkersStorage::instanciate(10);
+        $key                        = $this->getUniqueKey();
+        $workerStorage              = $this->createStorage(10, 0, $key);
         $workerStorage->getWorkerState(11);
     }
 

@@ -122,7 +122,8 @@ final class WorkerPool implements WorkerPoolInterface
         private ?ContextFactory $contextFactory         = null,
         private readonly ?PsrLogger $logger                      = null,
         private readonly string|bool $pidFile           = false,
-        private readonly int $statsUpdateInterval       = 5
+        private readonly int $statsUpdateInterval       = 5,
+        private readonly int|null $shmKey               = null
     ) {
         $this->contextFactory       ??= new DefaultContextFactory(ipcHub: $this->hub);
         $this->eventEmitter         = new WorkerEventEmitter();
@@ -134,7 +135,12 @@ final class WorkerPool implements WorkerPoolInterface
             throw new \Error("The workers storage class '{$this->workersStorageClass}' does not exist");
         }
 
-        $this->workersStorage       = \forward_static_call([$this->workersStorageClass, 'instanciate'], \count($this->workers), 0);
+        $this->workersStorage       = \forward_static_call([$this->workersStorageClass, 'instanciate'], \count($this->workers), 0, $this->shmKey);
+
+        // Add shmKey to pool context so workers can access it
+        if ($this->shmKey !== null) {
+            $this->poolContext['shmKey'] = $this->shmKey;
+        }
 
         // Assign worker states to workers
         foreach ($this->workers as $workerDescriptor) {

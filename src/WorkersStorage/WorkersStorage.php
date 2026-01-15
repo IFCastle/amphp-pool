@@ -20,14 +20,15 @@ namespace IfCastle\AmpPool\WorkersStorage;
  */
 final class WorkersStorage implements WorkersStorageInterface
 {
-    public static function instanciate(int $workersCount = 0, int $workerId = 0): static
+    public static function instanciate(int $workersCount = 0, int $workerId = 0, int|null $key = null): static
     {
         return new self(
             WorkerState::class,
             ApplicationState::class,
             MemoryUsage::class,
             $workersCount,
-            $workerId
+            $workerId,
+            $key
         );
     }
 
@@ -52,15 +53,20 @@ final class WorkersStorage implements WorkersStorageInterface
          * Number of the worker for which the data is stored.
          * For watcher process, this value is 0.
          */
-        private readonly int $workerId = 0
+        private readonly int $workerId = 0,
+        int|null $key = null
     ) {
         $this->structureSize        = $this->getStructureSize();
 
-        $this->key                  = \ftok(__FILE__, 's');
+        if ($key === null) {
+            $key                    = \ftok(__FILE__, 's');
 
-        if ($this->key === -1) {
-            throw new \RuntimeException('Failed to generate key ftok');
+            if ($key === -1) {
+                throw new \RuntimeException('Failed to generate key ftok');
+            }
         }
+
+        $this->key                  = $key;
 
         if ($this->workersCount > 0) {
             $this->isWrite          = true;
