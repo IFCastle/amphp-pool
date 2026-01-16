@@ -7,10 +7,17 @@ use Amp\Sync\Channel;
 return function (Channel $channel): void {
 
     $address                        = $channel->receive(new \Amp\TimeoutCancellation(5));
-    $result                         = file_get_contents($address);
+    $result                         = @file_get_contents($address);
+
+    // Retry if first attempt failed (server might still be starting up)
+    if ($result === false) {
+        sleep(5);
+        $result                     = @file_get_contents($address);
+    }
 
     if ($result === false) {
         $channel->send('Failed to get content');
+        return;
     }
 
     $channel->send($result);
