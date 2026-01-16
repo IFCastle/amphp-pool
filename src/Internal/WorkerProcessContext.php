@@ -60,6 +60,9 @@ final class WorkerProcessContext implements \Psr\Log\LoggerInterface, \Psr\Log\L
      */
     private bool $isExclusive   = false;
 
+    /**
+     * @var array<int, mixed>
+     */
     private array $transferredSockets = [];
 
     /**

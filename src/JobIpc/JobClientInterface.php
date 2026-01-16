@@ -37,6 +37,10 @@ interface JobClientInterface
      * Try to send a job to the worker immediately in the current fiber.
      *
      *
+     * @param array<string> $allowedGroups
+     * @param array<int> $allowedWorkers
+     * @param bool|DeferredFuture<mixed> $awaitResult
+     * @return Future<mixed>|null
      * @throws \Throwable
      */
     public function sendJobImmediately(

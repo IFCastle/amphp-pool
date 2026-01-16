@@ -12,7 +12,9 @@ interface PickupStrategyInterface
     /**
      * Pickup a worker from the pool.
      *
-     *
+     * @param array<string> $possibleGroups
+     * @param array<int> $possibleWorkers
+     * @param array<int> $ignoredWorkers
      */
     public function pickupWorker(
         array $possibleGroups       = [],
