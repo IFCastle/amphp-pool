@@ -186,6 +186,9 @@ final class SocketClientListenerProvider
         );
     }
 
+    /**
+     * @return resource
+     */
     private function bind(string $uri, BindContext $bindContext)
     {
         static $errorHandler;
