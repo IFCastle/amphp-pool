@@ -90,6 +90,7 @@ class Worker implements WorkerInterface, \Stringable
         ?LoggerInterface        $logger = null,
         /**
          * Shared context between all workers.
+         * @var array<string, mixed>
          */
         protected readonly array $poolContext          = []
     ) {
