@@ -106,6 +106,9 @@ final class SystemInfo
         return (int) $info * 1024;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public static function systemStat(bool $isRecalculate = false): array
     {
         if (self::$instance === null) {

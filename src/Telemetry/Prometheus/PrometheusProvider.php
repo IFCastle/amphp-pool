@@ -35,6 +35,9 @@ final readonly class PrometheusProvider
         return \implode("\n", $metrics);
     }
 
+    /**
+     * @return array<WorkerState>
+     */
     protected function getWorkersInfo(): array
     {
         $workers                    = $this->workersStorage->foreachWorkers();
