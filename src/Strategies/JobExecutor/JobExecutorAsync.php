@@ -18,7 +18,7 @@ final class JobExecutorAsync extends JobExecutorAbstract
     private int $jobCount           = 0;
 
     /**
-     * @var array<string, FutureInterface>
+     * @var array<string, FutureInterface<mixed>>
      */
     private array $jobFutures       = [];
 

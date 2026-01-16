@@ -9,6 +9,9 @@ use Amp\Future;
 
 interface SchedulerInterface
 {
+    /**
+     * @return Future<mixed>
+     */
     public function run(CoroutineInterface $coroutine, ?Cancellation $cancellation = null): Future;
 
     public function awaitAll(?Cancellation $cancellation = null): void;

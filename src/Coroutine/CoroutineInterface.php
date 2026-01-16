@@ -15,12 +15,24 @@ interface CoroutineInterface
 
     public function fail(\Throwable $exception): void;
 
+    /**
+     * @return Suspension<mixed>|null
+     */
     public function getSuspension(): ?Suspension;
 
+    /**
+     * @param Suspension<mixed> $suspension
+     */
     public function defineSuspension(Suspension $suspension): void;
 
+    /**
+     * @param Suspension<mixed> $schedulerSuspension
+     */
     public function defineSchedulerSuspension(Suspension $schedulerSuspension): void;
 
+    /**
+     * @return Future<mixed>
+     */
     public function getFuture(): Future;
 
     public function getPriority(): int;

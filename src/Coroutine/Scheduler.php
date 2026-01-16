@@ -119,6 +119,9 @@ final class Scheduler implements SchedulerInterface
         }
     }
 
+    /**
+     * @return Future<mixed>
+     */
     public function run(CoroutineInterface $coroutine, ?Cancellation $cancellation = null): Future
     {
         $this->init();
