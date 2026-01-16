@@ -74,7 +74,8 @@ final class WorkerProcessContext implements \Psr\Log\LoggerInterface, \Psr\Log\L
 
     /**
      * @param positive-int $id
-     * @param Context<mixed> $context
+     * @param Context<mixed, mixed, mixed> $context
+     * @param DeferredFuture<mixed> $startFuture
      */
     public function __construct(
         private readonly int                         $id,
@@ -189,6 +190,9 @@ final class WorkerProcessContext implements \Psr\Log\LoggerInterface, \Psr\Log\L
         });
     }
 
+    /**
+     * @return Context<mixed, mixed, mixed>
+     */
     public function getContext(): Context
     {
         return $this->context;
@@ -409,7 +413,10 @@ final class WorkerProcessContext implements \Psr\Log\LoggerInterface, \Psr\Log\L
         }
     }
 
-    public function log($level, $message, array $context = []): void
+    /**
+     * @param array<string, mixed> $context
+     */
+    public function log($level, string $message, array $context = []): void
     {
         $context['id']              = $this->id;
 

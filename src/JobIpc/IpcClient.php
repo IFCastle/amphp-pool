@@ -33,7 +33,7 @@ final class IpcClient implements IpcClientInterface
     use ForbidSerialization;
 
     /**
-     * @var StreamChannel[]
+     * @var array<int, StreamChannel<mixed, mixed>>
      */
     private array                       $workerChannels = [];
     /**
@@ -112,6 +112,8 @@ final class IpcClient implements IpcClientInterface
      *
      * @param array<string> $allowedGroups
      * @param array<int> $allowedWorkers
+     * @param bool|DeferredFuture<mixed> $awaitResult
+     * @return Future<mixed>|null
      * @throws \Throwable
      */
     public function sendJobImmediately(
@@ -193,6 +195,9 @@ final class IpcClient implements IpcClientInterface
         throw new SendJobException($allowedGroups, $this->maxTryCount);
     }
 
+    /**
+     * @param DeferredFuture<mixed>|null $deferred
+     */
     private function tryToSendJob(
         int $foundedWorkerId,
         string $data,
