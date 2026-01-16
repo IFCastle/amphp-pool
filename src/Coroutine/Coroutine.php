@@ -17,12 +17,12 @@ final class Coroutine implements CoroutineInterface
     private readonly DeferredFuture $future;
 
     /**
-     * @var Suspension<mixed, mixed, mixed>|null
+     * @var Suspension<mixed>|null
      */
     private Suspension|null     $suspension          = null;
 
     /**
-     * @var \WeakReference<Suspension<mixed, mixed, mixed>>|null
+     * @var \WeakReference<Suspension<mixed>>|null
      */
     private \WeakReference|null $schedulerSuspension = null;
 
@@ -66,7 +66,7 @@ final class Coroutine implements CoroutineInterface
     }
 
     /**
-     * @return Suspension<mixed, mixed, mixed>|null
+     * @return Suspension<mixed>|null
      */
     public function getSuspension(): ?Suspension
     {
@@ -74,7 +74,7 @@ final class Coroutine implements CoroutineInterface
     }
 
     /**
-     * @param Suspension<mixed, mixed, mixed> $suspension
+     * @param Suspension<mixed> $suspension
      */
     public function defineSuspension(Suspension $suspension): void
     {
@@ -86,7 +86,7 @@ final class Coroutine implements CoroutineInterface
     }
 
     /**
-     * @param Suspension<mixed, mixed, mixed> $schedulerSuspension
+     * @param Suspension<mixed> $schedulerSuspension
      */
     public function defineSchedulerSuspension(Suspension $schedulerSuspension): void
     {

@@ -27,7 +27,7 @@ final class Scheduler implements SchedulerInterface
     private int         $highestPriority   = 0;
 
     /**
-     * @var Suspension<mixed, mixed, mixed>|null
+     * @var Suspension<mixed>|null
      */
     private ?Suspension $suspension = null;
 

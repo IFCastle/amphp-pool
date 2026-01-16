@@ -119,6 +119,9 @@ class RemoteException extends \RuntimeException
         return $trace;
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public function __unserialize(array $data): void
     {
         $this->message = \array_key_exists('message', $data) ? 'Remote exception: ' . $data['message'] : 'Remote exception';

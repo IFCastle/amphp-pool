@@ -110,6 +110,8 @@ final class IpcClient implements IpcClientInterface
      * Try to send a job to the worker immediately in the current fiber.
      *
      *
+     * @param array<string> $allowedGroups
+     * @param array<int> $allowedWorkers
      * @throws \Throwable
      */
     public function sendJobImmediately(
@@ -235,6 +237,11 @@ final class IpcClient implements IpcClientInterface
         }
     }
 
+    /**
+     * @param array<string> $allowedGroups
+     * @param array<int> $allowedWorkers
+     * @param array<int> $ignoreWorkers
+     */
     private function pickupWorker(
         array $allowedGroups        = [],
         array $allowedWorkers       = [],
@@ -262,6 +269,9 @@ final class IpcClient implements IpcClientInterface
         );
     }
 
+    /**
+     * @param array<string> $allowedGroups
+     */
     private function requestScaling(array $allowedGroups): bool
     {
         $workerId                   = $this->workerId;
