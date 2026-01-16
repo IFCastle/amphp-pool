@@ -78,6 +78,9 @@ final class ScalingByRequest extends WorkerStrategyAbstract implements ScalingSt
         }
     }
 
+    /**
+     * @return array{int, int}
+     */
     private function getMinMaxWorkers(int $groupId): array
     {
         $minWorkerId                = 0;
@@ -98,7 +101,7 @@ final class ScalingByRequest extends WorkerStrategyAbstract implements ScalingSt
         return [$minWorkerId, $maxWorkerId];
     }
 
-    private function handleScalingRequest(mixed $message): void
+    private function handleScalingRequest(mixed $message, int $workerId = 0): void
     {
         if ($message instanceof ScalingRequest === false) {
             return;

@@ -12,5 +12,10 @@ final readonly class WorkerProcessTerminating
     /**
      * @param Context<mixed, mixed, mixed> $context
      */
-    public function __construct(public int $workerId, public WorkerGroupInterface $workerGroup, public Context $context) {}
+    public function __construct(
+        public int $workerId,
+        public WorkerGroupInterface $workerGroup,
+        public Context $context,
+        public ?\Throwable $exception = null
+    ) {}
 }

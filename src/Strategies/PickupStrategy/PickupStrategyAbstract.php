@@ -11,6 +11,9 @@ abstract class PickupStrategyAbstract extends WorkerStrategyAbstract implements 
     /**
      *
      * @return iterable<\IfCastle\AmpPool\WorkersStorage\WorkerStateInterface>
+     * @param array<int|string> $possibleGroups
+     * @param array<int> $possibleWorkers
+     * @param array<int> $ignoredWorkers
      */
     protected function iterate(array $possibleGroups = [], array $possibleWorkers = [], array $ignoredWorkers = []): iterable
     {

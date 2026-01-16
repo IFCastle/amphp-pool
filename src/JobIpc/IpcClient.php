@@ -125,6 +125,7 @@ final class IpcClient implements IpcClientInterface
         int                 $weight              = 0
     ): Future|null {
         $tryCount                   = 0;
+        /** @var array<int> $ignoreWorkers */
         $ignoreWorkers              = [];
 
         if ($awaitResult instanceof DeferredFuture) {

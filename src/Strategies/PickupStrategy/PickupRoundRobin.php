@@ -10,7 +10,7 @@ namespace IfCastle\AmpPool\Strategies\PickupStrategy;
 final class PickupRoundRobin extends PickupStrategyAbstract
 {
     /**
-     * @var array<int, bool>
+     * @var array<int, int>
      */
     private array                   $usedWorkers    = [];
 

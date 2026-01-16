@@ -17,6 +17,7 @@ class ApplicationState implements ApplicationStateInterface
 
     public static function instanciate(WorkersStorageInterface $workersStorage, int $workersCount, bool $isReadOnly = true): static
     {
+        /** @phpstan-ignore-next-line */
         $instance                   = new static($workersCount);
         $instance->storage          = \WeakReference::create($workersStorage);
         $instance->isReadOnly       = $isReadOnly;

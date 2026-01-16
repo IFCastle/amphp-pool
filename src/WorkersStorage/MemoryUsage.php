@@ -22,6 +22,7 @@ class MemoryUsage implements MemoryUsageInterface
 
     public static function instanciate(WorkersStorageInterface $workersStorage, int $workersCount = 0, bool $isReadOnly = true): static
     {
+        /** @phpstan-ignore-next-line */
         $instance                   = new static($workersCount);
         $instance->storage          = \WeakReference::create($workersStorage);
         $instance->isReadOnly       = $isReadOnly;

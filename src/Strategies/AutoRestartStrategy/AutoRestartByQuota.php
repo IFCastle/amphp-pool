@@ -17,6 +17,9 @@ final class AutoRestartByQuota extends WorkerStrategyAbstract
 {
     private string $checkerId                   = '';
 
+    /**
+     * @var array<int, \IfCastle\AmpPool\WorkersStorage\WorkerStateInterface>
+     */
     private array $workersLastState             = [];
 
     public function __construct(

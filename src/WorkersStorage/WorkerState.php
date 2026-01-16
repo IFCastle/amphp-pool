@@ -13,6 +13,7 @@ class WorkerState implements WorkerStateInterface
         int $workerId,
         bool $reviewOnly            = false
     ): WorkerStateInterface {
+        /** @phpstan-ignore-next-line */
         $workerState                = new static($workerId);
         $workerState->storage       = false === $reviewOnly ? \WeakReference::create($storage) : null;
         $workerState->reviewOnly    = $reviewOnly;
@@ -688,7 +689,7 @@ class WorkerState implements WorkerStateInterface
         }
 
         return new WorkerState(
-            $unpackedItem[1] ?? $workerId,
+            $unpackedItem[1],
             $unpackedItem[2] ?? 0,
             (bool) ($unpackedItem[3] ?? false),
             $unpackedItem[4] ?? 0,

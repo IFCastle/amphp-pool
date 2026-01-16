@@ -28,6 +28,9 @@ final class ServerSocketPipeProvider
     use ForbidSerialization;
     private readonly Serializer $serializer;
 
+    /**
+     * @var array<string, resource>
+     */
     private static array $servers   = [];
 
     /**
@@ -47,7 +50,7 @@ final class ServerSocketPipeProvider
      */
     public function provideFor(ReadableStream&ResourceStream $stream, ?Cancellation $cancellation = null): void
     {
-        /** @var Channel<SocketAddress|null, never> $channel */
+        /** @var StreamChannel<SocketAddress|null, never> $channel */
         $channel                    = new StreamChannel($stream, new WritableBuffer(), $this->serializer);
 
         /** @var StreamResourceSendPipe<SocketAddress> $pipe */

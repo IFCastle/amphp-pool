@@ -51,6 +51,7 @@ final class WorkerProcessContext implements \Psr\Log\LoggerInterface, \Psr\Log\L
 
     private int $lastActivity;
 
+    /** @var Future<mixed> */
     private readonly Future $processFuture;
 
     private string          $watcher     = '';
@@ -120,9 +121,13 @@ final class WorkerProcessContext implements \Psr\Log\LoggerInterface, \Psr\Log\L
 
                 // First, wait for the end of the worker process
                 // while waiting for the cancellation.
+                $result = null;
+                $cancelledException = null;
+
                 try {
-                    return $context->join($cancellation);
-                } catch (CancelledException $cancelledException) {
+                    $result = $context->join($cancellation);
+                } catch (CancelledException $exception) {
+                    $cancelledException = $exception;
 
                     if ($cancelledException->getPrevious() !== null) {
                         $cancelledException = $cancelledException->getPrevious();
@@ -139,6 +144,10 @@ final class WorkerProcessContext implements \Psr\Log\LoggerInterface, \Psr\Log\L
                     }
 
                     // Awaiting the worker process was interrupted by a cancellation not related to the worker process.
+                }
+
+                if ($cancelledException === null) {
+                    return $result;
                 }
 
                 // Try to gracefully close the worker process if possible.
@@ -206,9 +215,31 @@ final class WorkerProcessContext implements \Psr\Log\LoggerInterface, \Psr\Log\L
         return $this->id;
     }
 
+    public function getLastActivity(): int
+    {
+        return $this->lastActivity;
+    }
+
+    public function isExclusive(): bool
+    {
+        return $this->isExclusive;
+    }
+
+    /**
+     * @return array<int, mixed>
+     */
+    public function getTransferredSockets(): array
+    {
+        return $this->transferredSockets;
+    }
+
     public function getPid(): int
     {
-        return $this->context->getPid();
+        if ($this->context instanceof ProcessContext) {
+            return $this->context->getPid();
+        }
+
+        return 0;
     }
 
     public function getCancellation(): Cancellation
@@ -419,7 +450,7 @@ final class WorkerProcessContext implements \Psr\Log\LoggerInterface, \Psr\Log\L
     /**
      * @param array<string, mixed> $context
      */
-    public function log($level, string $message, array $context = []): void
+    public function log($level, string|\Stringable $message, array $context = []): void
     {
         $context['id']              = $this->id;
 

@@ -18,9 +18,10 @@ class PrometheusService implements WorkerEntryPointInterface
 {
     public const string MIME_TYPE = 'text/plain; version=0.0.4';
 
+    /** @var \WeakReference<WorkerInterface> */
     protected \WeakReference $worker;
 
-    protected function getWorker(): WorkerEntryPointInterface
+    protected function getWorker(): WorkerInterface|null
     {
         return $this->worker->get();
     }

@@ -35,7 +35,7 @@ use Revolt\EventLoop;
  * Abstraction of Worker Representation within the worker process.
  * This class should not be used within the process that creates workers!
  *
- * @template-covariant TReceive
+ * @template TReceive
  * @template TSend
  */
 class Worker implements WorkerInterface, \Stringable
@@ -67,7 +67,7 @@ class Worker implements WorkerInterface, \Stringable
     private bool $isStopped         = false;
 
     /**
-     * @var array<string, string>
+     * @var array<int, PeriodicTask>
      */
     private array $periodicTasks    = [];
 

@@ -37,6 +37,9 @@ final readonly class ApplicationCollector implements ApplicationCollectorInterfa
             ->update();
     }
 
+    /**
+     * @param array<int, int> $workersPid
+     */
     public function updateApplicationState(array $workersPid): void
     {
         $stat                       = SystemInfo::systemStat();

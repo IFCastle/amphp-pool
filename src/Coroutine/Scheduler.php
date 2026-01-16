@@ -153,7 +153,8 @@ final class Scheduler implements SchedulerInterface
 
                 $coroutine->fail($exception);
 
-                if ($exception !== $this->stopException) {
+                $stopException = $selfRef->get()?->stopException;
+                if ($stopException === null || $exception !== $stopException) {
                     throw $exception;
                 }
 

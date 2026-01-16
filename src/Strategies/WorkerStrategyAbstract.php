@@ -11,10 +11,13 @@ use IfCastle\AmpPool\WorkersStorage\WorkersStorageInterface;
 
 abstract class WorkerStrategyAbstract implements WorkerStrategyInterface
 {
+    /** @var \WeakReference<WorkerPoolInterface>|null */
     private \WeakReference|null $workerPool = null;
 
+    /** @var \WeakReference<WorkerInterface>|null */
     private \WeakReference|null $worker = null;
 
+    /** @var \WeakReference<WorkerGroupInterface>|null */
     private \WeakReference|null $workerGroup = null;
 
     private bool $isSelfWorker = false;
@@ -79,6 +82,9 @@ abstract class WorkerStrategyAbstract implements WorkerStrategyInterface
         return !$this->isSelfWorker;
     }
 
+    /**
+     * @return array<int, WorkerGroupInterface>
+     */
     protected function getGroupsScheme(): array
     {
         if ($this->worker?->get() !== null) {

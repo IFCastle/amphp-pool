@@ -14,6 +14,9 @@ interface ApplicationCollectorInterface extends TelemetryCollectorInterface
 
     public function restartApplication(): void;
 
+    /**
+     * @param array<int, int> $workersPid
+     */
     public function updateApplicationState(array $workersPid): void;
 
     public function stopApplication(): void;

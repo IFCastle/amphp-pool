@@ -20,7 +20,7 @@ use Psr\Log\LoggerInterface;
 class WorkerGroup implements WorkerGroupInterface
 {
     /**
-     * @param array<WorkerGroupInterface> $groupsScheme
+     * @param array<int, WorkerGroupInterface> $groupsScheme
      */
     public static function startStrategies(array $groupsScheme): void
     {
@@ -34,13 +34,12 @@ class WorkerGroup implements WorkerGroupInterface
     }
 
     /**
-     * @param array<WorkerGroupInterface> $groupsScheme
+     * @param array<int, WorkerGroupInterface> $groupsScheme
      */
     public static function stopStrategies(array $groupsScheme, ?LoggerInterface $logger = null): void
     {
         foreach ($groupsScheme as $group) {
             foreach ($group->getWorkerStrategies() as $strategy) {
-
                 if (false === $strategy instanceof WorkerStrategyInterface) {
                     continue;
                 }
@@ -60,7 +59,7 @@ class WorkerGroup implements WorkerGroupInterface
     private array $extraStrategies  = [];
 
     /**
-     * @param int|array<string> $jobGroups
+     * @param array<int|string> $jobGroups
      */
     public function __construct(
         private readonly string         $entryPointClass,
@@ -69,9 +68,9 @@ class WorkerGroup implements WorkerGroupInterface
         private int                     $maxWorkers = 0,
         private string                  $groupName = '',
         /**
-         * @var int|string[]
+         * @var array<int|string>
          */
-        private readonly array                     $jobGroups = [],
+        private readonly array            $jobGroups = [],
         private ?RunnerStrategyInterface  $runnerStrategy = null,
         private ?PickupStrategyInterface  $pickupStrategy = null,
         private ?RestartStrategyInterface $restartStrategy = null,
@@ -117,6 +116,9 @@ class WorkerGroup implements WorkerGroupInterface
         return $this->groupName;
     }
 
+    /**
+     * @return array<int|string>
+     */
     public function getJobGroups(): array
     {
         return $this->jobGroups;

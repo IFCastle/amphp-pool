@@ -31,7 +31,7 @@ interface WorkerGroupInterface
     public function getGroupName(): string;
 
     /**
-     * @return array<int>
+     * @return array<int|string>
      */
     public function getJobGroups(): array;
 
