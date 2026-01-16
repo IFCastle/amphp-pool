@@ -83,6 +83,8 @@ final class WorkerPool implements WorkerPoolInterface
 
     protected readonly Queue $queue;
 
+    private readonly ConcurrentIterator $iterator;
+
     private bool $running           = false;
 
     private WorkersStorageInterface $workersStorage;
