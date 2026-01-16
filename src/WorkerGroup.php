@@ -19,6 +19,9 @@ use Psr\Log\LoggerInterface;
  */
 class WorkerGroup implements WorkerGroupInterface
 {
+    /**
+     * @param array<WorkerGroupInterface> $groupsScheme
+     */
     public static function startStrategies(array $groupsScheme): void
     {
         foreach ($groupsScheme as $group) {
@@ -30,6 +33,9 @@ class WorkerGroup implements WorkerGroupInterface
         }
     }
 
+    /**
+     * @param array<WorkerGroupInterface> $groupsScheme
+     */
     public static function stopStrategies(array $groupsScheme, ?LoggerInterface $logger = null): void
     {
         foreach ($groupsScheme as $group) {
@@ -53,6 +59,9 @@ class WorkerGroup implements WorkerGroupInterface
      */
     private array $extraStrategies  = [];
 
+    /**
+     * @param int|array<string> $jobGroups
+     */
     public function __construct(
         private readonly string         $entryPointClass,
         private readonly WorkerTypeEnum $workerType,

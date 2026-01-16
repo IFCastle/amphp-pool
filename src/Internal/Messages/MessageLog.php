@@ -9,6 +9,9 @@ namespace IfCastle\AmpPool\Internal\Messages;
  */
 final readonly class MessageLog
 {
+    /**
+     * @param array<string, mixed> $context
+     */
     public function __construct(
         public string $message,
         public string $level        = \Psr\Log\LogLevel::INFO,

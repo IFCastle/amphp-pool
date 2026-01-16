@@ -124,6 +124,9 @@ class MemoryUsage implements MemoryUsageInterface
         return $this->stats[$workerId] ?? 0;
     }
 
+    /**
+     * @param array<int, int> $stats
+     */
     public function setStats(array $stats): static
     {
         if ($this->isReadOnly) {
@@ -135,6 +138,9 @@ class MemoryUsage implements MemoryUsageInterface
         return $this;
     }
 
+    /**
+     * @return array<int, int>
+     */
     public function getStats(): array
     {
         return $this->stats;

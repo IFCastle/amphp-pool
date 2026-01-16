@@ -728,6 +728,9 @@ class WorkerState implements WorkerStateInterface
         ];
     }
 
+    /**
+     * @return array<string>
+     */
     protected function packTimeSegment(): array
     {
         return [
@@ -769,6 +772,9 @@ class WorkerState implements WorkerStateInterface
         ];
     }
 
+    /**
+     * @return array<string>
+     */
     protected function packJobSegment(): array
     {
         return [
