@@ -45,6 +45,9 @@ final class IpcServer implements IpcServerInterface
 
     private SocketAddress $address;
 
+    /**
+     * @var Queue<array{0: StreamChannel<mixed, mixed>, 1: JobRequest}>
+     */
     private Queue $jobQueue;
 
     public static function getSocketAddress(int $workerId): SocketAddress
@@ -122,13 +125,16 @@ final class IpcServer implements IpcServerInterface
     }
 
     /**
-     * @return Queue<array{0: StreamChannel, 1: mixed}>
+     * @return Queue<array{0: StreamChannel<mixed, mixed>, 1: JobRequest}>
      */
     public function getJobQueue(): Queue
     {
         return $this->jobQueue;
     }
 
+    /**
+     * @param Channel<mixed, mixed> $channel
+     */
     public function sendJobResult(mixed $result, Channel $channel, JobRequest $jobRequest, ?Cancellation $cancellation = null): void
     {
         if ($result === null) {

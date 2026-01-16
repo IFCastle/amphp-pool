@@ -41,6 +41,9 @@ final class JobExecutorScheduler extends JobExecutorAbstract
         ];
     }
 
+    /**
+     * @param array<string, int> $data
+     */
     public function __unserialize(array $data): void
     {
         $this->maxJobCount          = $data['maxJobCount'] ?? 100;
@@ -63,6 +66,9 @@ final class JobExecutorScheduler extends JobExecutorAbstract
         $this->jobIpc               = new IpcServer(workerId: $this->workerId, logger: $this->logger);
     }
 
+    /**
+     * @return Future<mixed>
+     */
     public function runJob(string $data, ?int $priority = null, ?int $weight = null, ?Cancellation $cancellation = null): Future
     {
         $handler                    = \WeakReference::create($this->handler);

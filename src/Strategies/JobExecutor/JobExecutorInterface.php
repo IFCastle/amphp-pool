@@ -11,6 +11,9 @@ interface JobExecutorInterface
 {
     public function defineJobHandler(JobHandlerInterface $handler): void;
 
+    /**
+     * @return Future<mixed>
+     */
     public function runJob(string $data, ?int $priority = null, ?int $weight = null, ?Cancellation $cancellation = null): Future;
 
     /**

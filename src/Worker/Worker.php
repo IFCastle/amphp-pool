@@ -37,7 +37,6 @@ use Revolt\EventLoop;
  *
  * @template-covariant TReceive
  * @template TSend
- * @implements Channel<TReceive, TSend>
  */
 class Worker implements WorkerInterface, \Stringable
 {
@@ -48,6 +47,7 @@ class Worker implements WorkerInterface, \Stringable
      * This Future never throws exceptions,
      * but its result can be an exception thrown when the Worker had to terminate.
      */
+    /** @var DeferredFuture<mixed> */
     private readonly DeferredFuture $workerFuture;
 
     /** @var Queue<TReceive> */
@@ -80,6 +80,7 @@ class Worker implements WorkerInterface, \Stringable
 
     public function __construct(
         private readonly int     $id,
+        /** @var Channel<mixed, mixed> */
         private readonly Channel $ipcChannel,
         private readonly WorkerGroup $group,
         /**

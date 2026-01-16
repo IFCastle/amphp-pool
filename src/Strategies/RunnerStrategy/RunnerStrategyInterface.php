@@ -9,6 +9,9 @@ use IfCastle\AmpPool\WorkerGroupInterface;
 
 interface RunnerStrategyInterface
 {
+    /**
+     * @return string|array<string>
+     */
     public function getScript(): string|array;
 
     /**
@@ -17,5 +20,9 @@ interface RunnerStrategyInterface
      *
      *
      **/
+    /**
+     * @param Context<mixed, mixed, mixed> $processContext
+     * @param array<string, mixed> $context
+     */
     public function initiateWorkerContext(Context $processContext, int $workerId, WorkerGroupInterface $group, array $context = []): void;
 }

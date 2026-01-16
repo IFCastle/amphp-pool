@@ -23,6 +23,9 @@ interface WorkerInterface extends WorkerEventEmitterAwareInterface, WorkersStora
 
     public function sendMessageToWatcher(mixed $message): void;
 
+    /**
+     * @return Channel<mixed, mixed>
+     */
     public function getWatcherChannel(): Channel;
 
     public function getWorkerState(): WorkerStateInterface;

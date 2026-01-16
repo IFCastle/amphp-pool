@@ -23,6 +23,7 @@ interface JobClientInterface
      *
      * @param array<string> $allowedGroups
      * @param array<int> $allowedWorkers
+     * @return Future<mixed>|null
      */
     public function sendJob(
         string $data,

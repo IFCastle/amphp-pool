@@ -15,8 +15,14 @@ use IfCastle\AmpPool\WorkersStorage\WorkerStateInterface;
  */
 final class WorkerDescriptor
 {
+    /**
+     * @var DeferredFuture<mixed>|null
+     */
     private ?DeferredFuture       $startFuture      = null;
 
+    /**
+     * @var WorkerProcessContext<mixed, mixed>|null
+     */
     private ?WorkerProcessContext $workerProcess    = null;
 
     private bool                  $isStoppedForever = false;
@@ -45,21 +51,33 @@ final class WorkerDescriptor
         }
     }
 
+    /**
+     * @return DeferredFuture<mixed>|null
+     */
     public function getStartDeferred(): DeferredFuture|null
     {
         return $this->startFuture;
     }
 
+    /**
+     * @return Future<mixed>|null
+     */
     public function getStartFuture(): Future|null
     {
         return $this->startFuture?->getFuture();
     }
 
+    /**
+     * @return WorkerProcessContext<mixed, mixed>|null
+     */
     public function getWorkerProcess(): ?WorkerProcessContext
     {
         return $this->workerProcess;
     }
 
+    /**
+     * @param WorkerProcessContext<mixed, mixed> $workerProcess
+     */
     public function setWorkerProcess(WorkerProcessContext $workerProcess): void
     {
         $this->workerProcess        = $workerProcess;

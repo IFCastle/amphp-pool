@@ -25,6 +25,7 @@ class DefaultRunner extends WorkerStrategyAbstract implements RunnerStrategyInte
      *
      *
      *
+     * @param Channel<mixed, mixed> $channel
      * @throws \Throwable
      */
     public static function processEntryPoint(Channel $channel): void
@@ -103,6 +104,8 @@ class DefaultRunner extends WorkerStrategyAbstract implements RunnerStrategyInte
     /**
      * @throws SerializationException
      * @throws ChannelException
+     * @param Context<mixed, mixed, mixed> $processContext
+     * @param array<string, mixed> $context
      */
     public function initiateWorkerContext(Context $processContext, int $workerId, WorkerGroupInterface $group, array $context = []): void
     {
@@ -121,6 +124,10 @@ class DefaultRunner extends WorkerStrategyAbstract implements RunnerStrategyInte
         ]);
     }
 
+    /**
+     * @param Channel<mixed, mixed> $channel
+     * @return array<string, mixed>
+     */
     protected static function readWorkerMetadata(Channel $channel): array
     {
         // Read random IPC hub URI and associated key from a process channel.

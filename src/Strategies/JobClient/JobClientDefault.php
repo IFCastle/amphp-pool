@@ -27,6 +27,9 @@ final class JobClientDefault extends WorkerStrategyAbstract implements JobClient
         return $this->ipcClient?->sendJob($data, $allowedGroups, $allowedWorkers, $awaitResult, $priority, $weight);
     }
 
+    /**
+     * @return Future<mixed>|null
+     */
     public function sendJobImmediately(
         string $data,
         array $allowedGroups        = [],

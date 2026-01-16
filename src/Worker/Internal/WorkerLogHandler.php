@@ -34,6 +34,7 @@ final class WorkerLogHandler extends AbstractProcessingHandler
      * @psalm-suppress MismatchingDocblockParamType, PossiblyInvalidArgument, UnresolvableConstant
      */
     public function __construct(
+        /** @var Channel<mixed, mixed> */
         private readonly Channel $channel,
         private readonly int $workerId,
         private readonly WorkerGroup $workerGroup,
@@ -45,7 +46,7 @@ final class WorkerLogHandler extends AbstractProcessingHandler
     }
 
     /**
-     * @param array|LogRecord $record Array for Monolog v1.x or 2.x and {@see LogRecord} for v3.x.
+     * @param array<string, mixed>|LogRecord $record Array for Monolog v1.x or 2.x and {@see LogRecord} for v3.x.
      */
     protected function write(array|LogRecord $record): void
     {
@@ -70,7 +71,11 @@ final class WorkerLogHandler extends AbstractProcessingHandler
         $this->channel->send(new MessageLog($record['message'] ?? '', $record['level_name'] ?? '', $record['context']));
     }
 
-    private function removeUnserializableData(array|LogRecord $record, int $recursion = 0): array|LogRecord
+    /**
+     * @param array<string, mixed>|LogRecord $record
+     * @return array<string, mixed>
+     */
+    private function removeUnserializableData(array|LogRecord $record, int $recursion = 0): array
     {
         if ($recursion > 10) {
             return [];

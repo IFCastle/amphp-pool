@@ -23,11 +23,14 @@ interface IpcServerInterface
     public function receiveLoop(?Cancellation $cancellation = null): void;
 
     /**
-     * @return Queue<array{0: StreamChannel, 1: mixed}>
+     * @return Queue<array{0: StreamChannel<mixed, mixed>, 1: JobRequest}>
      */
     public function getJobQueue(): Queue;
 
     public function getAddress(): SocketAddress;
 
+    /**
+     * @param Channel<mixed, mixed> $channel
+     */
     public function sendJobResult(mixed $result, Channel $channel, JobRequest $jobRequest, ?Cancellation $cancellation = null): void;
 }

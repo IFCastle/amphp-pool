@@ -297,6 +297,9 @@ final class IpcClient implements IpcClientInterface
         return $isPossible;
     }
 
+    /**
+     * @return StreamChannel<mixed, mixed>
+     */
     private function getWorkerChannel(int $workerId): StreamChannel
     {
         if (\array_key_exists($workerId, $this->workerChannels)) {
@@ -310,6 +313,9 @@ final class IpcClient implements IpcClientInterface
         return $this->workerChannels[$workerId];
     }
 
+    /**
+     * @return StreamChannel<mixed, mixed>
+     */
     private function createWorkerChannel(int $workerId): StreamChannel
     {
         $connector                  = socketConnector();
