@@ -6,8 +6,14 @@ namespace IfCastle\AmpPool\Exceptions;
 
 class RemoteException extends \RuntimeException
 {
+    /**
+     * @var array<string, mixed>
+     */
     protected array $remoteException = [];
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getRemoteException(): ?array
     {
         return $this->remoteException;

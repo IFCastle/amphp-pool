@@ -9,6 +9,7 @@ use Amp\CompositeCancellation;
 use Amp\Future;
 use Amp\TimeoutCancellation;
 use IfCastle\AmpPool\JobIpc\IpcServer;
+use IfCastle\Async\FutureInterface;
 
 use function Amp\async;
 

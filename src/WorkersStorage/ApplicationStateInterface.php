@@ -52,5 +52,8 @@ interface ApplicationStateInterface
 
     public function read(): void;
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array;
 }

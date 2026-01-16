@@ -7,6 +7,7 @@ namespace IfCastle\AmpPool\Telemetry\Prometheus;
 use IfCastle\AmpPool\WorkerGroupInterface;
 use IfCastle\AmpPool\WorkersStorage\WorkersStorageInterface;
 use IfCastle\AmpPool\WorkersStorage\WorkerStateInterface;
+use IfCastle\AmpPool\WorkersStorage\WorkerState;
 
 final readonly class PrometheusProvider
 {

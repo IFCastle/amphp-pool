@@ -27,8 +27,14 @@ interface WorkerPoolInterface extends WorkerEventEmitterAwareInterface, WorkersS
 
     public function validateGroupsScheme(): void;
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getPoolsContext(): array;
 
+    /**
+     * @param array<string, mixed> $context
+     */
     public function setPoolContext(array $context): static;
 
     /**

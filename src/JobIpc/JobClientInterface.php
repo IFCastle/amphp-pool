@@ -21,7 +21,8 @@ interface JobClientInterface
      * Every time the job should be sent maxTryCount times with a retryInterval between attempts.
      * If retryInterval equals 0, the method will throw an exception if it cannot send the job.
      *
-     *
+     * @param array<string> $allowedGroups
+     * @param array<int> $allowedWorkers
      */
     public function sendJob(
         string $data,
