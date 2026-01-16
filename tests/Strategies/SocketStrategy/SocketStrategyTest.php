@@ -35,7 +35,7 @@ class SocketStrategyTest extends TestCase
             restartStrategy: new RestartNever()
         ));
 
-        EventLoop::delay(1, function () {
+        EventLoop::delay(2, function () {
 
             $contextFactory         = new DefaultContextFactory();
             $context                = $contextFactory->start(__DIR__ . '/connectionTester.php', new TimeoutCancellation(5));
