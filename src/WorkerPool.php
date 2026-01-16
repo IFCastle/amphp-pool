@@ -81,8 +81,10 @@ final class WorkerPool implements WorkerPoolInterface
      */
     protected array $poolContext    = [];
 
+    /** @var Queue<mixed> */
     protected readonly Queue $queue;
 
+    /** @var ConcurrentIterator<mixed> */
     private readonly ConcurrentIterator $iterator;
 
     private bool $running           = false;
@@ -103,10 +105,11 @@ final class WorkerPool implements WorkerPoolInterface
 
     private ?DeferredCancellation $scalingTrigger = null;
 
+    /** @var DeferredFuture<mixed>|null */
     private ?DeferredFuture $scalingFuture = null;
 
     /**
-     * @var WorkerGroupInterface[]
+     * @var array<int, WorkerGroupInterface>
      */
     private array $groupsScheme             = [];
 
@@ -220,6 +223,9 @@ final class WorkerPool implements WorkerPoolInterface
         return $this;
     }
 
+    /**
+     * @return array<int, WorkerGroupInterface>
+     */
     public function getGroupsScheme(): array
     {
         return $this->groupsScheme;
@@ -956,6 +962,9 @@ final class WorkerPool implements WorkerPoolInterface
         $this->workers[]            = $worker;
     }
 
+    /**
+     * @return array<int, int>
+     */
     public function getWorkers(): array
     {
         $workers                    = [];
@@ -967,6 +976,9 @@ final class WorkerPool implements WorkerPoolInterface
         return $workers;
     }
 
+    /**
+     * @return Context<mixed, mixed, mixed>|null
+     */
     public function findWorkerContext(int $workerId): Context|null
     {
         foreach ($this->workers as $workerDescriptor) {

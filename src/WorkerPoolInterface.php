@@ -19,7 +19,7 @@ interface WorkerPoolInterface extends WorkerEventEmitterAwareInterface, WorkersS
     public function getLogger(): PsrLogger|null;
 
     /**
-     * @return WorkerGroup[]
+     * @return array<int, WorkerGroupInterface>
      */
     public function getGroupsScheme(): array;
 
@@ -75,6 +75,9 @@ interface WorkerPoolInterface extends WorkerEventEmitterAwareInterface, WorkersS
      */
     public function getWorkers(): array;
 
+    /**
+     * @return Context<mixed, mixed, mixed>|null
+     */
     public function findWorkerContext(int $workerId): Context|null;
 
     public function isWorkerRunning(int $workerId): bool;

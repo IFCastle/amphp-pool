@@ -6,6 +6,7 @@ namespace IfCastle\AmpPool\WorkersStorage;
 
 class MemoryUsage implements MemoryUsageInterface
 {
+    /** @var \WeakReference<WorkersStorageInterface>|null */
     private \WeakReference|null $storage = null;
 
     private bool $isLoaded = false;
@@ -13,7 +14,7 @@ class MemoryUsage implements MemoryUsageInterface
     private bool $isReadOnly = true;
 
     /**
-     * @var array<string, mixed>
+     * @var array<int, int>
      */
     private array $stats            = [];
 
@@ -87,6 +88,9 @@ class MemoryUsage implements MemoryUsageInterface
         return $this->workersCount * self::ITEM_SIZE;
     }
 
+    /**
+     * @return array<int, int>
+     */
     public function getWorkersMemoryUsageStat(): array
     {
         $storage                    = $this->getStorage();

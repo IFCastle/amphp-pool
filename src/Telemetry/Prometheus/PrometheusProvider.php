@@ -37,7 +37,7 @@ final readonly class PrometheusProvider
     }
 
     /**
-     * @return array<WorkerState>
+     * @return array<int, WorkerStateInterface>
      */
     protected function getWorkersInfo(): array
     {
@@ -69,6 +69,9 @@ final readonly class PrometheusProvider
         return 0;
     }
 
+    /**
+     * @return array<int, string>
+     */
     protected function renderApplicationState(): array
     {
         $this->workersStorage->getApplicationState()->read();
@@ -100,6 +103,10 @@ final readonly class PrometheusProvider
         return $metrics;
     }
 
+    /**
+     * @param array<int, WorkerStateInterface> $workers
+     * @return array<int, string>
+     */
     protected function renderTimings(array $workers): array
     {
         $metrics[] = '';
@@ -148,6 +155,10 @@ final readonly class PrometheusProvider
         return $metrics;
     }
 
+    /**
+     * @param array<int, WorkerStateInterface> $workers
+     * @return array<int, string>
+     */
     protected function renderUsage(array $workers): array
     {
         $metrics[] = '';
@@ -174,6 +185,10 @@ final readonly class PrometheusProvider
         return $metrics;
     }
 
+    /**
+     * @param array<int, WorkerStateInterface> $workers
+     * @return array<int, string>
+     */
     protected function renderMemoryUsageSystem(array $workers): array
     {
         $metrics[]                  = '';
@@ -192,6 +207,10 @@ final readonly class PrometheusProvider
         return $metrics;
     }
 
+    /**
+     * @param array<int, WorkerStateInterface> $workers
+     * @return array<int, string>
+     */
     protected function renderConnections(array $workers): array
     {
         $metrics[] = '';
@@ -231,8 +250,8 @@ final readonly class PrometheusProvider
     }
 
     /**
-     * @param WorkerStateInterface[] $workers
-     *
+     * @param array<int, WorkerStateInterface> $workers
+     * @return array<int, string>
      */
     protected function renderGroupsScheme(array $workers): array
     {
@@ -266,8 +285,8 @@ final readonly class PrometheusProvider
     }
 
     /**
-     * @param WorkerStateInterface[] $workers
-     *
+     * @param array<int, WorkerStateInterface> $workers
+     * @return array<int, string>
      */
     protected function renderGroupsShouldBeStarted(array $workers): array
     {
@@ -302,6 +321,10 @@ final readonly class PrometheusProvider
         return $metrics;
     }
 
+    /**
+     * @param array<int, WorkerStateInterface> $workers
+     * @return array<int, string>
+     */
     protected function renderJobs(array $workers): array
     {
         $metrics[] = '';

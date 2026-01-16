@@ -10,6 +10,9 @@ interface MemoryUsageInterface
 
     public function getStructureSize(): int;
 
+    /**
+     * @return array<int, int>
+     */
     public function getWorkersMemoryUsageStat(): array;
 
     public function getWorkersMemoryUsage(int $workerId): int;
@@ -18,7 +21,13 @@ interface MemoryUsageInterface
 
     public function read(): void;
 
+    /**
+     * @return array<int, int>
+     */
     public function getStats(): array;
 
+    /**
+     * @param array<int, int> $stats
+     */
     public function setStats(array $stats): static;
 }

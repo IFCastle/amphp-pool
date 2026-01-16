@@ -6,6 +6,7 @@ namespace IfCastle\AmpPool\WorkersStorage;
 
 class ApplicationState implements ApplicationStateInterface
 {
+    /** @var \WeakReference<WorkersStorageInterface>|null */
     private \WeakReference|null $storage = null;
 
     private bool $isLoaded              = false;

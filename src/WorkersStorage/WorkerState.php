@@ -20,6 +20,7 @@ class WorkerState implements WorkerStateInterface
         return $workerState;
     }
 
+    /** @var \WeakReference<WorkersStorageInterface>|null */
     private \WeakReference|null $storage    = null;
 
     public function __construct(
@@ -714,6 +715,9 @@ class WorkerState implements WorkerStateInterface
         );
     }
 
+    /**
+     * @return array{string, int}
+     */
     protected function packStateSegment(): array
     {
         return [
@@ -729,7 +733,7 @@ class WorkerState implements WorkerStateInterface
     }
 
     /**
-     * @return array<string>
+     * @return array{string, int}
      */
     protected function packTimeSegment(): array
     {
@@ -745,6 +749,9 @@ class WorkerState implements WorkerStateInterface
         ];
     }
 
+    /**
+     * @return array{string, int}
+     */
     protected function packMemorySegment(): array
     {
         return [
@@ -757,6 +764,9 @@ class WorkerState implements WorkerStateInterface
         ];
     }
 
+    /**
+     * @return array{string, int}
+     */
     protected function packConnectionSegment(): array
     {
         return [
@@ -773,7 +783,7 @@ class WorkerState implements WorkerStateInterface
     }
 
     /**
-     * @return array<string>
+     * @return array{string, int}
      */
     protected function packJobSegment(): array
     {
