@@ -189,6 +189,9 @@ class Worker implements WorkerInterface, \Stringable
     }
 
     #[\Override]
+    /**
+     * @return array<string, mixed>
+     */
     public function getPoolContext(): array
     {
         return $this->poolContext;

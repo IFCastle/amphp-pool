@@ -37,7 +37,7 @@ interface WorkerInterface extends WorkerEventEmitterAwareInterface, WorkersStora
 
     /**
      * Returns the context of the worker pool.
-     *
+     * @return array<string, mixed>
      */
     public function getPoolContext(): array;
 

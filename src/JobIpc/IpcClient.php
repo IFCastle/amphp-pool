@@ -54,6 +54,7 @@ final class IpcClient implements IpcClientInterface
      * @param JobSerializerInterface|null $jobSerializer Job serializer
      * @param Cancellation|null           $cancellation  Cancellation
      * @param int                         $retryInterval Retry interval for sending a job
+     * @param array<int, WorkerGroupInterface> $groupsScheme
      */
     public function __construct(
         private readonly int $workerId,

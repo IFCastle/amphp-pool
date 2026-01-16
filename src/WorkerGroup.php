@@ -26,9 +26,7 @@ class WorkerGroup implements WorkerGroupInterface
     {
         foreach ($groupsScheme as $group) {
             foreach ($group->getWorkerStrategies() as $strategy) {
-                if ($strategy instanceof WorkerStrategyInterface) {
-                    $strategy->onStarted();
-                }
+                $strategy->onStarted();
             }
         }
     }
@@ -40,11 +38,6 @@ class WorkerGroup implements WorkerGroupInterface
     {
         foreach ($groupsScheme as $group) {
             foreach ($group->getWorkerStrategies() as $strategy) {
-
-                if (false === $strategy instanceof WorkerStrategyInterface) {
-                    continue;
-                }
-
                 try {
                     $strategy->onStopped();
                 } catch (\Throwable $exception) {

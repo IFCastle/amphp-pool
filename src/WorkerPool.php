@@ -1097,9 +1097,7 @@ final class WorkerPool implements WorkerPoolInterface
     private function initWorkerStrategies(WorkerGroupInterface $group): void
     {
         foreach ($group->getWorkerStrategies() as $strategy) {
-            if ($strategy instanceof WorkerStrategyInterface) {
-                $strategy->setWorkerPool($this)->setWorkerGroup($group);
-            }
+            $strategy->setWorkerPool($this)->setWorkerGroup($group);
         }
     }
 
