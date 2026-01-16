@@ -6,6 +6,9 @@ namespace IfCastle\AmpPool;
 
 final class WorkerEventEmitter implements WorkerEventEmitterInterface
 {
+    /**
+     * @var array<callable>
+     */
     private array $listeners        = [];
 
     public function addWorkerEventListener(callable $listener): void

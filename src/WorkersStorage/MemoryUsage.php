@@ -12,6 +12,9 @@ class MemoryUsage implements MemoryUsageInterface
 
     private bool $isReadOnly = true;
 
+    /**
+     * @var array<string, mixed>
+     */
     private array $stats            = [];
 
     protected const int ITEM_SIZE   = 8;

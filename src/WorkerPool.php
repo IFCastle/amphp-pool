@@ -76,6 +76,9 @@ final class WorkerPool implements WorkerPoolInterface
      */
     protected array $workers        = [];
 
+    /**
+     * @var array<string, mixed>
+     */
     protected array $poolContext    = [];
 
     protected readonly Queue $queue;
@@ -288,12 +291,18 @@ final class WorkerPool implements WorkerPoolInterface
     }
 
     #[\Override]
+    /**
+     * @return array<string, mixed>
+     */
     public function getPoolsContext(): array
     {
         return $this->poolContext;
     }
 
     #[\Override]
+    /**
+     * @param array<string, mixed> $context
+     */
     public function setPoolContext(array $context): static
     {
         $this->poolContext          = $context;

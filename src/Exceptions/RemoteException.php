@@ -38,6 +38,9 @@ class RemoteException extends \RuntimeException
         return $this->remoteException['line'] ?? $this->getLine();
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getRemoteTrace(): array
     {
         return $this->remoteException['trace'] ?? $this->getTrace();

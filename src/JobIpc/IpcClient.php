@@ -38,7 +38,7 @@ final class IpcClient implements IpcClientInterface
     private array                       $workerChannels = [];
     /**
      * List of futures that are waiting for the result of the job with SocketId, and time when the job was sent.
-     * @var array [Future, int, int]
+     * @var array<int, array{0: Future, 1: int, 2: int}>
      */
     private array $resultsFutures   = [];
 

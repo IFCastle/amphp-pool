@@ -66,6 +66,9 @@ class Worker implements WorkerInterface, \Stringable
 
     private bool $isStopped         = false;
 
+    /**
+     * @var array<string, string>
+     */
     private array $periodicTasks    = [];
 
     /**

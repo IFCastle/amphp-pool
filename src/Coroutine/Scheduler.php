@@ -19,6 +19,9 @@ final class Scheduler implements SchedulerInterface
      */
     private array $coroutines       = [];
 
+    /**
+     * @var array<int, array<CoroutineInterface>>
+     */
     private array $coroutinesQueue  = [];
 
     private int         $highestPriority   = 0;
