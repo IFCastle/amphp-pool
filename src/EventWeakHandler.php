@@ -6,8 +6,14 @@ namespace IfCastle\AmpPool;
 
 final class EventWeakHandler
 {
+    /**
+     * @var \WeakReference<WorkerEventEmitterInterface>|null
+     */
     private \WeakReference|null $eventEmitter;
 
+    /**
+     * @var \WeakReference<object>|null
+     */
     private \WeakReference|null $self;
 
     public function __construct(object $self, private \Closure|null $closure)

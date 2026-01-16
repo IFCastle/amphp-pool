@@ -38,7 +38,7 @@ final class IpcClient implements IpcClientInterface
     private array                       $workerChannels = [];
     /**
      * List of futures that are waiting for the result of the job with SocketId, and time when the job was sent.
-     * @var array<int, array{0: Future, 1: int, 2: int}>
+     * @var array<int, array{0: Future<mixed>, 1: int, 2: int}>
      */
     private array $resultsFutures   = [];
 
@@ -77,6 +77,7 @@ final class IpcClient implements IpcClientInterface
 
     /**
      * @inheritDoc
+     * @return Future<mixed>|null
      */
     public function sendJob(string $data, array $allowedGroups = [], array $allowedWorkers = [], bool $awaitResult = false, int $priority = 0, int $weight = 0): Future|null
     {

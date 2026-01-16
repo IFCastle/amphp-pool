@@ -26,12 +26,18 @@ final class Scheduler implements SchedulerInterface
 
     private int         $highestPriority   = 0;
 
+    /**
+     * @var Suspension<mixed, mixed, mixed>|null
+     */
     private ?Suspension $suspension = null;
 
     private string      $callbackId = '';
 
     private bool        $isRunning  = true;
 
+    /**
+     * @var DeferredFuture<mixed>|null
+     */
     private ?DeferredFuture $future = null;
 
     private \Throwable|null $stopException = null;

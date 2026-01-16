@@ -11,10 +11,19 @@ use Revolt\EventLoop\Suspension;
 
 final class Coroutine implements CoroutineInterface
 {
+    /**
+     * @var DeferredFuture<mixed>
+     */
     private readonly DeferredFuture $future;
 
+    /**
+     * @var Suspension<mixed, mixed, mixed>|null
+     */
     private Suspension|null     $suspension          = null;
 
+    /**
+     * @var \WeakReference<Suspension<mixed, mixed, mixed>>|null
+     */
     private \WeakReference|null $schedulerSuspension = null;
 
     public function __construct(
@@ -56,11 +65,17 @@ final class Coroutine implements CoroutineInterface
         }
     }
 
+    /**
+     * @return Suspension<mixed, mixed, mixed>|null
+     */
     public function getSuspension(): ?Suspension
     {
         return $this->suspension;
     }
 
+    /**
+     * @param Suspension<mixed, mixed, mixed> $suspension
+     */
     public function defineSuspension(Suspension $suspension): void
     {
         if ($this->suspension !== null) {
@@ -70,6 +85,9 @@ final class Coroutine implements CoroutineInterface
         $this->suspension           = $suspension;
     }
 
+    /**
+     * @param Suspension<mixed, mixed, mixed> $schedulerSuspension
+     */
     public function defineSchedulerSuspension(Suspension $schedulerSuspension): void
     {
         if ($this->schedulerSuspension !== null) {
@@ -79,6 +97,9 @@ final class Coroutine implements CoroutineInterface
         $this->schedulerSuspension = \WeakReference::create($schedulerSuspension);
     }
 
+    /**
+     * @return Future<mixed>
+     */
     public function getFuture(): Future
     {
         return $this->future->getFuture();
