@@ -63,6 +63,9 @@ class RemoteException extends \RuntimeException
         return static::_toArray($this);
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     protected static function _toArray(?\Throwable $exception = null, int $recursion = 0): ?array
     {
         if (null === $exception) {
@@ -89,6 +92,9 @@ class RemoteException extends \RuntimeException
         ];
     }
 
+    /**
+     * @return array<mixed>
+     */
     protected static function _getTrace(\Throwable $exception): array
     {
         $trace                      = $exception->getTrace();
