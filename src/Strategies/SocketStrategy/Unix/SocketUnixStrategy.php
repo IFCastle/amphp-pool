@@ -230,7 +230,7 @@ final class SocketUnixStrategy extends WorkerStrategyAbstract implements SocketS
 
             $ipcHub                 = $workerPool->getIpcHub();
             $ipcKey                 = $ipcHub->generateKey();
-            $socketPipeProvider     = new SocketProvider($message->workerId, $workerCancellation);
+            $socketPipeProvider     = new SocketProvider($message->workerId, $ipcHub, $ipcKey, $workerCancellation, $this->ipcTimeout);
 
             echo "[SocketUnixStrategy] Sending SocketTransferInfo to worker {$message->workerId}...\n";
             $workerContext->send(new SocketTransferInfo($ipcKey, $ipcHub->getUri()));
