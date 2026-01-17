@@ -45,27 +45,38 @@ final class TestHttpReactor implements WorkerEntryPointInterface
 
     public function run(): void
     {
+        echo "[TestHttpReactor] run() - START\n";
+
         $worker                     = $this->worker->get();
 
         if ($worker instanceof WorkerInterface === false) {
             throw new \RuntimeException('The worker is not available!');
         }
 
+        echo "[TestHttpReactor] Getting socket factory...\n";
         $socketFactory              = $worker->getWorkerGroup()->getSocketStrategy()?->getServerSocketFactory();
+        echo "[TestHttpReactor] Socket factory obtained\n";
 
         if ($socketFactory === null) {
             throw new \RuntimeException('The socket factory is not available!');
         }
 
+        echo "[TestHttpReactor] Creating HTTP server...\n";
         $clientFactory              = new SocketClientFactory($worker->getLogger());
         $httpServer                 = new SocketHttpServer($worker->getLogger(), $socketFactory, $clientFactory);
+        echo "[TestHttpReactor] HTTP server created\n";
 
         // 2. Expose the server to the network
+        echo "[TestHttpReactor] Exposing server on " . self::ADDRESS . "...\n";
         $httpServer->expose(self::ADDRESS);
+        echo "[TestHttpReactor] Server exposed\n";
 
         // 3. Handle incoming connections and start the server
+        echo "[TestHttpReactor] Starting HTTP server...\n";
         $httpServer->start(
             new ClosureRequestHandler(static function () use ($worker): Response {
+
+                echo "[TestHttpReactor] Request received!\n";
 
                 \file_put_contents(self::getFile(), self::class);
 
@@ -83,11 +94,15 @@ final class TestHttpReactor implements WorkerEntryPointInterface
             }),
             new DefaultErrorHandler(),
         );
+        echo "[TestHttpReactor] HTTP server started, awaiting requests\n";
 
         // 4. Await termination of the worker
         $worker->awaitTermination();
 
+        echo "[TestHttpReactor] Worker terminated\n";
+
         // 5. Stop the HTTP server
         $httpServer->stop();
+        echo "[TestHttpReactor] HTTP server stopped\n";
     }
 }
