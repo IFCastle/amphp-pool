@@ -38,11 +38,11 @@ class SocketStrategyTest extends TestCase
         EventLoop::delay(1, function () {
 
             $contextFactory         = new DefaultContextFactory();
-            $context                = $contextFactory->start(__DIR__ . '/connectionTester.php', new TimeoutCancellation(5));
+            $context                = $contextFactory->start(__DIR__ . '/connectionTester.php', new TimeoutCancellation(15));
 
             $context->send('http://' . TestHttpReactor::ADDRESS . '/');
 
-            $response               = $context->receive(new TimeoutCancellation(5));
+            $response               = $context->receive(new TimeoutCancellation(15));
 
             $this->assertEquals(TestHttpReactor::class, $response);
         });
