@@ -16,7 +16,9 @@ return function (Channel $channel): void {
     }
 
     if ($result === false) {
-        $channel->send('Failed to get content');
+        $lastError = error_get_last();
+        $errorMsg = $lastError ? $lastError['message'] : 'Unknown error';
+        $channel->send('Failed to get content: ' . $errorMsg);
         return;
     }
 
