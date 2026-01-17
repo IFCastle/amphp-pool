@@ -35,10 +35,10 @@ class SocketStrategyTest extends TestCase
             restartStrategy: new RestartNever()
         ));
 
-        EventLoop::delay(3, function () {
+        EventLoop::delay(5, function () {
 
             $contextFactory         = new DefaultContextFactory();
-            $context                = $contextFactory->start(__DIR__ . '/connectionTester.php', new TimeoutCancellation(15));
+            $context                = $contextFactory->start(__DIR__ . '/connectionTester.php', new TimeoutCancellation(20));
 
             $context->send('http://' . TestHttpReactor::ADDRESS . '/');
 

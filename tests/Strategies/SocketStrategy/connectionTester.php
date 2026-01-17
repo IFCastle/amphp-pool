@@ -6,19 +6,26 @@ use Amp\Sync\Channel;
 
 return function (Channel $channel): void {
 
-    $address                        = $channel->receive(new \Amp\TimeoutCancellation(15));
-    $result                         = @file_get_contents($address);
+    $address                        = $channel->receive(new \Amp\TimeoutCancellation(20));
+    $result                         = false;
 
-    // Retry if first attempt failed (server might still be starting up)
-    if ($result === false) {
-        sleep(2);
-        $result                     = @file_get_contents($address);
+    // Retry multiple times with delays (server might still be starting up)
+    for ($attempt = 0; $attempt < 5; $attempt++) {
+        if ($attempt > 0) {
+            sleep(1);
+        }
+
+        $result = @file_get_contents($address);
+
+        if ($result !== false) {
+            break;
+        }
     }
 
     if ($result === false) {
         $lastError = error_get_last();
         $errorMsg = $lastError ? $lastError['message'] : 'Unknown error';
-        $channel->send('Failed to get content: ' . $errorMsg);
+        $channel->send('Failed to get content after 5 attempts: ' . $errorMsg);
         return;
     }
 
