@@ -48,14 +48,15 @@ final class SocketProvider
 
         EventLoop::queue(static function () use ($self) {
 
+            $socketProvider         = $self->get();
             $provider               = $self->get()?->provider;
 
-            if ($provider === null) {
+            if ($socketProvider == null || $provider === null) {
                 return;
             }
 
             try {
-                $provider->provideFor($self->get()->createSocketTransport(), $self->get()->cancellation);
+                $provider->provideFor($socketProvider->createSocketTransport(), $socketProvider->cancellation);
             } catch (SocketException $exception) {
 
                 $deferredCancellation = $self->get()?->deferredCancellation;
