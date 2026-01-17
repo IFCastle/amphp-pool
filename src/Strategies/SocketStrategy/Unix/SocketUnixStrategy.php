@@ -32,7 +32,7 @@ final class SocketUnixStrategy extends WorkerStrategyAbstract implements SocketS
     /** @var SocketProvider[] */
     private array $workerSocketProviders = [];
 
-    public function __construct(private readonly int $ipcTimeout = 15) {}
+    public function __construct(private readonly int $ipcTimeout = 5) {}
 
     public function onStarted(): void
     {
