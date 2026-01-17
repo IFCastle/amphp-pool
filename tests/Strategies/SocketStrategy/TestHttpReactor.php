@@ -45,11 +45,15 @@ final class TestHttpReactor implements WorkerEntryPointInterface
 
     public function run(): void
     {
+        echo "TestHttpReactor::run() - START\n";
+
         $worker                     = $this->worker->get();
 
         if ($worker instanceof WorkerInterface === false) {
             throw new \RuntimeException('The worker is not available!');
         }
+
+        echo "TestHttpReactor::run() - Worker obtained\n";
 
         $socketFactory              = $worker->getWorkerGroup()->getSocketStrategy()?->getServerSocketFactory();
 
@@ -57,15 +61,23 @@ final class TestHttpReactor implements WorkerEntryPointInterface
             throw new \RuntimeException('The socket factory is not available!');
         }
 
+        echo "TestHttpReactor::run() - Socket factory obtained\n";
+
         $clientFactory              = new SocketClientFactory($worker->getLogger());
         $httpServer                 = new SocketHttpServer($worker->getLogger(), $socketFactory, $clientFactory);
+
+        echo "TestHttpReactor::run() - HTTP server created\n";
 
         // 2. Expose the server to the network
         $httpServer->expose(self::ADDRESS);
 
+        echo "TestHttpReactor::run() - Server exposed on " . self::ADDRESS . "\n";
+
         // 3. Handle incoming connections and start the server
         $httpServer->start(
             new ClosureRequestHandler(static function () use ($worker): Response {
+
+                echo "TestHttpReactor - Request received!\n";
 
                 \file_put_contents(self::getFile(), self::class);
 
@@ -84,8 +96,12 @@ final class TestHttpReactor implements WorkerEntryPointInterface
             new DefaultErrorHandler(),
         );
 
+        echo "TestHttpReactor::run() - Server started, awaiting requests\n";
+
         // 4. Await termination of the worker
         $worker->awaitTermination();
+
+        echo "TestHttpReactor::run() - Worker terminated\n";
 
         // 5. Stop the HTTP server
         $httpServer->stop();
