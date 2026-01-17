@@ -55,7 +55,21 @@ final class TestHttpReactor implements WorkerEntryPointInterface
 
         echo "TestHttpReactor::run() - Worker obtained\n";
 
-        $socketFactory              = $worker->getWorkerGroup()->getSocketStrategy()?->getServerSocketFactory();
+        echo "TestHttpReactor::run() - Getting worker group...\n";
+        $workerGroup = $worker->getWorkerGroup();
+        echo "TestHttpReactor::run() - Worker group obtained\n";
+
+        echo "TestHttpReactor::run() - Getting socket strategy...\n";
+        $socketStrategy = $workerGroup->getSocketStrategy();
+        echo "TestHttpReactor::run() - Socket strategy: " . ($socketStrategy ? get_class($socketStrategy) : 'NULL') . "\n";
+
+        if ($socketStrategy === null) {
+            throw new \RuntimeException('The socket strategy is not available!');
+        }
+
+        echo "TestHttpReactor::run() - Getting server socket factory...\n";
+        $socketFactory = $socketStrategy->getServerSocketFactory();
+        echo "TestHttpReactor::run() - Server socket factory obtained\n";
 
         if ($socketFactory === null) {
             throw new \RuntimeException('The socket factory is not available!');
