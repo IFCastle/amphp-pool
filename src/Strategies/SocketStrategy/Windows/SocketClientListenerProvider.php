@@ -53,6 +53,7 @@ final class SocketClientListenerProvider
      */
     private array                   $transferredSockets = [];
 
+    /** @var array<int, array<string, ResourceSocket|Socket>> */
     private array                   $transferredSocketsByWorker = [];
 
     /**
@@ -88,6 +89,9 @@ final class SocketClientListenerProvider
         return $this->address;
     }
 
+    /**
+     * @return int[]
+     */
     public function getWorkers(): array
     {
         return $this->workers;
@@ -150,8 +154,10 @@ final class SocketClientListenerProvider
                     return;
                 }
 
+                /** @phpstan-ignore method.notFound (ProcessContext has getPid, but Context interface doesn't) */
                 $pid                = $foundedWorker->getPid();
 
+                /** @phpstan-ignore method.notFound (ResourceSocket has getResource, but Socket interface doesn't) */
                 $socketId           = Safe::execute(fn() => \socket_wsaprotocol_info_export(\socket_import_stream($socket->getResource()), $pid));
 
                 if (false === $socketId) {

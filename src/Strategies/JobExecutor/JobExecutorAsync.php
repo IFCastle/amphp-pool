@@ -82,7 +82,7 @@ final class JobExecutorAsync extends JobExecutorAbstract
                 return;
             }
 
-            $this->jobCount--;
+            $self->jobCount--;
 
             $index                  = \array_search($future, $self->jobFutures, true);
 

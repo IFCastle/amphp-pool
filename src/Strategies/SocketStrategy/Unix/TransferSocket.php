@@ -22,6 +22,7 @@ final readonly class TransferSocket implements Closable
 
     private \Closure $errorHandler;
 
+    /** @var DeferredFuture<void> */
     private DeferredFuture $onClose;
 
     public function __construct(ResourceStream $socket)

@@ -27,15 +27,20 @@ final class ServerSocketFactoryWindows implements ServerSocket
     use ForbidCloning;
     use ForbidSerialization;
 
+    /** @var DeferredFuture<void> */
     private readonly DeferredFuture $onClose;
 
     /** @var Queue<MessageSocketTransfer> */
     private readonly Queue $queue;
 
+    /** @var ConcurrentIterator<MessageSocketTransfer> */
     private readonly ConcurrentIterator $iterator;
 
     private mixed $workerEventHandler;
 
+    /**
+     * @param Channel<mixed, mixed> $writeOnlyChannel
+     */
     public function __construct(
         private readonly Channel       $writeOnlyChannel,
         private readonly SocketAddress $socketAddress,
@@ -136,7 +141,7 @@ final class ServerSocketFactoryWindows implements ServerSocket
      *
      *
      */
-    private function workerEventHandler(mixed $message): void
+    private function workerEventHandler(mixed $message, int $workerId = 0): void
     {
         if ($message instanceof MessageSocketTransfer) {
             $this->queue->pushAsync($message)->ignore();

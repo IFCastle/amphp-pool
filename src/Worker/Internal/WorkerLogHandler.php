@@ -85,8 +85,7 @@ final class WorkerLogHandler extends AbstractProcessingHandler
             $record                 = $record->toArray();
         }
 
-        if (\is_array($record)) {
-            foreach ($record as $key => $value) {
+        foreach ($record as $key => $value) {
                 if (\is_array($value)) {
                     $record[$key] = $this->removeUnserializableData($value, $recursion + 1);
                 }
@@ -111,9 +110,6 @@ final class WorkerLogHandler extends AbstractProcessingHandler
                 if (\is_callable($value)) {
                     $record[$key] = 'callable(...)';
                 }
-            }
-
-            return $record;
         }
 
         return $record;

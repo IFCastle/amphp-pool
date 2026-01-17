@@ -17,8 +17,12 @@ use IfCastle\AmpPool\Worker\WorkerInterface;
 
 final readonly class SocketPipeFactoryWindows implements ServerSocketFactory
 {
+    /** @var \WeakReference<WorkerInterface> */
     private \WeakReference $worker;
 
+    /**
+     * @param Channel<mixed, mixed> $channel
+     */
     public function __construct(private Channel $channel, WorkerInterface $worker)
     {
         $this->worker                = \WeakReference::create($worker);

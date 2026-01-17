@@ -25,6 +25,7 @@ final class SocketUnixStrategy extends WorkerStrategyAbstract implements SocketS
 
     private string              $key                = '';
 
+    /** @var DeferredFuture<void>|null */
     private DeferredFuture|null $deferredFuture     = null;
 
     private EventWeakHandler|null $workerEventHandler = null;
@@ -137,7 +138,7 @@ final class SocketUnixStrategy extends WorkerStrategyAbstract implements SocketS
         }
     }
 
-    private function handleMessage(mixed $message): void
+    private function handleMessage(mixed $message, int $workerId = 0): void
     {
         if ($this->isSelfWorker()) {
             $this->workerHandler($message);
@@ -224,6 +225,9 @@ final class SocketUnixStrategy extends WorkerStrategyAbstract implements SocketS
         return ['ipcTimeout' => $this->ipcTimeout];
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public function __unserialize(array $data): void
     {
         $this->ipcTimeout           = $data['ipcTimeout'] ?? 5;

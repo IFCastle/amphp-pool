@@ -28,6 +28,8 @@ use IfCastle\AmpPool\Strategies\SocketStrategy\Windows\Messages\MessageSocketFre
 /**
  * Copy of the ResourceSocket class from the amphp/socket package.
  * It needs for $this->channel->send(new MessageSocketFree($this->socketId));.
+ *
+ * @implements \IteratorAggregate<int, string>
  */
 final class ResourceSocket implements Socket, ResourceStream, \IteratorAggregate
 {
@@ -38,8 +40,9 @@ final class ResourceSocket implements Socket, ResourceStream, \IteratorAggregate
     public const int DEFAULT_CHUNK_SIZE = ReadableResourceStream::DEFAULT_CHUNK_SIZE;
 
     /**
-     * @param resource     $resource  Stream resource.
-     * @param positive-int $chunkSize Read and write chunk size.
+     * @param resource                $resource  Stream resource.
+     * @param Channel<mixed, mixed>   $channel
+     * @param positive-int            $chunkSize Read and write chunk size.
      *
      * @throws SocketException
      */
@@ -50,6 +53,7 @@ final class ResourceSocket implements Socket, ResourceStream, \IteratorAggregate
 
     private TlsState $tlsState = TlsState::Disabled;
 
+    /** @var array<string, mixed>|null */
     private ?array $streamContext = null;
 
     private readonly ReadableResourceStream $reader;
@@ -63,8 +67,9 @@ final class ResourceSocket implements Socket, ResourceStream, \IteratorAggregate
     private ?TlsInfo $tlsInfo = null;
 
     /**
-     * @param resource     $resource  Stream resource.
-     * @param positive-int $chunkSize Read and write chunk size.
+     * @param resource              $resource  Stream resource.
+     * @param Channel<mixed, mixed> $channel
+     * @param positive-int          $chunkSize Read and write chunk size.
      *
      * @throws SocketException
      */
@@ -199,6 +204,9 @@ final class ResourceSocket implements Socket, ResourceStream, \IteratorAggregate
         return $this->tlsContext instanceof \Amp\Socket\ClientTlsContext || !empty($this->getStreamContext()['ssl']);
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     private function getStreamContext(): ?array
     {
         if ($this->streamContext !== null) {
